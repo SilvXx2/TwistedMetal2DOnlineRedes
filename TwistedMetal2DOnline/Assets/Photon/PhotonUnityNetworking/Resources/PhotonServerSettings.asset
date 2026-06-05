@@ -41,6 +41,8 @@ MonoBehaviour:
   - RespawnSpaceship
   - RpcApplyBackward
   - TakeDamage
+  - DestroyPickup
+  - PickWeapon
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0

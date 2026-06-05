@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PickupFloat : MonoBehaviour
+public class PickUpFloat : MonoBehaviour
 {
     [SerializeField] private float moveDistance = 0.8f;
     [SerializeField] private float moveSpeed = 2f;

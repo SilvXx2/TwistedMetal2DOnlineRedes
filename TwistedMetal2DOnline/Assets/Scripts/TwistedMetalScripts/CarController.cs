@@ -1,6 +1,7 @@
 using UnityEngine;
+using Photon.Pun;
 
-public class CarController : MonoBehaviour
+public class CarController : MonoBehaviourPun, IPunObservable
 {
     [Header("Player Ownership")]
     [SerializeField] private bool isLocalPlayer = true;
@@ -12,6 +13,10 @@ public class CarController : MonoBehaviour
     [Header("Weapon")]
     [SerializeField] private bool hasWeapon = false;
 
+    [Header("Network Sync")]
+    [SerializeField] private float remoteLerpSpeed = 12f;
+    private RemoteTransformSynchronizer remoteSynchronizer;
+
     private Rigidbody2D rb;
 
     private float moveInput;
@@ -22,8 +27,23 @@ public class CarController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    private void Start()
+    {
+        if (photonView != null)
+        {
+            SetLocalPlayer(photonView.IsMine);
+            remoteSynchronizer = new RemoteTransformSynchronizer(transform, remoteLerpSpeed);
+        }
+    }
+
     private void Update()
     {
+        if (photonView != null && !photonView.IsMine)
+        {
+            remoteSynchronizer?.ApplyRemoteStep(Time.deltaTime);
+            return;
+        }
+
         if (!isLocalPlayer)
             return;
 
@@ -82,10 +102,18 @@ public class CarController : MonoBehaviour
     {
         isLocalPlayer = value;
 
-        if (!isLocalPlayer && rb != null)
+        if (rb != null)
         {
-            rb.velocity = Vector2.zero;
-            rb.angularVelocity = 0f;
+            if (!isLocalPlayer)
+            {
+                rb.velocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+                rb.isKinematic = true;
+            }
+            else
+            {
+                rb.isKinematic = false;
+            }
         }
     }
 
@@ -94,6 +122,7 @@ public class CarController : MonoBehaviour
         return isLocalPlayer;
     }
 
+    [PunRPC]
     public void PickWeapon()
     {
         hasWeapon = true;
@@ -104,5 +133,10 @@ public class CarController : MonoBehaviour
     public bool HasWeapon()
     {
         return hasWeapon;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        remoteSynchronizer?.Serialize(stream);
     }
 }

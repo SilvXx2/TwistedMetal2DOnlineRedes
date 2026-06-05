@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -391,6 +391,10 @@ PrefabInstance:
       propertyPath: menuUIManager
       value: 
       objectReference: {fileID: 2092080874}
+    - target: {fileID: 2825758073908592740, guid: e501fc526f528e044b542ba2f0a25ca8, type: 3}
+      propertyPath: gameplaySceneName
+      value: GameplayScene
+      objectReference: {fileID: 0}
     - target: {fileID: 2825758073908592741, guid: e501fc526f528e044b542ba2f0a25ca8, type: 3}
       propertyPath: m_Name
       value: PhotonManager
