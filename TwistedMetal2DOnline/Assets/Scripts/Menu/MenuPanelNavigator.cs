@@ -3,6 +3,7 @@ using UnityEngine;
 internal enum MenuPanel
 {
     MainMenu,
+    Nickname,
     RoomSelect,
     CreateRoom,
     JoinRoom,
@@ -13,6 +14,7 @@ internal enum MenuPanel
 internal sealed class MenuPanelNavigator
 {
     private readonly GameObject panelMainMenu;
+    private readonly GameObject panelNickname;
     private readonly GameObject panelRoomSelect;
     private readonly GameObject panelCreateRoom;
     private readonly GameObject panelJoinRoom;
@@ -23,6 +25,7 @@ internal sealed class MenuPanelNavigator
 
     public MenuPanelNavigator(
         GameObject panelMainMenu,
+        GameObject panelNickname,
         GameObject panelRoomSelect,
         GameObject panelCreateRoom,
         GameObject panelJoinRoom,
@@ -30,6 +33,7 @@ internal sealed class MenuPanelNavigator
         GameObject panelLoading)
     {
         this.panelMainMenu = panelMainMenu;
+        this.panelNickname = panelNickname;
         this.panelRoomSelect = panelRoomSelect;
         this.panelCreateRoom = panelCreateRoom;
         this.panelJoinRoom = panelJoinRoom;
@@ -42,6 +46,7 @@ internal sealed class MenuPanelNavigator
         CurrentPanel = panel;
 
         SetPanelActive(panelMainMenu, panel == MenuPanel.MainMenu);
+        SetPanelActive(panelNickname, panel == MenuPanel.Nickname);
         SetPanelActive(panelRoomSelect, panel == MenuPanel.RoomSelect);
         SetPanelActive(panelCreateRoom, panel == MenuPanel.CreateRoom);
         SetPanelActive(panelJoinRoom, panel == MenuPanel.JoinRoom);

@@ -8,11 +8,15 @@ public class MenuUIManager : MonoBehaviour
 {
     [Header("Panels")]
     [SerializeField] private GameObject panelMainMenu;
+    [SerializeField] private GameObject panelNickname;
     [SerializeField] private GameObject panelRoomSelect;
     [SerializeField] private GameObject panelCreateRoom;
     [SerializeField] private GameObject panelJoinRoom;
     [SerializeField] private GameObject panelLobby;
     [SerializeField] private GameObject panelLoading;
+
+    [Header("Nickname Inputs")]
+    [SerializeField] private TMP_InputField nicknameInput;
 
     [Header("Texts")]
     [SerializeField] private TMP_Text statusText;
@@ -44,6 +48,7 @@ public class MenuUIManager : MonoBehaviour
     {
         panelNavigator = new MenuPanelNavigator(
             panelMainMenu,
+            panelNickname,
             panelRoomSelect,
             panelCreateRoom,
             panelJoinRoom,
@@ -81,6 +86,11 @@ public class MenuUIManager : MonoBehaviour
         }
 
         SyncLobbyFromPhotonState();
+
+        if (nicknameInput != null)
+        {
+            nicknameInput.text = PlayerPrefs.GetString("PlayerNickname", "");
+        }
     }
 
     private void Update()
@@ -107,6 +117,7 @@ public class MenuUIManager : MonoBehaviour
     }
 
     public void ShowMainMenu()  => panelNavigator.Show(MenuPanel.MainMenu);
+    public void ShowNickname()  => panelNavigator.Show(MenuPanel.Nickname);
     public void ShowRoomSelect() => panelNavigator.Show(MenuPanel.RoomSelect);
     public void ShowCreateRoom() => panelNavigator.Show(MenuPanel.CreateRoom);
     public void ShowJoinRoom()   => panelNavigator.Show(MenuPanel.JoinRoom);
@@ -131,8 +142,34 @@ public class MenuUIManager : MonoBehaviour
             connectionTimeout.Start(Time.unscaledTime);
         }
 
+        ShowNickname();
+    }
+
+    public void OnClickNicknameConfirm()
+    {
+        if (nicknameInput == null)
+        {
+            ShowRoomSelect();
+            return;
+        }
+
+        string nickname = nicknameInput.text;
+        if (string.IsNullOrWhiteSpace(nickname))
+        {
+            nickname = "Player_" + Random.Range(1000, 9999);
+        }
+        else
+        {
+            nickname = nickname.Trim();
+        }
+
+        PhotonNetwork.NickName = nickname;
+        PlayerPrefs.SetString("PlayerNickname", nickname);
+        PlayerPrefs.Save();
+
         ShowRoomSelect();
     }
+
     public void OnClickOpenCreateRoom()   => ShowCreateRoom();
     public void OnClickOpenJoinRoom()     => ShowJoinRoom();
 
@@ -146,6 +183,9 @@ public class MenuUIManager : MonoBehaviour
     {
         switch (backNavigationPolicy.Resolve(panelNavigator.CurrentPanel))
         {
+            case MenuBackNavigationDecision.ShowNickname:
+                ShowNickname();
+                break;
             case MenuBackNavigationDecision.ShowRoomSelect:
                 ShowRoomSelect();
                 break;
@@ -281,6 +321,7 @@ public class MenuUIManager : MonoBehaviour
         MenuPanel currentPanel = panelNavigator.CurrentPanel;
         return currentPanel == MenuPanel.Lobby
             || currentPanel == MenuPanel.RoomSelect
+            || currentPanel == MenuPanel.Nickname
             || currentPanel == MenuPanel.MainMenu;
     }
 
