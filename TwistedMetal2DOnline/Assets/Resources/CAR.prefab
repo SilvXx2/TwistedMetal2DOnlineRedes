@@ -15,6 +15,10 @@ GameObject:
   - component: {fileID: 1622535798551406423}
   - component: {fileID: 1622535798551406422}
   - component: {fileID: 6750288353240207455}
+  - component: {fileID: 5508734961718619511}
+  - component: {fileID: -6366716036144992972}
+  - component: {fileID: 9111207047709230937}
+  - component: {fileID: 648031224935911833}
   m_Layer: 0
   m_Name: CAR
   m_TagString: Untagged
@@ -152,6 +156,17 @@ MonoBehaviour:
   moveSpeed: 200
   turnSpeed: 200
   hasWeapon: 0
+  weaponSprite: {fileID: 21300000, guid: 78e2815544fce5f4a9370b3b0a7d8734, type: 3}
+  weaponLocalPosition: {x: 0, y: 0, z: 0}
+  weaponLocalScale: {x: 1, y: 1, z: 1}
+  weaponAngleOffset: 0
+  bulletCustomSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  bulletSpeed: 500
+  bulletDamage: 15
+  bulletLifetime: 2
+  fireRate: 0.15
+  bulletSpawnOffset: 8
+  bulletScale: {x: 10, y: 10, z: 1}
   remoteLerpSpeed: 12
 --- !u!114 &1622535798551406422
 MonoBehaviour:
@@ -186,7 +201,61 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 1622535798551406423}
-  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &5508734961718619511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622535798551406416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7872f3fc8ae2204d8a3398eedc6682f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageInvulnerabilityTime: 0.5
+--- !u!114 &-6366716036144992972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622535798551406416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 941ec7237a308bf40976b5c666db2d2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blinkInterval: 0.1
+  blinkAlpha: 0.35
+  targetRenderers: []
+--- !u!114 &9111207047709230937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622535798551406416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4dc325bd35a41f892f0db5515bfd3f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockbackDistance: 0.75
+--- !u!114 &648031224935911833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622535798551406416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63d51807021b5eb48be234cc5c791957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  fallbackBlinkDuration: 0.15
