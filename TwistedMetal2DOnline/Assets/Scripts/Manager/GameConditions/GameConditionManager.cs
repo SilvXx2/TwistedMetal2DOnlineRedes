@@ -17,6 +17,10 @@ public class GameConditionManager : MonoBehaviourPunCallbacks
     [Header("Botones")]
     [SerializeField] private Button[] restartMatchButtons;
 
+    [Header("Leaderboard/Scores UI")]
+    [SerializeField] private TMPro.TMP_Text victoryScoreText;
+    [SerializeField] private TMPro.TMP_Text defeatScoreText;
+
     private GameManager gameManager;
     private PhotonManager photonManager;
     private MatchResultCanvasView canvasView;
@@ -111,7 +115,45 @@ public class GameConditionManager : MonoBehaviourPunCallbacks
     {
         Debug.Log($"[GameConditionManager] OnLocalMatchResultResolved - won:{localPlayerWon}");
         canvasView.ShowResult(localPlayerWon);
+
+        // Update and show the scoreboard
+        string scoreBoardText = GetScoreBoardText();
+        if (victoryScoreText != null) victoryScoreText.text = scoreBoardText;
+        if (defeatScoreText != null) defeatScoreText.text = scoreBoardText;
+
         RefreshRestartButtonInteractivity();
+    }
+
+    private string GetScoreBoardText()
+    {
+        if (!PhotonNetwork.InRoom)
+        {
+            return "Modo Offline - Sin puntuaciones.";
+        }
+
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.AppendLine("TABLA DE POSICIONES");
+        sb.AppendLine("-----------------------");
+
+        System.Collections.Generic.List<Player> sortedPlayers = new System.Collections.Generic.List<Player>(PhotonNetwork.PlayerList);
+        sortedPlayers.Sort((p1, p2) => {
+            int score1 = p1.CustomProperties.ContainsKey("Score") ? (int)p1.CustomProperties["Score"] : 0;
+            int score2 = p2.CustomProperties.ContainsKey("Score") ? (int)p2.CustomProperties["Score"] : 0;
+            return score2.CompareTo(score1);
+        });
+
+        for (int i = 0; i < sortedPlayers.Count; i++)
+        {
+            Player p = sortedPlayers[i];
+            string name = string.IsNullOrEmpty(p.NickName) ? $"Jugador {p.ActorNumber}" : p.NickName;
+            int score = p.CustomProperties.ContainsKey("Score") ? (int)p.CustomProperties["Score"] : 0;
+            int kills = p.CustomProperties.ContainsKey("Kills") ? (int)p.CustomProperties["Kills"] : 0;
+            int deaths = p.CustomProperties.ContainsKey("Deaths") ? (int)p.CustomProperties["Deaths"] : 0;
+
+            sb.AppendLine($"{i + 1}. {name}: {score} pts (Kills: {kills}, Deaths: {deaths})");
+        }
+
+        return sb.ToString();
     }
 
     private void OnMatchStateReset()

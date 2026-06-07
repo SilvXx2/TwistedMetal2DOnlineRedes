@@ -5,19 +5,35 @@ using System.Collections.Generic;
 
 public class LeaderBoardAPI : MonoBehaviour
 {
-    public static LeaderBoardAPI Instance { get; private set; }
+    private static LeaderBoardAPI instance;
+    public static LeaderBoardAPI Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<LeaderBoardAPI>();
+                if (instance == null)
+                {
+                    GameObject go = new GameObject("LeaderBoardAPI");
+                    instance = go.AddComponent<LeaderBoardAPI>();
+                }
+            }
+            return instance;
+        }
+    }
 
     [SerializeField]
     private string url = "https://script.google.com/macros/s/AKfycbwoxHu4Gec3lG9LXOmTT6IJRuubRQBID2MP8lRMxl9SwtIWIN4S-Z-WPLHSpdj4f8-p/exec";
 
     private void Awake()
     {
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else
+        else if (instance != this)
         {
             Destroy(gameObject);
         }

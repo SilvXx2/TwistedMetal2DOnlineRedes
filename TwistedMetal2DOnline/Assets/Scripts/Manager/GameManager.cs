@@ -189,9 +189,29 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Debug.Log($"[GameManager] ResolveResultAfterDelay — won:{localPlayerWon}");
         Debug.Log(localPlayerWon ? "Ganaste." : "Perdiste.");
 
+        // If the local player won, they get a Victory bonus of +500 points!
+        if (localPlayerWon && PhotonNetwork.InRoom)
+        {
+            int score = PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Score") ? (int)PhotonNetwork.LocalPlayer.CustomProperties["Score"] : 0;
+            PhotonHashtable hash = new PhotonHashtable();
+            hash["Score"] = score + 500;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }
+
         if (endGameDelay > 0f)
         {
             yield return new WaitForSeconds(endGameDelay);
+        }
+
+        // Send scores to LeaderBoardAPI (only the Master Client does this!)
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.InRoom)
+        {
+            foreach (Player p in PhotonNetwork.PlayerList)
+            {
+                string name = string.IsNullOrEmpty(p.NickName) ? $"Jugador {p.ActorNumber}" : p.NickName;
+                int score = p.CustomProperties.ContainsKey("Score") ? (int)p.CustomProperties["Score"] : 0;
+                LeaderBoardAPI.Instance.EnviarScore(name, score);
+            }
         }
 
         pendingResultRoutine = null;
@@ -201,6 +221,17 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     private IEnumerator InvokeMatchStateResetNextFrame()
     {
         yield return null;
+
+        // Reset player custom properties for the new round
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonHashtable hash = new PhotonHashtable();
+            hash["Kills"] = 0;
+            hash["Deaths"] = 0;
+            hash["Score"] = 0;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }
+
         Debug.Log($"[GameManager] MatchStateReset invocado — listeners: {MatchStateReset?.GetInvocationList().Length ?? 0}");
         MatchStateReset?.Invoke();
         matchState.MarkResultPending();

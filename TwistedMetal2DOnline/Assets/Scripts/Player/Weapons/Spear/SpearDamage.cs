@@ -51,7 +51,8 @@ public class SpearDamage : MonoBehaviour
             if (health != null && Time.time - lastHitTime > hitCooldown)
             {
                 lastHitTime = Time.time;
-                health.photonView.RPC(nameof(PlayerHealth.TakeDamage), RpcTarget.AllViaServer, damage);
+                int attackerId = ownerPhotonView != null ? ownerPhotonView.OwnerActorNr : -1;
+                health.photonView.RPC(nameof(PlayerHealth.TakeDamage), RpcTarget.AllViaServer, damage, attackerId);
             }
         }
     }
