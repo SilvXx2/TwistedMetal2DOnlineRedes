@@ -85,6 +85,23 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
         TrySpawnPlayer();
     }
 
+    /// <summary>
+    /// Permite que el sistema LiveOps (MapPartitionLoader) sobreescriba las posiciones
+    /// de spawn definidas en el inspector con valores recibidos desde Remote Config.
+    /// </summary>
+    public void SetSpawnPositionsFromLiveOps(Vector3[] positions)
+    {
+        if (positions == null || positions.Length == 0)
+        {
+            Debug.LogWarning("[PlayerSpawner] SetSpawnPositionsFromLiveOps: array vacío, ignorado.");
+            return;
+        }
+
+        spawnPositions = positions;
+        Debug.Log($"[PlayerSpawner] LiveOps: {positions.Length} spawn position(s) actualizadas.");
+    }
+
+
     private void TrySpawnPlayer()
     {
         if (hasSpawned)

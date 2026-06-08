@@ -34,6 +34,21 @@ public class CarController : MonoBehaviourPun, IPunObservable
             SetLocalPlayer(photonView.IsMine);
             remoteSynchronizer = new RemoteTransformSynchronizer(transform, remoteLerpSpeed);
         }
+
+        // LiveOps: sobreescribir velocidades con los valores remotos si están disponibles.
+        // Si LiveOpsManager no cargó todavía, se usan los valores del inspector como fallback.
+        ApplyLiveOpsConfig();
+    }
+
+    private void ApplyLiveOpsConfig()
+    {
+        if (LiveOpsManager.Instance == null || !LiveOpsManager.Instance.IsReady)
+            return;
+
+        moveSpeed = LiveOpsManager.Instance.Config.CarMoveSpeed;
+        turnSpeed = LiveOpsManager.Instance.Config.CarTurnSpeed;
+
+        Debug.Log($"[CarController] LiveOps aplicado — moveSpeed:{moveSpeed} turnSpeed:{turnSpeed}");
     }
 
     private void Update()

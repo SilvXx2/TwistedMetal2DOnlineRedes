@@ -21,6 +21,13 @@ public class PlayerHealth : MonoBehaviourPun
 
     private void Awake()
     {
+        // LiveOps: sobreescribir maxHealth con el valor remoto si está disponible.
+        // Si LiveOpsManager no cargó todavía, se usa el valor del inspector como fallback.
+        if (LiveOpsManager.Instance != null && LiveOpsManager.Instance.IsReady)
+        {
+            maxHealth = LiveOpsManager.Instance.Config.PlayerMaxHealth;
+        }
+
         maxHealth = Mathf.Max(1, maxHealth);
         currentHealth = maxHealth;
 
