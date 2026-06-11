@@ -45,6 +45,7 @@ MonoBehaviour:
   - PickWeapon
   - RPC_Shoot
   - RPC_ShowTaunt
+  - RequestDestroy
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0

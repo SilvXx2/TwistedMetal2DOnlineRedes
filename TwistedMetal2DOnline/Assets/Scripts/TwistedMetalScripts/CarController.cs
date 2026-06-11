@@ -9,6 +9,7 @@ public class CarController : MonoBehaviourPun, IPunObservable
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 12f;
     [SerializeField] private float turnSpeed = 240f;
+    [SerializeField] private float moveSpeedMultiplier = 1f;
 
     [Header("Weapon")]
     [SerializeField] private bool hasWeapon = false;
@@ -114,7 +115,11 @@ public class CarController : MonoBehaviourPun, IPunObservable
 
     private void Move()
     {
-        rb.velocity = transform.right * moveInput * moveSpeed;
+        rb.velocity =
+        transform.right *
+        moveInput *
+        moveSpeed *
+        moveSpeedMultiplier;
     }
 
     private void Rotate()
@@ -300,5 +305,10 @@ public class CarController : MonoBehaviourPun, IPunObservable
                 }
             }
         }
+    }
+
+    public void SetMoveSpeedMultiplier(float multiplier)
+    {
+        moveSpeedMultiplier = multiplier;
     }
 }
