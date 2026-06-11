@@ -10,6 +10,16 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private Renderer playerRenderer;
     [SerializeField] private float remoteLerpSpeed = 12f;
 
+    [Header("Nitro Settings")]
+    [SerializeField] private float nitroMultiplier = 1.5f;
+    [SerializeField] private KeyCode nitroKey = KeyCode.LeftShift;
+
+    private bool remoteNitroActive;
+
+    public bool IsNitroActive => photonView != null && photonView.IsMine 
+        ? (localMovement != null && localMovement.IsNitroActive) 
+        : remoteNitroActive;
+
     private Rigidbody rb;
     private PhotonView photonView;
     private PlayerInputMovement localMovement;
@@ -27,7 +37,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
 
         PhotonViewMovementConfigurator.Configure(photonView, this);
         PlayerOwnerColorAssigner.ApplyOwnerColor(playerRenderer, photonView);
-        localMovement = new PlayerInputMovement(transform, rb, movSpeed, rotSpeed); // agregar rb
+        localMovement = new PlayerInputMovement(transform, rb, movSpeed, rotSpeed, nitroMultiplier, nitroKey); // agregar rb y nitro
         remoteSynchronizer = new RemoteTransformSynchronizer(transform, remoteLerpSpeed);
     }
 
@@ -48,6 +58,18 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (remoteSynchronizer == null) return;
         remoteSynchronizer.Serialize(stream);
+
+        if (stream.IsWriting)
+        {
+            stream.SendNext(localMovement != null && localMovement.IsNitroActive);
+        }
+        else
+        {
+            if (stream.Count >= 3)
+            {
+                remoteNitroActive = (bool)stream.ReceiveNext();
+            }
+        }
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)

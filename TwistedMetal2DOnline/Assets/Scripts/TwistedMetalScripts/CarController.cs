@@ -10,6 +10,14 @@ public class CarController : MonoBehaviourPun, IPunObservable
     [SerializeField] private float moveSpeed = 12f;
     [SerializeField] private float turnSpeed = 240f;
 
+    [Header("Nitro Settings")]
+    [SerializeField] private float nitroMultiplier = 1.5f;
+    [SerializeField] private KeyCode nitroKey = KeyCode.LeftShift;
+
+    private bool isNitroActive;
+
+    public bool IsNitroActive => isNitroActive;
+
     [Header("Weapon")]
     [SerializeField] private bool hasWeapon = false;
     [SerializeField] private Sprite weaponSprite;
@@ -98,6 +106,7 @@ public class CarController : MonoBehaviourPun, IPunObservable
     {
         moveInput = 0f;
         turnInput = 0f;
+        isNitroActive = false;
 
         if (Input.GetKey(KeyCode.W))
             moveInput = 1f;
@@ -110,11 +119,19 @@ public class CarController : MonoBehaviourPun, IPunObservable
 
         if (Input.GetKey(KeyCode.D))
             turnInput = -1f;
+
+        if (Input.GetKey(nitroKey))
+            isNitroActive = true;
     }
 
     private void Move()
     {
-        rb.velocity = transform.right * moveInput * moveSpeed;
+        float currentSpeed = moveSpeed;
+        if (isNitroActive && moveInput > 0f)
+        {
+            currentSpeed *= nitroMultiplier;
+        }
+        rb.velocity = transform.right * moveInput * currentSpeed;
     }
 
     private void Rotate()
@@ -285,6 +302,7 @@ public class CarController : MonoBehaviourPun, IPunObservable
         {
             stream.SendNext(hasWeapon);
             stream.SendNext(weaponAngle);
+            stream.SendNext(isNitroActive);
         }
         else
         {
@@ -293,6 +311,11 @@ public class CarController : MonoBehaviourPun, IPunObservable
             {
                 hasWeapon = (bool)stream.ReceiveNext();
                 weaponAngle = (float)stream.ReceiveNext();
+
+                if (stream.Count >= 5)
+                {
+                    isNitroActive = (bool)stream.ReceiveNext();
+                }
 
                 if (hasWeapon != previousHasWeapon && weaponObject != null)
                 {
