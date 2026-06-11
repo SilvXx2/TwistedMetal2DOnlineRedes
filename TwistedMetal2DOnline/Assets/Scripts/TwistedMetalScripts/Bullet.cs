@@ -23,29 +23,20 @@ public class Bullet : MonoBehaviour
         if (other.isTrigger)
             return;
 
-        PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-        if (playerHealth == null)
-            playerHealth = other.GetComponentInParent<PlayerHealth>();
+        CarHealth carHealth = other.GetComponent<CarHealth>();
 
-        int attackerId = -1;
-        if (ownerGo != null)
-        {
-            PhotonView pv = ownerGo.GetComponent<PhotonView>();
-            if (pv != null)
-            {
-                attackerId = pv.OwnerActorNr;
-            }
-        }
+        if (carHealth == null)
+            carHealth = other.GetComponentInParent<CarHealth>();
 
-        if (playerHealth != null)
+        if (carHealth != null)
         {
-            if (playerHealth.photonView != null)
+            if (carHealth.photonView != null)
             {
-                playerHealth.photonView.RPC("TakeDamage", RpcTarget.All, damage, attackerId);
+                carHealth.photonView.RPC("TakeDamage", RpcTarget.All, damage);
             }
             else
             {
-                playerHealth.TakeDamage(damage, attackerId);
+                carHealth.TakeDamage(damage);
             }
         }
         else

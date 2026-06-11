@@ -11,9 +11,6 @@ public class CarPowerUpHandler : MonoBehaviour
     [SerializeField] private float speedMultiplier = 1.5f;
     [SerializeField] private float speedDuration = 5f;
 
-    [Header("Heal")]
-    [SerializeField] private int healAmount = 25;
-
     private Coroutine speedRoutine;
 
     private void Awake()
@@ -66,8 +63,8 @@ public class CarPowerUpHandler : MonoBehaviour
         if (carHealth == null)
             return;
 
-        carHealth.Heal(healAmount);
+        carHealth.HealToFull();
 
-        Debug.Log("Vida recuperada");
+        Debug.Log("Vida recuperada al máximo");
     }
 }
