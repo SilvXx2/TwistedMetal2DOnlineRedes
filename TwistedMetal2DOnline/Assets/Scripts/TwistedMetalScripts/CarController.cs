@@ -13,26 +13,6 @@ public class CarController : MonoBehaviourPun, IPunObservable
 
     [Header("Weapon")]
     [SerializeField] private bool hasWeapon = false;
-    [SerializeField] private Sprite weaponSprite;
-    [SerializeField] private Vector3 weaponLocalPosition = Vector3.zero;
-    [SerializeField] private Vector3 weaponLocalScale = Vector3.one;
-    [SerializeField] private float weaponAngleOffset = 0f;
-
-    private GameObject weaponObject;
-    private SpriteRenderer weaponSpriteRenderer;
-    private float weaponAngle;
-
-    [Header("Bullet Settings")]
-    [SerializeField] private Sprite bulletCustomSprite;
-    [SerializeField] private float bulletSpeed = 500f;
-    [SerializeField] private int bulletDamage = 15;
-    [SerializeField] private float bulletLifetime = 2f;
-    [SerializeField] private float fireRate = 0.15f;
-    [SerializeField] private float bulletSpawnOffset = 8f;
-    [SerializeField] private Vector3 bulletScale = new Vector3(10f, 10f, 1f);
-
-    private float nextFireTime = 0f;
-    private static Sprite defaultBulletSprite;
 
     [Header("Network Sync")]
     [SerializeField] private float remoteLerpSpeed = 12f;
@@ -46,10 +26,6 @@ public class CarController : MonoBehaviourPun, IPunObservable
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        if (photonView != null)
-        {
-            remoteSynchronizer = new RemoteTransformSynchronizer(transform, remoteLerpSpeed);
-        }
     }
 
     private void Start()
@@ -57,9 +33,23 @@ public class CarController : MonoBehaviourPun, IPunObservable
         if (photonView != null)
         {
             SetLocalPlayer(photonView.IsMine);
+            remoteSynchronizer = new RemoteTransformSynchronizer(transform, remoteLerpSpeed);
         }
 
-        InitializeWeaponObject();
+        // LiveOps: sobreescribir velocidades con los valores remotos si están disponibles.
+        // Si LiveOpsManager no cargó todavía, se usan los valores del inspector como fallback.
+        ApplyLiveOpsConfig();
+    }
+
+    private void ApplyLiveOpsConfig()
+    {
+        if (LiveOpsManager.Instance == null || !LiveOpsManager.Instance.IsReady)
+            return;
+
+        moveSpeed = LiveOpsManager.Instance.Config.CarMoveSpeed;
+        turnSpeed = LiveOpsManager.Instance.Config.CarTurnSpeed;
+
+        Debug.Log($"[CarController] LiveOps aplicado — moveSpeed:{moveSpeed} turnSpeed:{turnSpeed}");
     }
 
     private void Update()
@@ -67,10 +57,6 @@ public class CarController : MonoBehaviourPun, IPunObservable
         if (photonView != null && !photonView.IsMine)
         {
             remoteSynchronizer?.ApplyRemoteStep(Time.deltaTime);
-            if (weaponObject != null && weaponObject.activeSelf)
-            {
-                weaponObject.transform.rotation = Quaternion.Euler(0f, 0f, weaponAngle);
-            }
             return;
         }
 
@@ -78,12 +64,6 @@ public class CarController : MonoBehaviourPun, IPunObservable
             return;
 
         ReadInput();
-
-        if (hasWeapon && weaponObject != null)
-        {
-            RotateWeaponToMouse();
-            HandleShootingInput();
-        }
     }
 
     private void FixedUpdate()
@@ -162,113 +142,10 @@ public class CarController : MonoBehaviourPun, IPunObservable
         return isLocalPlayer;
     }
 
-    private void InitializeWeaponObject()
-    {
-        if (weaponObject != null)
-            return;
-
-        weaponObject = new GameObject("CarWeapon");
-        weaponObject.transform.SetParent(transform, false);
-        weaponObject.transform.localPosition = weaponLocalPosition;
-        weaponObject.transform.localScale = weaponLocalScale;
-
-        weaponSpriteRenderer = weaponObject.AddComponent<SpriteRenderer>();
-        weaponSpriteRenderer.sprite = weaponSprite;
-        weaponSpriteRenderer.sortingOrder = 5;
-
-        weaponObject.SetActive(hasWeapon);
-    }
-
-    private void RotateWeaponToMouse()
-    {
-        Camera mainCam = Camera.main;
-        if (mainCam == null)
-            return;
-
-        Vector3 mouseWorldPosition = mainCam.ScreenToWorldPoint(Input.mousePosition);
-        mouseWorldPosition.z = 0f;
-
-        Vector3 direction = mouseWorldPosition - weaponObject.transform.position;
-        weaponAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + weaponAngleOffset;
-
-        weaponObject.transform.rotation = Quaternion.Euler(0f, 0f, weaponAngle);
-    }
-
-    private void HandleShootingInput()
-    {
-        if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
-        {
-            nextFireTime = Time.time + fireRate;
-            Shoot();
-        }
-    }
-
-    private void Shoot()
-    {
-        Vector3 dir = Quaternion.Euler(0, 0, weaponAngle) * Vector3.right;
-        Vector3 spawnPos = weaponObject.transform.position + dir * bulletSpawnOffset;
-
-        if (photonView != null && PhotonNetwork.InRoom)
-        {
-            photonView.RPC("RPC_Shoot", RpcTarget.All, spawnPos, weaponAngle);
-        }
-        else
-        {
-            RPC_Shoot(spawnPos, weaponAngle);
-        }
-    }
-
-    [PunRPC]
-    private void RPC_Shoot(Vector3 position, float angle)
-    {
-        GameObject bulletGo = new GameObject("Bullet");
-        bulletGo.transform.position = position;
-        bulletGo.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-        bulletGo.transform.localScale = bulletScale;
-
-        SpriteRenderer sr = bulletGo.AddComponent<SpriteRenderer>();
-        sr.sprite = bulletCustomSprite != null ? bulletCustomSprite : GetDefaultBulletSprite();
-        sr.sortingOrder = 6;
-
-        Rigidbody2D bulletRb = bulletGo.AddComponent<Rigidbody2D>();
-        bulletRb.gravityScale = 0f;
-        bulletRb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-
-        BoxCollider2D col = bulletGo.AddComponent<BoxCollider2D>();
-        col.isTrigger = true;
-
-        Bullet bulletComponent = bulletGo.AddComponent<Bullet>();
-        bulletComponent.Initialize(gameObject, bulletDamage, bulletLifetime);
-
-        Vector2 direction = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
-        bulletRb.velocity = direction * bulletSpeed;
-    }
-
-    private static Sprite GetDefaultBulletSprite()
-    {
-        if (defaultBulletSprite == null)
-        {
-            Texture2D texture = new Texture2D(8, 4);
-            Color[] colors = new Color[32];
-            for (int i = 0; i < colors.Length; i++)
-            {
-                colors[i] = Color.yellow;
-            }
-            texture.SetPixels(colors);
-            texture.Apply();
-            defaultBulletSprite = Sprite.Create(texture, new Rect(0, 0, 8, 4), new Vector2(0.5f, 0.5f));
-        }
-        return defaultBulletSprite;
-    }
-
     [PunRPC]
     public void PickWeapon()
     {
         hasWeapon = true;
-        if (weaponObject != null)
-        {
-            weaponObject.SetActive(true);
-        }
 
         Debug.Log("Arma recogida");
     }
@@ -280,31 +157,7 @@ public class CarController : MonoBehaviourPun, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (remoteSynchronizer == null && photonView != null)
-        {
-            remoteSynchronizer = new RemoteTransformSynchronizer(transform, remoteLerpSpeed);
-        }
-
         remoteSynchronizer?.Serialize(stream);
-        if (stream.IsWriting)
-        {
-            stream.SendNext(hasWeapon);
-            stream.SendNext(weaponAngle);
-        }
-        else
-        {
-            bool previousHasWeapon = hasWeapon;
-            if (stream.Count >= 4)
-            {
-                hasWeapon = (bool)stream.ReceiveNext();
-                weaponAngle = (float)stream.ReceiveNext();
-
-                if (hasWeapon != previousHasWeapon && weaponObject != null)
-                {
-                    weaponObject.SetActive(hasWeapon);
-                }
-            }
-        }
     }
 
     public void SetMoveSpeedMultiplier(float multiplier)

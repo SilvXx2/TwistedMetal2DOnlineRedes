@@ -6,8 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerKnockback))]
 public class PlayerHealth : MonoBehaviourPun
 {
-    public static PlayerHealth LocalPlayerInstance { get; private set; }
-
     [SerializeField] private int maxHealth = 100;
     [SerializeField, Min(0.01f)] private float fallbackBlinkDuration = 0.15f;
 
@@ -23,9 +21,11 @@ public class PlayerHealth : MonoBehaviourPun
 
     private void Awake()
     {
-        if (photonView != null && photonView.IsMine)
+        // LiveOps: sobreescribir maxHealth con el valor remoto si está disponible.
+        // Si LiveOpsManager no cargó todavía, se usa el valor del inspector como fallback.
+        if (LiveOpsManager.Instance != null && LiveOpsManager.Instance.IsReady)
         {
-            LocalPlayerInstance = this;
+            maxHealth = LiveOpsManager.Instance.Config.PlayerMaxHealth;
         }
 
         maxHealth = Mathf.Max(1, maxHealth);
@@ -50,16 +50,8 @@ public class PlayerHealth : MonoBehaviourPun
         }
     }
 
-    private void OnDestroy()
-    {
-        if (LocalPlayerInstance == this)
-        {
-            LocalPlayerInstance = null;
-        }
-    }
-
     [PunRPC]
-    public void TakeDamage(int amount, int attackerActorNumber)
+    public void TakeDamage(int amount)
     {
         if (isDead || amount <= 0)
         {
@@ -93,88 +85,7 @@ public class PlayerHealth : MonoBehaviourPun
 
         if (currentHealth <= 0)
         {
-            if (PhotonNetwork.InRoom)
-            {
-                if (photonView != null && photonView.IsMine)
-                {
-                    int deaths = PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Deaths") ? (int)PhotonNetwork.LocalPlayer.CustomProperties["Deaths"] : 0;
-                    ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
-                    hash["Deaths"] = deaths + 1;
-                    PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-                }
-
-                if (PhotonNetwork.LocalPlayer.ActorNumber == attackerActorNumber)
-                {
-                    int kills = PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Kills") ? (int)PhotonNetwork.LocalPlayer.CustomProperties["Kills"] : 0;
-                    int score = PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Score") ? (int)PhotonNetwork.LocalPlayer.CustomProperties["Score"] : 0;
-                    ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
-                    hash["Kills"] = kills + 1;
-                    hash["Score"] = score + 100;
-                    PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-
-                    int tauntId = UnityEngine.Random.Range(1, 6);
-                    string victimName = (photonView != null && photonView.Owner != null) ? photonView.Owner.NickName : "El rival";
-                    string attackerName = PhotonNetwork.LocalPlayer.NickName;
-
-                    if (photonView != null && photonView.Owner != null && string.IsNullOrEmpty(victimName))
-                        victimName = $"Jugador {photonView.Owner.ActorNumber}";
-                    if (string.IsNullOrEmpty(attackerName))
-                        attackerName = $"Jugador {PhotonNetwork.LocalPlayer.ActorNumber}";
-
-                    TauntList.Instance.ObtenerTauntPorId(tauntId, (tauntText) =>
-                    {
-                        if (LocalPlayerInstance != null && LocalPlayerInstance.photonView != null)
-                        {
-                            LocalPlayerInstance.photonView.RPC("RPC_ShowTaunt", RpcTarget.All, attackerName, victimName, tauntText);
-                        }
-                        else
-                        {
-                            if (TauntNotifier.Instance != null)
-                            {
-                                TauntNotifier.Instance.ShowTaunt(attackerName, victimName, tauntText);
-                            }
-                        }
-                    });
-                }
-            }
-            else
-            {
-                // Single-player / Offline fallback
-                if (photonView == null || photonView.IsMine)
-                {
-                    int tauntId = UnityEngine.Random.Range(1, 6);
-                    TauntList.Instance.ObtenerTauntPorId(tauntId, (tauntText) =>
-                    {
-                        if (TauntNotifier.Instance != null)
-                        {
-                            TauntNotifier.Instance.ShowTaunt("El rival", "Tú", tauntText);
-                        }
-                    });
-                }
-                else
-                {
-                    int tauntId = UnityEngine.Random.Range(1, 6);
-                    TauntList.Instance.ObtenerTauntPorId(tauntId, (tauntText) =>
-                    {
-                        if (TauntNotifier.Instance != null)
-                        {
-                            TauntNotifier.Instance.ShowTaunt("Tú", "El rival", tauntText);
-                        }
-                    });
-                }
-            }
-
             Die();
-        }
-    }
-
-    [PunRPC]
-    public void RPC_ShowTaunt(string attackerName, string victimName, string tauntText)
-    {
-        Debug.Log($"[Taunt RPC] {attackerName} -> {victimName}: {tauntText}");
-        if (TauntNotifier.Instance != null)
-        {
-            TauntNotifier.Instance.ShowTaunt(attackerName, victimName, tauntText);
         }
     }
 

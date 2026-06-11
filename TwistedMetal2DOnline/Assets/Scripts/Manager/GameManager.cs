@@ -53,6 +53,13 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Instance = this;
         DontDestroyOnLoad(gameObject);
         matchResultEventBridge = new PhotonMatchResultEventBridge(MatchResultEventCode);
+
+        // LiveOps: sobreescribir el período de gracia con el valor remoto si está disponible.
+        if (LiveOpsManager.Instance != null && LiveOpsManager.Instance.IsReady)
+        {
+            matchCheckGracePeriod = LiveOpsManager.Instance.Config.MatchGracePeriod;
+            Debug.Log($"[GameManager] LiveOps aplicado — matchCheckGracePeriod:{matchCheckGracePeriod}");
+        }
     }
 
     private void OnDestroy()
