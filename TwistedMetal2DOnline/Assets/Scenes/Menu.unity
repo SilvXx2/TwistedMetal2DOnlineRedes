@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657886, g: 0.4964128, b: 0.57481724, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1348,8 +1348,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1609,7 +1609,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ce6d6f4529cad234ab34ce36d4f8194a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 073aa10aa866ea5458e88554e6c4c86f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2072,17 +2072,41 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
+    - target: {fileID: 1686582821865520454, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 80a5010cf1e2a8e409c1594be0a41663, type: 3}
     - target: {fileID: 2058591574861186067, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0.000089645386
       objectReference: {fileID: 0}
+    - target: {fileID: 2655422681243985456, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e7f4918474238c7429d23e935e8b7863, type: 3}
+    - target: {fileID: 2655422681281143870, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 764e066035eacdb4491f8ef4607f4469, type: 3}
+    - target: {fileID: 2655422681874354695, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3c07f08c1168fc34e9dc55b4c9ba9fd2, type: 3}
     - target: {fileID: 2655422682931588821, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: c310e41aaa9db024c9199d4f91f7170b, type: 3}
+      objectReference: {fileID: 21300000, guid: 7ec87dc77ba8d6147bc5df7a58e7389a, type: 3}
     - target: {fileID: 2655422682931588823, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3025002846786965705, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3025002846786965705, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3276197911359618266, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_text
@@ -2214,12 +2238,46 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2092080874}
+    - target: {fileID: 4557099696030084868, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_text
+      value: '
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4557099696269384514, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4557099696274023961, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2092080874}
     - target: {fileID: 4557099696319837369, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4854204862438300801, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3c07f08c1168fc34e9dc55b4c9ba9fd2, type: 3}
+    - target: {fileID: 4905695722505767780, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5548163294472070802, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5548163294472070802, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5548163294472070802, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5548163294472070802, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6250220161822105454, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
@@ -2249,6 +2307,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2092080874}
+    - target: {fileID: 8013770150335905037, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8572819549660560804, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_isRightToLeft
       value: 0

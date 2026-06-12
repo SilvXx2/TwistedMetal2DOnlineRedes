@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: -6366716036144992972}
   - component: {fileID: 9111207047709230937}
   - component: {fileID: 648031224935911833}
+  - component: {fileID: 2148524861854565514}
   m_Layer: 0
   m_Name: CAR
   m_TagString: Untagged
@@ -153,12 +154,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
   isLocalPlayer: 1
-  moveSpeed: 200
+  moveSpeed: 300
   turnSpeed: 200
+  nitroMultiplier: 1.8
+  nitroKey: 304
   hasWeapon: 0
-  weaponSprite: {fileID: 21300000, guid: 78e2815544fce5f4a9370b3b0a7d8734, type: 3}
+  weaponSprite: {fileID: 21300000, guid: 6b1b37cacc428bf46bf7e6be97bdf7f1, type: 3}
   weaponLocalPosition: {x: 0, y: 0, z: 0}
-  weaponLocalScale: {x: 1, y: 1, z: 1}
+  weaponLocalScale: {x: 0.8, y: 0.8, z: 1}
   weaponAngleOffset: 0
   bulletCustomSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   bulletSpeed: 500
@@ -201,6 +204,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 1622535798551406423}
+  - {fileID: 2148524861854565514}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -259,3 +263,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   fallbackBlinkDuration: 0.15
+--- !u!114 &2148524861854565514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622535798551406416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e394dffdb670bc4cbe26655cf2e6509, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carSpriteRenderer: {fileID: 1622535798551406421}
+  carSprites:
+  - {fileID: 21300000, guid: 270e21e1d146e74429f0c9918d2b0275, type: 3}
+  - {fileID: 21300000, guid: aaad0ca0deeea904fbd991778bd162b0, type: 3}
+  - {fileID: 21300000, guid: 3ab18fafc809a8e48baeb92bbe7eef45, type: 3}
+  - {fileID: 21300000, guid: 6bfa9dd8d606dda47b0e9ef39b311b39, type: 3}

@@ -1,9 +1,11 @@
 using Photon.Pun;
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(PlayerDamageInvulnerability))]
 [RequireComponent(typeof(PlayerDamageBlink))]
 [RequireComponent(typeof(PlayerKnockback))]
+
 public class PlayerHealth : MonoBehaviourPun
 {
     public static PlayerHealth LocalPlayerInstance { get; private set; }
@@ -13,6 +15,8 @@ public class PlayerHealth : MonoBehaviourPun
 
     private int currentHealth;
     private bool isDead = false;
+    private bool powerUpInvulnerable;
+    private Coroutine powerUpInvulnerabilityRoutine;
     private PlayerDamageBlink damageBlink;
     private PlayerDamageInvulnerability damageInvulnerability;
     private PlayerKnockback knockback;
@@ -91,6 +95,11 @@ public class PlayerHealth : MonoBehaviourPun
     public void TakeDamage(int amount, int attackerActorNumber)
     {
         if (isDead || amount <= 0)
+        {
+            return;
+        }
+
+        if (powerUpInvulnerable)
         {
             return;
         }
@@ -205,6 +214,34 @@ public class PlayerHealth : MonoBehaviourPun
         {
             TauntNotifier.Instance.ShowTaunt(attackerName, victimName, tauntText);
         }
+    }
+
+    [PunRPC]
+    public void FullHeal()
+    {
+        if (isDead)
+            return;
+
+        currentHealth = maxHealth;
+    }
+
+    [PunRPC]
+    public void SetPowerUpInvulnerability(float duration)
+    {
+        if (powerUpInvulnerabilityRoutine != null)
+            StopCoroutine(powerUpInvulnerabilityRoutine);
+
+        powerUpInvulnerabilityRoutine =
+            StartCoroutine(PowerUpInvulnerabilityRoutine(duration));
+    }
+
+    private IEnumerator PowerUpInvulnerabilityRoutine(float duration)
+    {
+        powerUpInvulnerable = true;
+
+        yield return new WaitForSeconds(duration);
+
+        powerUpInvulnerable = false;
     }
 
     void Die()
