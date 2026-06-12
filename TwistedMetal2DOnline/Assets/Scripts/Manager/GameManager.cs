@@ -57,6 +57,18 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         // LiveOps: sobreescribir el período de gracia con el valor remoto si está disponible.
         if (LiveOpsManager.Instance != null && LiveOpsManager.Instance.IsReady)
         {
+            ApplyLiveOpsConfig();
+        }
+        else if (LiveOpsManager.Instance != null)
+        {
+            LiveOpsManager.Instance.OnLiveOpsReady += ApplyLiveOpsConfig;
+        }
+    }
+
+    private void ApplyLiveOpsConfig()
+    {
+        if (LiveOpsManager.Instance != null)
+        {
             matchCheckGracePeriod = LiveOpsManager.Instance.Config.MatchGracePeriod;
             Debug.Log($"[GameManager] LiveOps aplicado — matchCheckGracePeriod:{matchCheckGracePeriod}");
         }
@@ -67,6 +79,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         if (Instance == this)
         {
             Instance = null;
+        }
+        if (LiveOpsManager.Instance != null)
+        {
+            LiveOpsManager.Instance.OnLiveOpsReady -= ApplyLiveOpsConfig;
         }
     }
 

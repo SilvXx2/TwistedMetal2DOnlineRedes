@@ -50,28 +50,42 @@ public class LiveOpsManager : MonoBehaviour
         try
         {
             Debug.Log("[LiveOpsManager] Inicializando Unity Gaming Services...");
-            await UnityServices.InitializeAsync();
-
-            if (!AuthenticationService.Instance.IsSignedIn)
+            
+            // Timeout de 4 segundos para todo el proceso de inicialización de LiveOps
+            Task initTask = DoInitializeLiveOpsAsync();
+            Task delayTask = Task.Delay(4000);
+            
+            Task completedTask = await Task.WhenAny(initTask, delayTask);
+            if (completedTask == delayTask)
             {
-                Debug.Log("[LiveOpsManager] Autenticando anónimamente...");
-                await AuthenticationService.Instance.SignInAnonymouslyAsync();
-                Debug.Log($"[LiveOpsManager] Autenticado. PlayerID: {AuthenticationService.Instance.PlayerId}");
+                throw new TimeoutException("La inicialización de LiveOps superó el límite de tiempo.");
             }
-
-            RemoteConfigService.Instance.FetchCompleted += OnRemoteConfigFetchCompleted;
-
-            Debug.Log("[LiveOpsManager] Descargando Remote Config...");
-            await RemoteConfigService.Instance.FetchConfigsAsync(new UserAttributes(), new AppAttributes());
         }
         catch (Exception e)
         {
-            Debug.LogWarning($"[LiveOpsManager] Error al inicializar LiveOps: {e.Message}. Usando configuración por defecto.");
+            Debug.LogWarning($"[LiveOpsManager] Error/Timeout al inicializar LiveOps: {e.Message}. Usando configuración por defecto.");
             OnLiveOpsFailed?.Invoke(e.Message);
 
             IsReady = true;
             OnLiveOpsReady?.Invoke();
         }
+    }
+
+    private async Task DoInitializeLiveOpsAsync()
+    {
+        await UnityServices.InitializeAsync();
+
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            Debug.Log("[LiveOpsManager] Autenticando anónimamente...");
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            Debug.Log($"[LiveOpsManager] Autenticado. PlayerID: {AuthenticationService.Instance.PlayerId}");
+        }
+
+        RemoteConfigService.Instance.FetchCompleted += OnRemoteConfigFetchCompleted;
+
+        Debug.Log("[LiveOpsManager] Descargando Remote Config...");
+        await RemoteConfigService.Instance.FetchConfigsAsync(new UserAttributes(), new AppAttributes());
     }
 
     private void OnRemoteConfigFetchCompleted(ConfigResponse response)

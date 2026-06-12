@@ -25,8 +25,41 @@ public class MapPartitionLoader : MonoBehaviourPunCallbacks
     private void Start()
     {
         BuildZoneCache();
+        if (LiveOpsManager.Instance != null && LiveOpsManager.Instance.IsReady)
+        {
+            InitializeMap();
+        }
+        else if (LiveOpsManager.Instance != null)
+        {
+            LiveOpsManager.Instance.OnLiveOpsReady += OnLiveOpsReadyHandler;
+        }
+        else
+        {
+            InitializeMap();
+        }
+    }
+
+    private void OnLiveOpsReadyHandler()
+    {
+        if (LiveOpsManager.Instance != null)
+        {
+            LiveOpsManager.Instance.OnLiveOpsReady -= OnLiveOpsReadyHandler;
+        }
+        InitializeMap();
+    }
+
+    private void InitializeMap()
+    {
         ApplySpawnAndPickups();
         TryApplyRandomMap();
+    }
+
+    private void OnDestroy()
+    {
+        if (LiveOpsManager.Instance != null)
+        {
+            LiveOpsManager.Instance.OnLiveOpsReady -= OnLiveOpsReadyHandler;
+        }
     }
 
     private void TryApplyRandomMap()

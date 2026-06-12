@@ -28,6 +28,17 @@ public class PlayerHealth : MonoBehaviourPun
             LocalPlayerInstance = this;
         }
 
+        // LiveOps: sobreescribir maxHealth con el valor remoto si está disponible.
+        // Si LiveOpsManager no cargó todavía, se usa el valor del inspector como fallback y se subscribe.
+        if (LiveOpsManager.Instance != null && LiveOpsManager.Instance.IsReady)
+        {
+            ApplyLiveOpsConfig();
+        }
+        else if (LiveOpsManager.Instance != null)
+        {
+            LiveOpsManager.Instance.OnLiveOpsReady += ApplyLiveOpsConfig;
+        }
+
         maxHealth = Mathf.Max(1, maxHealth);
         currentHealth = maxHealth;
 
@@ -50,11 +61,29 @@ public class PlayerHealth : MonoBehaviourPun
         }
     }
 
+    private void ApplyLiveOpsConfig()
+    {
+        if (LiveOpsManager.Instance != null)
+        {
+            int oldMax = maxHealth;
+            maxHealth = Mathf.Max(1, LiveOpsManager.Instance.Config.PlayerMaxHealth);
+            if (currentHealth == oldMax)
+            {
+                currentHealth = maxHealth;
+            }
+            Debug.Log($"[PlayerHealth] LiveOps aplicado — maxHealth:{maxHealth}");
+        }
+    }
+
     private void OnDestroy()
     {
         if (LocalPlayerInstance == this)
         {
             LocalPlayerInstance = null;
+        }
+        if (LiveOpsManager.Instance != null)
+        {
+            LiveOpsManager.Instance.OnLiveOpsReady -= ApplyLiveOpsConfig;
         }
     }
 

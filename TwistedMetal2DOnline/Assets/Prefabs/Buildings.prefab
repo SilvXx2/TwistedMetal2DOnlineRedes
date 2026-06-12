@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1441090530652479210}
   - component: {fileID: 6774801711000533057}
   - component: {fileID: 3820046426637491699}
+  - component: {fileID: 1512156983201707542}
   m_Layer: 0
   m_Name: BACKGROUND_22
   m_TagString: Untagged
@@ -139,6 +140,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.16, y: 0.84}
   m_EdgeRadius: 0
+--- !u!114 &1512156983201707542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925159373897611767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &994320095962540693
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,6 +175,7 @@ GameObject:
   - component: {fileID: 1713325128425742373}
   - component: {fileID: 1878310838096271929}
   - component: {fileID: 2254966779775939455}
+  - component: {fileID: 8968394477835764460}
   m_Layer: 0
   m_Name: BACKGROUND_11
   m_TagString: Untagged
@@ -278,6 +302,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.91, y: 1.03}
   m_EdgeRadius: 0
+--- !u!114 &8968394477835764460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994320095962540693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1142010908195624348
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,6 +337,7 @@ GameObject:
   - component: {fileID: 4644818318921511877}
   - component: {fileID: 177423333511201519}
   - component: {fileID: 4878951689989683206}
+  - component: {fileID: 6347662531387617200}
   m_Layer: 0
   m_Name: BACKGROUND_5
   m_TagString: Untagged
@@ -417,6 +464,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.31, y: 1.16}
   m_EdgeRadius: 0
+--- !u!114 &6347662531387617200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142010908195624348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1969065672429771512
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,6 +499,7 @@ GameObject:
   - component: {fileID: 3658536264510692304}
   - component: {fileID: 1142267642112357922}
   - component: {fileID: 8064362135938796830}
+  - component: {fileID: 7885266207171812497}
   m_Layer: 0
   m_Name: BACKGROUND_14
   m_TagString: Untagged
@@ -556,6 +626,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.99, y: 1.3}
   m_EdgeRadius: 0
+--- !u!114 &7885266207171812497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969065672429771512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1985342116417947098
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,6 +661,7 @@ GameObject:
   - component: {fileID: 4877500314344840745}
   - component: {fileID: 4153677514464298258}
   - component: {fileID: 8711580036684095968}
+  - component: {fileID: 4495149186207587924}
   m_Layer: 0
   m_Name: BACKGROUND_20
   m_TagString: Untagged
@@ -695,6 +788,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.29, y: 1.05}
   m_EdgeRadius: 0
+--- !u!114 &4495149186207587924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985342116417947098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2358072204891368988
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,6 +823,7 @@ GameObject:
   - component: {fileID: 5851063802091823986}
   - component: {fileID: 5622101076222210738}
   - component: {fileID: 4017891383669091720}
+  - component: {fileID: 2585588909282332945}
   m_Layer: 0
   m_Name: BACKGROUND_21
   m_TagString: Untagged
@@ -834,6 +950,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.68, y: 0.75}
   m_EdgeRadius: 0
+--- !u!114 &2585588909282332945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2358072204891368988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2394028741370282715
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,6 +985,7 @@ GameObject:
   - component: {fileID: 622408488743652754}
   - component: {fileID: 1552010498098867888}
   - component: {fileID: 8097389125663656650}
+  - component: {fileID: 5264414363266321268}
   m_Layer: 0
   m_Name: BACKGROUND_2
   m_TagString: Untagged
@@ -973,6 +1112,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.78, y: 1.06}
   m_EdgeRadius: 0
+--- !u!114 &5264414363266321268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2394028741370282715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2561404879786022933
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,6 +1147,7 @@ GameObject:
   - component: {fileID: 3851811879969269737}
   - component: {fileID: 4840147843111305910}
   - component: {fileID: 4235653873568239000}
+  - component: {fileID: 637860601612617259}
   m_Layer: 0
   m_Name: BACKGROUND_13
   m_TagString: Untagged
@@ -1112,6 +1274,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.19, y: 1.23}
   m_EdgeRadius: 0
+--- !u!114 &637860601612617259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2561404879786022933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2660262119353955423
 GameObject:
   m_ObjectHideFlags: 0
@@ -1125,6 +1309,7 @@ GameObject:
   - component: {fileID: 7465705661472827693}
   - component: {fileID: 3613546748476030414}
   - component: {fileID: 1665201901734206882}
+  - component: {fileID: 7219581254490431293}
   m_Layer: 0
   m_Name: BACKGROUND_17
   m_TagString: Untagged
@@ -1251,6 +1436,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.96, y: 1.11}
   m_EdgeRadius: 0
+--- !u!114 &7219581254490431293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2660262119353955423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &3185155767634762573
 GameObject:
   m_ObjectHideFlags: 0
@@ -1264,6 +1471,7 @@ GameObject:
   - component: {fileID: 5013031640354350294}
   - component: {fileID: 8470487329205437570}
   - component: {fileID: 9073158334297080743}
+  - component: {fileID: 47568021737747078}
   m_Layer: 0
   m_Name: BACKGROUND_11 (1)
   m_TagString: Untagged
@@ -1390,6 +1598,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.91, y: 1.03}
   m_EdgeRadius: 0
+--- !u!114 &47568021737747078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3185155767634762573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &3210430406383699055
 GameObject:
   m_ObjectHideFlags: 0
@@ -1403,6 +1633,7 @@ GameObject:
   - component: {fileID: 2584986389524066517}
   - component: {fileID: 4504946979660123853}
   - component: {fileID: 92480911723140309}
+  - component: {fileID: 2325778239496752672}
   m_Layer: 0
   m_Name: BACKGROUND_9
   m_TagString: Untagged
@@ -1529,6 +1760,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.15, y: 1.1}
   m_EdgeRadius: 0
+--- !u!114 &2325778239496752672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3210430406383699055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &3311989952243153063
 GameObject:
   m_ObjectHideFlags: 0
@@ -1542,6 +1795,7 @@ GameObject:
   - component: {fileID: 2405957951921136321}
   - component: {fileID: 6735557815580113246}
   - component: {fileID: 5299492672054049357}
+  - component: {fileID: 2838942880624213752}
   m_Layer: 0
   m_Name: BACKGROUND_0
   m_TagString: Untagged
@@ -1668,6 +1922,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.29, y: 2.52}
   m_EdgeRadius: 0
+--- !u!114 &2838942880624213752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3311989952243153063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &4615546954853560981
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,6 +1957,7 @@ GameObject:
   - component: {fileID: 8216085641672672527}
   - component: {fileID: 2977603344211401654}
   - component: {fileID: 7561642119505288454}
+  - component: {fileID: 8723938738974671235}
   m_Layer: 0
   m_Name: BACKGROUND_7 (1)
   m_TagString: Untagged
@@ -1807,6 +2084,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.33, y: 1.3}
   m_EdgeRadius: 0
+--- !u!114 &8723938738974671235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4615546954853560981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &4880534201276478973
 GameObject:
   m_ObjectHideFlags: 0
@@ -1820,6 +2119,7 @@ GameObject:
   - component: {fileID: 6398711372731527839}
   - component: {fileID: 4293003738826235580}
   - component: {fileID: 144502684260333327}
+  - component: {fileID: 3681841681912090216}
   m_Layer: 0
   m_Name: BACKGROUND_8
   m_TagString: Untagged
@@ -1946,6 +2246,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.01, y: 1.12}
   m_EdgeRadius: 0
+--- !u!114 &3681841681912090216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4880534201276478973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &5526598150606887970
 GameObject:
   m_ObjectHideFlags: 0
@@ -1959,6 +2281,7 @@ GameObject:
   - component: {fileID: 7919140052811047442}
   - component: {fileID: 8452289965111262924}
   - component: {fileID: 3503706862177096846}
+  - component: {fileID: 763124571710865612}
   m_Layer: 0
   m_Name: BACKGROUND_19
   m_TagString: Untagged
@@ -2085,6 +2408,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.03, y: 1.05}
   m_EdgeRadius: 0
+--- !u!114 &763124571710865612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5526598150606887970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &5584933417897597415
 GameObject:
   m_ObjectHideFlags: 0
@@ -2098,6 +2443,7 @@ GameObject:
   - component: {fileID: 3068279533565333756}
   - component: {fileID: 2033951437473151065}
   - component: {fileID: 7605396361164338598}
+  - component: {fileID: 1822420078280899910}
   m_Layer: 0
   m_Name: BACKGROUND_4
   m_TagString: Untagged
@@ -2224,6 +2570,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.74, y: 1.09}
   m_EdgeRadius: 0
+--- !u!114 &1822420078280899910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5584933417897597415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6031008100498405141
 GameObject:
   m_ObjectHideFlags: 0
@@ -2237,6 +2605,7 @@ GameObject:
   - component: {fileID: 5073963236468503755}
   - component: {fileID: 2410828753715722405}
   - component: {fileID: 3074531766852184889}
+  - component: {fileID: 2550259429674334348}
   m_Layer: 0
   m_Name: BACKGROUND_7
   m_TagString: Untagged
@@ -2363,6 +2732,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.33, y: 1.3}
   m_EdgeRadius: 0
+--- !u!114 &2550259429674334348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6031008100498405141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6416602920588590648
 GameObject:
   m_ObjectHideFlags: 0
@@ -2376,6 +2767,7 @@ GameObject:
   - component: {fileID: 4901481380352080993}
   - component: {fileID: 3385337470628837157}
   - component: {fileID: 7710764194095695277}
+  - component: {fileID: 8982153395234715005}
   m_Layer: 0
   m_Name: BACKGROUND_9
   m_TagString: Untagged
@@ -2502,6 +2894,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.15, y: 1.1}
   m_EdgeRadius: 0
+--- !u!114 &8982153395234715005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6416602920588590648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6472889190972062305
 GameObject:
   m_ObjectHideFlags: 0
@@ -2515,6 +2929,7 @@ GameObject:
   - component: {fileID: 5728366677788638213}
   - component: {fileID: 314595594077013029}
   - component: {fileID: 7511218171217379653}
+  - component: {fileID: 6507130882503014125}
   m_Layer: 0
   m_Name: BACKGROUND_1
   m_TagString: Untagged
@@ -2641,6 +3056,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.38, y: 1.63}
   m_EdgeRadius: 0
+--- !u!114 &6507130882503014125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6472889190972062305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6606722424883817066
 GameObject:
   m_ObjectHideFlags: 0
@@ -2654,6 +3091,7 @@ GameObject:
   - component: {fileID: 5594098010133542401}
   - component: {fileID: 9201311451511964442}
   - component: {fileID: 8657224712248794070}
+  - component: {fileID: 766151815817326806}
   m_Layer: 0
   m_Name: BACKGROUND_2
   m_TagString: Untagged
@@ -2780,6 +3218,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.78, y: 1.06}
   m_EdgeRadius: 0
+--- !u!114 &766151815817326806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6606722424883817066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6739872953955085472
 GameObject:
   m_ObjectHideFlags: 0
@@ -2793,6 +3253,7 @@ GameObject:
   - component: {fileID: 2326559540079408460}
   - component: {fileID: 1242018886909559266}
   - component: {fileID: 2938262298242265933}
+  - component: {fileID: 4201970334734908881}
   m_Layer: 0
   m_Name: BACKGROUND_10
   m_TagString: Untagged
@@ -2919,6 +3380,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.29, y: 1.27}
   m_EdgeRadius: 0
+--- !u!114 &4201970334734908881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6739872953955085472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7025881044518622030
 GameObject:
   m_ObjectHideFlags: 0
@@ -2932,6 +3415,7 @@ GameObject:
   - component: {fileID: 7032369404498750008}
   - component: {fileID: 8925530735125060395}
   - component: {fileID: 803760117837346493}
+  - component: {fileID: 6644768014012634382}
   m_Layer: 0
   m_Name: BACKGROUND_4
   m_TagString: Untagged
@@ -3058,6 +3542,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.74, y: 1.09}
   m_EdgeRadius: 0
+--- !u!114 &6644768014012634382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7025881044518622030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7139770014787033317
 GameObject:
   m_ObjectHideFlags: 0
@@ -3127,6 +3633,7 @@ GameObject:
   - component: {fileID: 4326142515733465111}
   - component: {fileID: 3733224540516415309}
   - component: {fileID: 4146359126573133580}
+  - component: {fileID: 1427507614936595920}
   m_Layer: 0
   m_Name: BACKGROUND_3
   m_TagString: Untagged
@@ -3253,6 +3760,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.92, y: 1.06}
   m_EdgeRadius: 0
+--- !u!114 &1427507614936595920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7382195563909286066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7933517750835767584
 GameObject:
   m_ObjectHideFlags: 0
@@ -3266,6 +3795,7 @@ GameObject:
   - component: {fileID: 5327813072053750170}
   - component: {fileID: 8909330173862667632}
   - component: {fileID: 962944059690118084}
+  - component: {fileID: 7139085101589702685}
   m_Layer: 0
   m_Name: BACKGROUND_6
   m_TagString: Untagged
@@ -3392,6 +3922,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.27, y: 1.35}
   m_EdgeRadius: 0
+--- !u!114 &7139085101589702685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7933517750835767584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &8706527970333016639
 GameObject:
   m_ObjectHideFlags: 0
@@ -3405,6 +3957,7 @@ GameObject:
   - component: {fileID: 8966364047831805098}
   - component: {fileID: 5818822974945121979}
   - component: {fileID: 3451179130113352882}
+  - component: {fileID: 7888637298926728463}
   m_Layer: 0
   m_Name: BACKGROUND_18
   m_TagString: Untagged
@@ -3531,3 +4084,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.64, y: 1.2}
   m_EdgeRadius: 0
+--- !u!114 &7888637298926728463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8706527970333016639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

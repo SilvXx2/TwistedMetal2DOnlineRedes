@@ -63,10 +63,51 @@ public class CarController : MonoBehaviourPun, IPunObservable
     {
         if (photonView != null)
         {
+            Debug.Log($"[CarController] Start en GameObject '{gameObject.name}' — photonView.IsMine: {photonView.IsMine}");
             SetLocalPlayer(photonView.IsMine);
+        }
+        else
+        {
+            Debug.LogWarning($"[CarController] Start en GameObject '{gameObject.name}' — photonView es null!");
         }
 
         InitializeWeaponObject();
+
+        // LiveOps: sobreescribir velocidades con los valores remotos si están disponibles.
+        // Si LiveOpsManager no cargó todavía, se usan los valores del inspector como fallback.
+        ApplyLiveOpsConfig();
+    }
+
+    private void ApplyLiveOpsConfig()
+    {
+        if (LiveOpsManager.Instance == null || !LiveOpsManager.Instance.IsReady)
+        {
+            Debug.Log($"[CarController] ApplyLiveOpsConfig omitido en '{gameObject.name}' — LiveOpsManager listo: {(LiveOpsManager.Instance != null && LiveOpsManager.Instance.IsReady)}");
+            return;
+        }
+
+        float remoteMoveSpeed = LiveOpsManager.Instance.Config.CarMoveSpeed;
+        float remoteTurnSpeed = LiveOpsManager.Instance.Config.CarTurnSpeed;
+
+        if (remoteMoveSpeed > 0f)
+        {
+            moveSpeed = remoteMoveSpeed;
+        }
+        else
+        {
+            Debug.LogWarning($"[CarController] Valor de moveSpeed remoto inválido o cero ({remoteMoveSpeed}) para '{gameObject.name}', se mantiene el valor local: {moveSpeed}");
+        }
+
+        if (remoteTurnSpeed > 0f)
+        {
+            turnSpeed = remoteTurnSpeed;
+        }
+        else
+        {
+            Debug.LogWarning($"[CarController] Valor de turnSpeed remoto inválido o cero ({remoteTurnSpeed}) para '{gameObject.name}', se mantiene el valor local: {turnSpeed}");
+        }
+
+        Debug.Log($"[CarController] LiveOps aplicado en '{gameObject.name}' — moveSpeed:{moveSpeed} turnSpeed:{turnSpeed}");
     }
 
     private void Update()
@@ -153,6 +194,7 @@ public class CarController : MonoBehaviourPun, IPunObservable
     public void SetLocalPlayer(bool value)
     {
         isLocalPlayer = value;
+        Debug.Log($"[CarController] SetLocalPlayer({value}) en '{gameObject.name}' — isLocalPlayer ahora es: {isLocalPlayer}");
 
         if (rb != null)
         {
@@ -161,11 +203,17 @@ public class CarController : MonoBehaviourPun, IPunObservable
                 rb.velocity = Vector2.zero;
                 rb.angularVelocity = 0f;
                 rb.isKinematic = true;
+                Debug.Log($"[CarController] '{gameObject.name}' Rigidbody2D configurado como KINEMATIC (jugador remoto).");
             }
             else
             {
                 rb.isKinematic = false;
+                Debug.Log($"[CarController] '{gameObject.name}' Rigidbody2D configurado como DINÁMICO (jugador local).");
             }
+        }
+        else
+        {
+            Debug.LogWarning($"[CarController] SetLocalPlayer en '{gameObject.name}' — rb (Rigidbody2D) es null!");
         }
     }
 

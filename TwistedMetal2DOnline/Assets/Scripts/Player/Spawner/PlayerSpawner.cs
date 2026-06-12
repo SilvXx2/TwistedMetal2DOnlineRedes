@@ -26,6 +26,21 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        // Limpiar coches estáticos que hayan quedado colocados en la escena por error
+        if (playerPrefab != null)
+        {
+            PhotonView[] allViews = FindObjectsOfType<PhotonView>(true);
+            for (int i = 0; i < allViews.Length; i++)
+            {
+                PhotonView view = allViews[i];
+                if (view != null && !view.isRuntimeInstantiated && view.gameObject.name.StartsWith(playerPrefab.name))
+                {
+                    Debug.Log($"[PlayerSpawner] Destruyendo coche de escena estático para evitar conflictos: {view.gameObject.name}");
+                    Destroy(view.gameObject);
+                }
+            }
+        }
+
         if (!spawnOnStart)
         {
             return;
@@ -104,6 +119,12 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
 
     private void TrySpawnPlayer()
     {
+        if (LiveOpsManager.Instance != null && !LiveOpsManager.Instance.IsReady)
+        {
+            Debug.Log("[PlayerSpawner] TrySpawnPlayer omitido: LiveOpsManager está inicializándose.");
+            return;
+        }
+
         if (hasSpawned)
         {
             return;
@@ -111,6 +132,7 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
 
         if (!PhotonNetwork.InRoom)
         {
+            Debug.Log("[PlayerSpawner] TrySpawnPlayer omitido: no estamos en una room de Photon.");
             return;
         }
 
@@ -122,6 +144,7 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
 
         if (HasLocalPlayerInstance())
         {
+            Debug.Log("[PlayerSpawner] TrySpawnPlayer: Ya existe una instancia local del jugador en escena. Marcando hasSpawned = true.");
             hasSpawned = true;
             return;
         }
@@ -141,6 +164,7 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
 
         if (!PhotonPlayerSlotRegistry.TryGetLocalStableSlot(out int slotIndex))
         {
+            Debug.Log("[PlayerSpawner] TrySpawnPlayer: Aún no se ha asignado o sincronizado el slot del jugador estable.");
             return;
         }
 
@@ -148,6 +172,7 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
             ? spawnPositions[slotIndex % spawnPositions.Length]
             : transform.position;
 
+        Debug.Log($"[PlayerSpawner] Instanciando jugador local '{playerPrefab.name}' en la posición de spawn [{slotIndex}]: {spawnPosition}");
         PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
         hasSpawned = true;
     }
@@ -159,6 +184,12 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
         {
             PhotonView view = views[i];
             if (view == null || !view.IsMine)
+            {
+                continue;
+            }
+
+            // Ignorar objetos colocados estáticamente en la escena (no instanciados en tiempo de ejecución)
+            if (!view.isRuntimeInstantiated || view.InstantiationId == 0)
             {
                 continue;
             }

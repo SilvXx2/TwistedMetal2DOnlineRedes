@@ -338,15 +338,18 @@ internal static class PhotonPlayerSlotRegistry
     private static string GetOrCreateLocalStableId()
     {
         string stableId = PlayerPrefs.GetString(LocalStableIdPrefsKey, string.Empty);
-        if (!string.IsNullOrWhiteSpace(stableId))
+        if (string.IsNullOrWhiteSpace(stableId))
         {
-            return stableId;
+            stableId = Guid.NewGuid().ToString("N");
+            PlayerPrefs.SetString(LocalStableIdPrefsKey, stableId);
+            PlayerPrefs.Save();
         }
 
-        stableId = Guid.NewGuid().ToString("N");
-        PlayerPrefs.SetString(LocalStableIdPrefsKey, stableId);
-        PlayerPrefs.Save();
-        return stableId;
+        #if UNITY_EDITOR
+        return stableId + "_editor";
+        #else
+        return stableId + "_build";
+        #endif
     }
 
     private static string EncodeIdentityKey(string identityKey)
