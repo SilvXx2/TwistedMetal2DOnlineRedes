@@ -10,13 +10,7 @@ public class CarController : MonoBehaviourPun, IPunObservable
     [SerializeField] private float moveSpeed = 12f;
     [SerializeField] private float turnSpeed = 240f;
 
-    [Header("Nitro Settings")]
-    [SerializeField] private float nitroMultiplier = 1.5f;
-    [SerializeField] private KeyCode nitroKey = KeyCode.LeftShift;
-
-    private bool isNitroActive;
-
-    public bool IsNitroActive => isNitroActive;
+    private NitroSystem nitroSystem;
 
     [Header("Weapon")]
     [SerializeField] private bool hasWeapon = false;
@@ -53,6 +47,7 @@ public class CarController : MonoBehaviourPun, IPunObservable
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        nitroSystem = GetComponent<NitroSystem>();
         if (photonView != null)
         {
             remoteSynchronizer = new RemoteTransformSynchronizer(transform, remoteLerpSpeed);
@@ -127,6 +122,9 @@ public class CarController : MonoBehaviourPun, IPunObservable
 
         ReadInput();
 
+        if (nitroSystem != null)
+            nitroSystem.Tick(moveInput);
+
         if (hasWeapon && weaponObject != null)
         {
             RotateWeaponToMouse();
@@ -147,7 +145,6 @@ public class CarController : MonoBehaviourPun, IPunObservable
     {
         moveInput = 0f;
         turnInput = 0f;
-        isNitroActive = false;
 
         if (Input.GetKey(KeyCode.W))
             moveInput = 1f;
@@ -160,17 +157,14 @@ public class CarController : MonoBehaviourPun, IPunObservable
 
         if (Input.GetKey(KeyCode.D))
             turnInput = -1f;
-
-        if (Input.GetKey(nitroKey))
-            isNitroActive = true;
     }
 
     private void Move()
     {
         float currentSpeed = moveSpeed;
-        if (isNitroActive && moveInput > 0f)
+        if (nitroSystem != null && nitroSystem.IsNitroActive && nitroSystem.CanUseNitro && moveInput > 0f)
         {
-            currentSpeed *= nitroMultiplier;
+            currentSpeed *= nitroSystem.NitroSpeedMultiplier;
         }
         rb.velocity = transform.right * moveInput * currentSpeed;
     }
@@ -350,7 +344,6 @@ public class CarController : MonoBehaviourPun, IPunObservable
         {
             stream.SendNext(hasWeapon);
             stream.SendNext(weaponAngle);
-            stream.SendNext(isNitroActive);
         }
         else
         {
@@ -359,11 +352,6 @@ public class CarController : MonoBehaviourPun, IPunObservable
             {
                 hasWeapon = (bool)stream.ReceiveNext();
                 weaponAngle = (float)stream.ReceiveNext();
-
-                if (stream.Count >= 5)
-                {
-                    isNitroActive = (bool)stream.ReceiveNext();
-                }
 
                 if (hasWeapon != previousHasWeapon && weaponObject != null)
                 {

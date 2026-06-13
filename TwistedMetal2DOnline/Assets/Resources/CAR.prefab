@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: 648031224935911833}
   - component: {fileID: 2148524861854565514}
   - component: {fileID: 4724630049302104319}
+  - component: {fileID: 5767731704423278076}
+  - component: {fileID: 1907591409373016273}
   m_Layer: 0
   m_Name: CAR
   m_TagString: Untagged
@@ -158,8 +160,6 @@ MonoBehaviour:
   isLocalPlayer: 1
   moveSpeed: 300
   turnSpeed: 200
-  nitroMultiplier: 1.8
-  nitroKey: 304
   hasWeapon: 0
   weaponSprite: {fileID: 21300000, guid: 6b1b37cacc428bf46bf7e6be97bdf7f1, type: 3}
   weaponLocalPosition: {x: 0, y: 0, z: 0}
@@ -207,6 +207,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 1622535798551406423}
   - {fileID: 2148524861854565514}
+  - {fileID: 5767731704423278076}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -296,6 +297,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoke: {fileID: 2407121194439546569}
+--- !u!114 &5767731704423278076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622535798551406416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b570747aeea069043bf9f3d4e2b553c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxNitro: 100
+  consumeRate: 30
+  rechargeRate: 15
+  nitroMultiplier: 1.5
+  nitroKey: 304
+--- !u!114 &1907591409373016273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622535798551406416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97caeb35c96b555499ab6544bcfa7475, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2407121194439546569
 GameObject:
   m_ObjectHideFlags: 0
