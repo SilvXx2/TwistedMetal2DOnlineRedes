@@ -991,11 +991,11 @@ PrefabInstance:
     - target: {fileID: 8691149935388530233, guid: 08a55a6b51bca354184317c799739541, type: 3}
       propertyPath: notificationText
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1125003778}
     - target: {fileID: 8691149935388530233, guid: 08a55a6b51bca354184317c799739541, type: 3}
       propertyPath: notificationPanel
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1125003779}
     - target: {fileID: 8691149935388530238, guid: 08a55a6b51bca354184317c799739541, type: 3}
       propertyPath: m_Name
       value: GameConditionManager
