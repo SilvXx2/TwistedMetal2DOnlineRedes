@@ -38,6 +38,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     private PhotonRoomService roomService;
     private PhotonMatchService matchService;
     private string currentStatusMessage = string.Empty;
+    private bool wasOutOfFocus = false;
+    private Coroutine resetFocusFlagsCoroutine;
 
     private void Awake()
     {
@@ -231,8 +233,86 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         connectionState.MarkDisconnected();
         matchService.ResetMatchState();
         roomState.ResetRoomFlags();
-        EmitStatus($"Desconectado: {cause}");
+
+        string statusMsg = $"Desconectado: {cause}";
+        if (wasOutOfFocus)
+        {
+            statusMsg = $"Desconectado por pérdida de foco (AppOutOfFocus) - Causa: {cause}";
+            wasOutOfFocus = false;
+        }
+
+        EmitStatus(statusMsg);
         ConnectionFailed?.Invoke(cause);
+
+        // Volver a la pantalla del menú/lobby si nos desconectamos durante el gameplay
+        string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        if (currentScene != lobbySceneName)
+        {
+            Debug.Log($"[PhotonManager] Cargando escena de lobby/menu '{lobbySceneName}' debido a desconexión.");
+            UnityEngine.SceneManagement.SceneManager.LoadScene(lobbySceneName);
+        }
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (!hasFocus)
+        {
+            wasOutOfFocus = true;
+            if (resetFocusFlagsCoroutine != null)
+            {
+                StopCoroutine(resetFocusFlagsCoroutine);
+                resetFocusFlagsCoroutine = null;
+            }
+            Debug.Log("[PhotonManager] Aplicación fuera de foco. Se marca flag wasOutOfFocus = true.");
+        }
+        else
+        {
+            // Esperar 2 segundos antes de limpiar la bandera por si se produce desconexión diferida
+            if (gameObject.activeInHierarchy)
+            {
+                if (resetFocusFlagsCoroutine != null)
+                {
+                    StopCoroutine(resetFocusFlagsCoroutine);
+                }
+                resetFocusFlagsCoroutine = StartCoroutine(ResetFocusFlagsDelayed());
+            }
+        }
+    }
+
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+        {
+            wasOutOfFocus = true;
+            if (resetFocusFlagsCoroutine != null)
+            {
+                StopCoroutine(resetFocusFlagsCoroutine);
+                resetFocusFlagsCoroutine = null;
+            }
+            Debug.Log("[PhotonManager] Aplicación pausada. Se marca flag wasOutOfFocus = true.");
+        }
+        else
+        {
+            if (gameObject.activeInHierarchy)
+            {
+                if (resetFocusFlagsCoroutine != null)
+                {
+                    StopCoroutine(resetFocusFlagsCoroutine);
+                }
+                resetFocusFlagsCoroutine = StartCoroutine(ResetFocusFlagsDelayed());
+            }
+        }
+    }
+
+    private IEnumerator ResetFocusFlagsDelayed()
+    {
+        yield return new WaitForSecondsRealtime(2f);
+        if (PhotonNetwork.IsConnected)
+        {
+            wasOutOfFocus = false;
+            Debug.Log("[PhotonManager] Foco recuperado y sigue conectado. Flag wasOutOfFocus restablecido a false.");
+        }
+        resetFocusFlagsCoroutine = null;
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
