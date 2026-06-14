@@ -313,7 +313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxNitro: 100
   consumeRate: 30
-  rechargeRate: 15
+  rechargeRate: 5
   nitroMultiplier: 1.5
   nitroKey: 304
 --- !u!114 &1907591409373016273

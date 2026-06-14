@@ -1,5 +1,6 @@
 public enum PowerUpType
 {
     FullHeal,
-    Invulnerability
+    Invulnerability,
+    NitroRecharge
 }

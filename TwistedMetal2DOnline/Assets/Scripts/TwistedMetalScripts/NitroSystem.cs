@@ -44,6 +44,12 @@ public class NitroSystem : MonoBehaviourPun, IPunObservable
         }
     }
 
+    [PunRPC]
+    public void FullNitroRecharge()
+    {
+        currentNitro = maxNitro;
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)

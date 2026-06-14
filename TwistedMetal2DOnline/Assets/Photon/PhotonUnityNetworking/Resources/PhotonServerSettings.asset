@@ -49,6 +49,7 @@ MonoBehaviour:
   - SetPowerUpInvulnerability
   - RequestDestroy
   - RPC_SetSkin
+  - FullNitroRecharge
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0

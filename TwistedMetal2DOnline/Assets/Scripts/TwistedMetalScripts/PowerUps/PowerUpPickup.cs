@@ -22,18 +22,19 @@ public class PowerUpPickup : MonoBehaviourPun
             return;
 
         PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+        NitroSystem nitroSystem = other.GetComponent<NitroSystem>();
 
         if (playerHealth == null)
             return;
 
         wasPicked = true;
 
-        ApplyPowerUp(playerHealth);
+        ApplyPowerUp(playerHealth, nitroSystem);
 
         photonView.RPC(nameof(RequestDestroy), RpcTarget.MasterClient);
     }
 
-    private void ApplyPowerUp(PlayerHealth playerHealth)
+    private void ApplyPowerUp(PlayerHealth playerHealth, NitroSystem nitroSystem)
     {
         switch (powerUpType)
         {
@@ -47,6 +48,11 @@ public class PowerUpPickup : MonoBehaviourPun
                     RpcTarget.All,
                     invulnerabilityDuration
                 );
+                break;
+
+            case PowerUpType.NitroRecharge:
+                if (nitroSystem != null)
+                    nitroSystem.photonView.RPC("FullNitroRecharge", RpcTarget.All);
                 break;
         }
     }
