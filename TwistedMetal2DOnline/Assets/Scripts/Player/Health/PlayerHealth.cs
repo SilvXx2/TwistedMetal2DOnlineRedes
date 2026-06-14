@@ -248,6 +248,23 @@ public class PlayerHealth : MonoBehaviourPun
     {
         isDead = true;
 
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.Instantiate(
+                "Effects/Explosion",
+                transform.position,
+                Quaternion.identity
+            );
+        }
+        else
+        {
+            Instantiate(
+                Resources.Load<GameObject>("Effects/Explosion"),
+                transform.position,
+                Quaternion.identity
+            );
+        }
+
         if (photonView != null && photonView.IsMine)
         {
             PhotonNetwork.Destroy(gameObject);

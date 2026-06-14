@@ -173,7 +173,7 @@ MonoBehaviour:
   bulletLifetime: 2
   fireRate: 0.15
   bulletSpawnOffset: 8
-  bulletScale: {x: 10, y: 10, z: 1}
+  bulletScale: {x: 30, y: 30, z: 1}
   remoteLerpSpeed: 12
 --- !u!114 &1622535798551406422
 MonoBehaviour:
@@ -299,6 +299,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoke: {fileID: 2407121194439546569}
+  rb: {fileID: 1622535798551406419}
+  minSpeedToShow: 0.1
 --- !u!114 &5767731704423278076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,7 +363,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5541918115279668237
 Transform:
   m_ObjectHideFlags: 0

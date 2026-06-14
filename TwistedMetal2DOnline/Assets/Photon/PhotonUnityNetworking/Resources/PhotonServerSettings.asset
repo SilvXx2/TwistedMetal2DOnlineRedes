@@ -50,6 +50,7 @@ MonoBehaviour:
   - RequestDestroy
   - RPC_SetSkin
   - FullNitroRecharge
+  - RPC_SetSmokeVisible
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0
