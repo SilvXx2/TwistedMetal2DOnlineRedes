@@ -13,20 +13,24 @@ internal static class PhotonPlayerSlotRegistry
     public const string RoomSlotMapPropertyKey = "tgSlotMap";
 
     private const string LocalStableIdPrefsKey = "TankGame.StablePlayerId";
+    private static string localSessionStableId = null;
 
     public static void EnsureLocalStableIdentity()
     {
         Player localPlayer = PhotonNetwork.LocalPlayer;
         if (localPlayer == null)
         {
+            Debug.LogWarning("[SlotRegistry] EnsureLocalStableIdentity: localPlayer is null.");
             return;
         }
 
         string stableId = GetOrCreateLocalStableId();
+        Debug.Log($"[SlotRegistry] EnsureLocalStableIdentity: localPlayer.ActorNumber={localPlayer.ActorNumber}, localPlayer.NickName={localPlayer.NickName}, stableId={stableId}");
 
         if (TryReadStringCustomProperty(localPlayer.CustomProperties, PlayerStableIdPropertyKey, out string currentStableId) &&
             string.Equals(currentStableId, stableId, StringComparison.Ordinal))
         {
+            Debug.Log($"[SlotRegistry] Stable ID already set and matches: {currentStableId}");
             return;
         }
 
@@ -35,13 +39,20 @@ internal static class PhotonPlayerSlotRegistry
             { PlayerStableIdPropertyKey, stableId }
         };
 
+        Debug.Log($"[SlotRegistry] Setting stable ID property to: {stableId}");
         localPlayer.SetCustomProperties(properties);
     }
 
     public static bool EnsureSlotsAssignedForCurrentPlayers(int preferredSlotCount = 0)
     {
-        if (!PhotonNetwork.InRoom || PhotonNetwork.CurrentRoom == null || !PhotonNetwork.IsMasterClient)
+        if (!PhotonNetwork.InRoom || PhotonNetwork.CurrentRoom == null)
         {
+            Debug.LogWarning("[SlotRegistry] EnsureSlotsAssigned: Not in room.");
+            return false;
+        }
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            Debug.LogWarning("[SlotRegistry] EnsureSlotsAssigned: Not Master Client.");
             return false;
         }
 
@@ -49,26 +60,32 @@ internal static class PhotonPlayerSlotRegistry
         bool mapChanged = false;
 
         Player[] players = PhotonNetwork.PlayerList;
+        Debug.Log($"[SlotRegistry] EnsureSlotsAssigned: scanning {players.Length} players. Current slotMap keys count: {slotMap.Count}");
+        
         for (int i = 0; i < players.Length; i++)
         {
             Player player = players[i];
             if (!TryGetPlayerIdentityKey(player, out string identityKey))
             {
+                Debug.LogWarning($"[SlotRegistry] Could not get identity key for player {player.ActorNumber} (NickName: {player.NickName})");
                 continue;
             }
 
             if (slotMap.ContainsKey(identityKey))
             {
+                Debug.Log($"[SlotRegistry] Player {player.ActorNumber} ({identityKey}) already has slot: {slotMap[identityKey]}");
                 continue;
             }
 
             int slotIndex = FindNextAvailableSlot(slotMap, preferredSlotCount);
             slotMap[identityKey] = slotIndex;
             mapChanged = true;
+            Debug.Log($"[SlotRegistry] Assigned NEW slot {slotIndex} to player {player.ActorNumber} ({identityKey})");
         }
 
         if (!mapChanged)
         {
+            Debug.Log("[SlotRegistry] EnsureSlotsAssigned: No changes to slot map.");
             return false;
         }
 
@@ -78,6 +95,7 @@ internal static class PhotonPlayerSlotRegistry
             { RoomSlotMapPropertyKey, serializedMap }
         };
 
+        Debug.Log($"[SlotRegistry] Updating room slotMap property to: {serializedMap}");
         PhotonNetwork.CurrentRoom.SetCustomProperties(roomProperties);
         return true;
     }
@@ -86,6 +104,7 @@ internal static class PhotonPlayerSlotRegistry
     {
         if (!TryGetLocalStableSlot(out int slotIndex))
         {
+            Debug.LogWarning("[SlotRegistry] TryApplyLocalPlayerSlotProperty: Could not get stable slot for local player.");
             return false;
         }
 
@@ -98,6 +117,7 @@ internal static class PhotonPlayerSlotRegistry
         if (TryReadIntCustomProperty(localPlayer.CustomProperties, PlayerSlotPropertyKey, out int currentSlot) &&
             currentSlot == slotIndex)
         {
+            Debug.Log($"[SlotRegistry] Local player slot property already matches: {currentSlot}");
             return true;
         }
 
@@ -106,6 +126,7 @@ internal static class PhotonPlayerSlotRegistry
             { PlayerSlotPropertyKey, slotIndex }
         };
 
+        Debug.Log($"[SlotRegistry] Setting local player slot property to: {slotIndex}");
         localPlayer.SetCustomProperties(properties);
         return true;
     }
@@ -117,15 +138,19 @@ internal static class PhotonPlayerSlotRegistry
         Player localPlayer = PhotonNetwork.LocalPlayer;
         if (localPlayer == null)
         {
+            Debug.LogWarning("[SlotRegistry] TryGetLocalStableSlot: localPlayer is null.");
             return false;
         }
 
         if (TryReadIntCustomProperty(localPlayer.CustomProperties, PlayerSlotPropertyKey, out slotIndex))
         {
+            Debug.Log($"[SlotRegistry] TryGetLocalStableSlot: found {slotIndex} in player properties.");
             return slotIndex >= 0;
         }
 
-        return TryGetSlotFromRoomMap(localPlayer, out slotIndex);
+        bool foundInMap = TryGetSlotFromRoomMap(localPlayer, out slotIndex);
+        Debug.Log($"[SlotRegistry] TryGetLocalStableSlot: found in room map? {foundInMap}, slotIndex={slotIndex}");
+        return foundInMap;
     }
 
     public static bool TryGetPlayerSlotIndex(Player player, out int slotIndex)
@@ -337,6 +362,11 @@ internal static class PhotonPlayerSlotRegistry
 
     private static string GetOrCreateLocalStableId()
     {
+        if (!string.IsNullOrEmpty(localSessionStableId))
+        {
+            return localSessionStableId;
+        }
+
         string stableId = PlayerPrefs.GetString(LocalStableIdPrefsKey, string.Empty);
         if (string.IsNullOrWhiteSpace(stableId))
         {
@@ -345,11 +375,23 @@ internal static class PhotonPlayerSlotRegistry
             PlayerPrefs.Save();
         }
 
+        string sessionSuffix = "";
+        try
+        {
+            sessionSuffix = "_" + System.Diagnostics.Process.GetCurrentProcess().Id.ToString();
+        }
+        catch
+        {
+            sessionSuffix = "_" + UnityEngine.Random.Range(100000, 999999).ToString();
+        }
+
         #if UNITY_EDITOR
-        return stableId + "_editor";
+        localSessionStableId = stableId + sessionSuffix + "_editor";
         #else
-        return stableId + "_build";
+        localSessionStableId = stableId + sessionSuffix + "_build";
         #endif
+
+        return localSessionStableId;
     }
 
     private static string EncodeIdentityKey(string identityKey)

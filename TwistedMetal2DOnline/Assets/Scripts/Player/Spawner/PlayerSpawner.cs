@@ -119,6 +119,8 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
 
     private void TrySpawnPlayer()
     {
+        Debug.Log($"[PlayerSpawner] TrySpawnPlayer entered. hasSpawned={hasSpawned}, InRoom={PhotonNetwork.InRoom}, localPlayer.ActorNumber={PhotonNetwork.LocalPlayer?.ActorNumber}");
+
         if (LiveOpsManager.Instance != null && !LiveOpsManager.Instance.IsReady)
         {
             Debug.Log("[PlayerSpawner] TrySpawnPlayer omitido: LiveOpsManager está inicializándose.");
@@ -127,6 +129,7 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
 
         if (hasSpawned)
         {
+            Debug.Log("[PlayerSpawner] TrySpawnPlayer: already spawned (hasSpawned is true).");
             return;
         }
 
@@ -172,8 +175,18 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
             ? spawnPositions[slotIndex % spawnPositions.Length]
             : transform.position;
 
-        Debug.Log($"[PlayerSpawner] Instanciando jugador local '{playerPrefab.name}' en la posición de spawn [{slotIndex}]: {spawnPosition}");
-        PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
+        Debug.Log($"[PlayerSpawner] Instanciando jugador local '{playerPrefab.name}' en la posición de spawn [{slotIndex}] (mod {spawnPositions?.Length ?? 0}): {spawnPosition}");
+        
+        GameObject spawned = PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
+        if (spawned == null)
+        {
+            Debug.LogError($"[PlayerSpawner] PhotonNetwork.Instantiate falló al retornar GameObject para {playerPrefab.name}!");
+        }
+        else
+        {
+            Debug.Log($"[PlayerSpawner] PhotonNetwork.Instantiate exitoso. Nombre={spawned.name}, Activo={spawned.activeSelf}, Layer={spawned.layer}");
+        }
+        
         hasSpawned = true;
     }
 

@@ -24,7 +24,7 @@ public class LeaderBoardAPI : MonoBehaviour
     }
 
     [SerializeField]
-    private string url = "https://script.google.com/macros/s/AKfycbwoxHu4Gec3lG9LXOmTT6IJRuubRQBID2MP8lRMxl9SwtIWIN4S-Z-WPLHSpdj4f8-p/exec";
+    private string url = "https://script.google.com/macros/s/AKfycbx66j_Fz7Iaqk5lYAwEqP3NthXOsheGQU7Z98NlYzbt2mzWIpaeCRL-OYrl9kLq0Fmc/exec";
 
     private void Awake()
     {
@@ -39,9 +39,13 @@ public class LeaderBoardAPI : MonoBehaviour
         }
     }
 
-    public void EnviarScore(string nombre, int score, System.Action<bool> callback = null)
+    public void EnviarScore(string nombre, int score, string macId = null, System.Action<bool> callback = null)
     {
-        StartCoroutine(PostScore(nombre, score, callback));
+        if (string.IsNullOrEmpty(macId))
+        {
+            macId = GetMacAddress();
+        }
+        StartCoroutine(PostScore(nombre, score, macId, callback));
     }
 
     public void ObtenerScores(System.Action<List<ScoreData>> callback)
@@ -49,9 +53,9 @@ public class LeaderBoardAPI : MonoBehaviour
         StartCoroutine(GetScores(callback));
     }
 
-    private IEnumerator PostScore(string nombre, int score, System.Action<bool> callback)
+    private IEnumerator PostScore(string nombre, int score, string macId, System.Action<bool> callback)
     {
-        string json = JsonUtility.ToJson(new ScoreData(nombre, score));
+        string json = JsonUtility.ToJson(new ScoreData(nombre, score, macId));
 
         using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
         {
@@ -104,6 +108,45 @@ public class LeaderBoardAPI : MonoBehaviour
             }
         }
     }
+
+    public string GetMacAddress()
+    {
+        try
+        {
+            foreach (var nic in System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (nic.OperationalStatus == System.Net.NetworkInformation.OperationalStatus.Up &&
+                    nic.NetworkInterfaceType != System.Net.NetworkInformation.NetworkInterfaceType.Loopback)
+                {
+                    string mac = nic.GetPhysicalAddress().ToString();
+                    if (!string.IsNullOrEmpty(mac))
+                    {
+                        return FormatMacAddress(mac);
+                    }
+                }
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Error al obtener la MAC ID: " + e.Message);
+        }
+        return "Unknown_MAC";
+    }
+
+    private string FormatMacAddress(string mac)
+    {
+        if (mac.Length != 12) return mac;
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        for (int i = 0; i < mac.Length; i++)
+        {
+            sb.Append(mac[i]);
+            if (i % 2 == 1 && i < mac.Length - 1)
+            {
+                sb.Append(":");
+            }
+        }
+        return sb.ToString();
+    }
 }
 
 [System.Serializable]
@@ -111,11 +154,13 @@ public class ScoreData
 {
     public string nombre;
     public int score;
+    public string macId;
 
-    public ScoreData(string n, int s)
+    public ScoreData(string n, int s, string mac)
     {
         nombre = n;
         score = s;
+        macId = mac;
     }
 }
 

@@ -226,15 +226,14 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             yield return new WaitForSeconds(endGameDelay);
         }
 
-        // Send scores to LeaderBoardAPI (only the Master Client does this!)
-        if (PhotonNetwork.IsMasterClient && PhotonNetwork.InRoom)
+        // Send local player's score to LeaderBoardAPI
+        if (PhotonNetwork.InRoom && PhotonNetwork.LocalPlayer != null)
         {
-            foreach (Player p in PhotonNetwork.PlayerList)
-            {
-                string name = string.IsNullOrEmpty(p.NickName) ? $"Jugador {p.ActorNumber}" : p.NickName;
-                int score = p.CustomProperties.ContainsKey("Score") ? (int)p.CustomProperties["Score"] : 0;
-                LeaderBoardAPI.Instance.EnviarScore(name, score);
-            }
+            Player p = PhotonNetwork.LocalPlayer;
+            string name = string.IsNullOrEmpty(p.NickName) ? $"Jugador {p.ActorNumber}" : p.NickName;
+            int score = p.CustomProperties.ContainsKey("Score") ? (int)p.CustomProperties["Score"] : 0;
+            string macId = LeaderBoardAPI.Instance.GetMacAddress();
+            LeaderBoardAPI.Instance.EnviarScore(name, score, macId);
         }
 
         pendingResultRoutine = null;
