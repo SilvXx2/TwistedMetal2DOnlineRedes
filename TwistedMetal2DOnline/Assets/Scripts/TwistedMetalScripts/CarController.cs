@@ -474,4 +474,25 @@ public class CarController : MonoBehaviourPun, IPunObservable
             ConfrontationManager.Instance.OnScoreSubmitted(photonView.ViewID, score);
         }
     }
+
+    public void TransformToPedestrian(string prefabName)
+    {
+        Vector3 spawnPos = transform.position;
+
+        if (PhotonNetwork.InRoom)
+        {
+            if (photonView != null && photonView.IsMine)
+            {
+                PhotonNetwork.Destroy(gameObject);
+                PhotonNetwork.Instantiate(prefabName, spawnPos, Quaternion.identity);
+            }
+        }
+        else
+        {
+            Destroy(gameObject);
+            GameObject pedestrianGo = Instantiate(Resources.Load<GameObject>(prefabName), spawnPos, Quaternion.identity);
+            
+            PedestrianController pc = pedestrianGo.GetComponent<PedestrianController>();
+        }
+    }
 }

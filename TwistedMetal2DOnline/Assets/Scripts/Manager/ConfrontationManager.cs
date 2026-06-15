@@ -19,6 +19,7 @@ public class ConfrontationManager : MonoBehaviour
     [SerializeField] private float separationDistance = 1.6f;
     [SerializeField] private float oscillationSpeed = 5.0f;
     [SerializeField] private int confrontationDamage = 40;
+    [SerializeField] private string pedestrianPrefabName = "Pedestrian";
 
     private ConfrontationState state = ConfrontationState.Idle;
     private CarController localCar;
@@ -582,25 +583,12 @@ public class ConfrontationManager : MonoBehaviour
             }
         }
 
-        if (loser != null && loser.photonView != null)
+        if (loser != null)
         {
-            PlayerHealth loseHealth = loser.GetComponent<PlayerHealth>();
-            if (loseHealth != null)
+            bool isLoserMine = (loser.photonView == null) || loser.photonView.IsMine;
+            if (isLoserMine)
             {
-                int attackerActor = (winner != null && winner.photonView != null && winner.photonView.Owner != null)
-                    ? winner.photonView.Owner.ActorNumber
-                    : 0;
-
-                if (PhotonNetwork.InRoom)
-                    loseHealth.photonView.RPC("TakeDamage", RpcTarget.All, confrontationDamage, attackerActor);
-                else
-                    loseHealth.TakeDamage(confrontationDamage, attackerActor);
-            }
-
-            PlayerKnockback loseKnockback = loser.GetComponent<PlayerKnockback>();
-            if (loseKnockback != null)
-            {
-                loseKnockback.RequestApplyBackward();
+                loser.TransformToPedestrian(pedestrianPrefabName);
             }
         }
     }
