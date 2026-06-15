@@ -47,6 +47,8 @@ public class CameraFollow : MonoBehaviour
         }
     }
 
+    public Transform Target => target;
+
     public void SetTarget(Transform newTarget)
     {
         target = newTarget;

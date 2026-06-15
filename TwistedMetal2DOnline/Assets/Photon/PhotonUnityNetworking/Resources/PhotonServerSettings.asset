@@ -51,13 +51,8 @@ MonoBehaviour:
   - RPC_SetSkin
   - FullNitroRecharge
   - RPC_SetSmokeVisible
-  - SetWeapon
-  - RPC_GiveMachineGun
-  - RPC_RequestDestroy
-  - RPC_GiveRayGun
-  - RPC_ShowShotLine
-  - HidePickup
-  - RPC_ShowLaser
+  - RPC_StartConfrontation
+  - RPC_SubmitConfrontationScore
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0
