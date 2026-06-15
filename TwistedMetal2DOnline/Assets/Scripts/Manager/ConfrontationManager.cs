@@ -20,6 +20,7 @@ public class ConfrontationManager : MonoBehaviour
     [SerializeField] private float oscillationSpeed = 5.0f;
     [SerializeField] private int confrontationDamage = 40;
     [SerializeField] private GameObject pedestrianPrefab;
+    [SerializeField] private float pedestrianSpawnOffset = 3.0f;
 
     private ConfrontationState state = ConfrontationState.Idle;
     private CarController localCar;
@@ -669,7 +670,7 @@ public class ConfrontationManager : MonoBehaviour
             bool isLoserMine = (loser.photonView == null) || loser.photonView.IsMine;
             if (isLoserMine)
             {
-                loser.TransformToPedestrian(pedestrianPrefab);
+                loser.TransformToPedestrian(pedestrianPrefab, pedestrianSpawnOffset);
             }
         }
     }
@@ -681,7 +682,7 @@ public class ConfrontationManager : MonoBehaviour
             bool isCarAMine = (carA.photonView == null) || carA.photonView.IsMine;
             if (isCarAMine)
             {
-                carA.TransformToPedestrian(pedestrianPrefab);
+                carA.TransformToPedestrian(pedestrianPrefab, pedestrianSpawnOffset);
             }
         }
         if (carB != null)
@@ -689,7 +690,7 @@ public class ConfrontationManager : MonoBehaviour
             bool isCarBMine = (carB.photonView == null) || carB.photonView.IsMine;
             if (isCarBMine)
             {
-                carB.TransformToPedestrian(pedestrianPrefab);
+                carB.TransformToPedestrian(pedestrianPrefab, pedestrianSpawnOffset);
             }
         }
     }

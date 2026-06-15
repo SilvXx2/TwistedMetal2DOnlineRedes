@@ -83,6 +83,11 @@ public class CarController : MonoBehaviourPun, IPunObservable
         {
             Debug.Log($"[CarController] Start en GameObject '{gameObject.name}' — photonView.IsMine: {photonView.IsMine}");
             SetLocalPlayer(photonView.IsMine);
+
+            if (photonView.InstantiationData != null && photonView.InstantiationData.Length > 0)
+            {
+                hasWeapon = (bool)photonView.InstantiationData[0];
+            }
         }
         else
         {
@@ -475,7 +480,7 @@ public class CarController : MonoBehaviourPun, IPunObservable
         }
     }
 
-    public void TransformToPedestrian(GameObject pedestrianPrefab)
+    public void TransformToPedestrian(GameObject pedestrianPrefab, float spawnOffset)
     {
         if (pedestrianPrefab == null)
         {
@@ -483,14 +488,15 @@ public class CarController : MonoBehaviourPun, IPunObservable
             return;
         }
 
-        Vector3 spawnPos = transform.position;
+        // Spawn position shifted backwards relative to orientation
+        Vector3 spawnPos = transform.position - transform.right * spawnOffset;
 
         if (PhotonNetwork.InRoom)
         {
             if (photonView != null && photonView.IsMine)
             {
                 PhotonNetwork.Destroy(gameObject);
-                PhotonNetwork.Instantiate(pedestrianPrefab.name, spawnPos, Quaternion.identity);
+                PhotonNetwork.Instantiate(pedestrianPrefab.name, spawnPos, Quaternion.identity, 0, new object[] { hasWeapon });
             }
         }
         else
@@ -499,6 +505,10 @@ public class CarController : MonoBehaviourPun, IPunObservable
             GameObject pedestrianGo = Instantiate(pedestrianPrefab, spawnPos, Quaternion.identity);
             
             PedestrianController pc = pedestrianGo.GetComponent<PedestrianController>();
+            if (pc != null)
+            {
+                pc.SetHadWeapon(hasWeapon);
+            }
         }
     }
 }

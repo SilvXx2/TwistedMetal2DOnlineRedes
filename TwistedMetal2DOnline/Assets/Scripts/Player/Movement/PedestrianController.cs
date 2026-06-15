@@ -14,6 +14,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
     private PlayerHealth health;
     private float timer;
     private bool isLocal;
+    private bool hadWeapon;
 
     // Sincronización de posición para clientes remotos
     private Vector3 remotePos;
@@ -24,9 +25,19 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
         health = GetComponent<PlayerHealth>();
     }
 
+    public void SetHadWeapon(bool value)
+    {
+        hadWeapon = value;
+    }
+
     private void Start()
     {
         isLocal = photonView == null || photonView.IsMine;
+
+        if (photonView != null && photonView.InstantiationData != null && photonView.InstantiationData.Length > 0)
+        {
+            hadWeapon = (bool)photonView.InstantiationData[0];
+        }
 
         if (isLocal)
         {
@@ -118,7 +129,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
             PhotonNetwork.Destroy(gameObject);
 
             // Spawnear el auto
-            PhotonNetwork.Instantiate(carPrefabName, spawnPos, Quaternion.identity);
+            PhotonNetwork.Instantiate(carPrefabName, spawnPos, Quaternion.identity, 0, new object[] { hadWeapon });
         }
         else
         {
@@ -130,6 +141,10 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
             if (cc != null)
             {
                 cc.SetLocalPlayer(true);
+                if (hadWeapon)
+                {
+                    cc.PickWeapon();
+                }
             }
         }
     }
