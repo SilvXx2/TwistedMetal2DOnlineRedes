@@ -1639,7 +1639,7 @@ MonoBehaviour:
   separationDistance: 1.6
   oscillationSpeed: 5
   confrontationDamage: 40
-  pedestrianPrefabName: Pedestrian
+  pedestrianPrefab: {fileID: 398389711173448284, guid: 0e011bc344f074945af7b053bfe84901, type: 3}
 --- !u!4 &1617474279
 Transform:
   m_ObjectHideFlags: 0

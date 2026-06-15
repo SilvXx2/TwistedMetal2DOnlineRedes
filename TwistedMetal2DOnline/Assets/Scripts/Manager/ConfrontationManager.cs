@@ -19,7 +19,7 @@ public class ConfrontationManager : MonoBehaviour
     [SerializeField] private float separationDistance = 1.6f;
     [SerializeField] private float oscillationSpeed = 5.0f;
     [SerializeField] private int confrontationDamage = 40;
-    [SerializeField] private string pedestrianPrefabName = "Pedestrian";
+    [SerializeField] private GameObject pedestrianPrefab;
 
     private ConfrontationState state = ConfrontationState.Idle;
     private CarController localCar;
@@ -32,6 +32,8 @@ public class ConfrontationManager : MonoBehaviour
     private float rivalScore = -1f;
     private bool localLocked;
     private bool rivalLocked;
+    private bool localPressedSpace;
+    private bool rivalPressedSpace;
 
     private float localPhaseOffset;
     private float rivalPhaseOffset;
@@ -81,6 +83,8 @@ public class ConfrontationManager : MonoBehaviour
         rivalScore = -1f;
         localLocked = false;
         rivalLocked = false;
+        localPressedSpace = false;
+        rivalPressedSpace = false;
         timer = maxDuration;
 
         participantA = carA;
@@ -389,6 +393,7 @@ public class ConfrontationManager : MonoBehaviour
                     {
                         localScore = localFill;
                         localLocked = true;
+                        localPressedSpace = true;
                         
                         if (localBarFill != null)
                         {
@@ -400,7 +405,7 @@ public class ConfrontationManager : MonoBehaviour
                             localStatusText.color = Color.white;
                         }
 
-                        localCar.SendConfrontationScore(localScore);
+                        localCar.SendConfrontationScore(localScore, true);
                     }
                 }
 
@@ -420,10 +425,15 @@ public class ConfrontationManager : MonoBehaviour
                     if (!localLocked)
                     {
                         localScore = localBarFill != null ? localBarFill.fillAmount : 0f;
+                        localPressedSpace = false;
                         localLocked = true;
-                        localCar.SendConfrontationScore(localScore);
-                        if (localBarFill != null) localBarFill.color = new Color(1f, 0.85f, 0f);
-                        if (localStatusText != null) localStatusText.text = "TIMEOUT (" + (localScore * 100f).ToString("F0") + "%)";
+                        localCar.SendConfrontationScore(localScore, false);
+                        if (localBarFill != null) localBarFill.color = Color.gray;
+                        if (localStatusText != null)
+                        {
+                            localStatusText.text = "TIMEOUT (" + (localScore * 100f).ToString("F0") + "%)";
+                            localStatusText.color = Color.red;
+                        }
                     }
 
                     StartCoroutine(ResolveConfrontationRoutine());
@@ -440,38 +450,56 @@ public class ConfrontationManager : MonoBehaviour
         }
     }
 
-    public void OnScoreSubmitted(int viewId, float score)
+    public void OnScoreSubmitted(int viewId, float score, bool pressedSpace)
     {
         if (state != ConfrontationState.Active) return;
 
         if (localCar != null && localCar.photonView != null && localCar.photonView.ViewID == viewId)
         {
             localScore = score;
+            localPressedSpace = pressedSpace;
             localLocked = true;
             if (localBarFill != null)
             {
                 localBarFill.fillAmount = score;
-                localBarFill.color = new Color(1f, 0.85f, 0f);
+                localBarFill.color = pressedSpace ? new Color(1f, 0.85f, 0f) : Color.gray;
             }
             if (localStatusText != null)
             {
-                localStatusText.text = "LOCKED (" + (score * 100f).ToString("F0") + "%)";
-                localStatusText.color = Color.white;
+                if (pressedSpace)
+                {
+                    localStatusText.text = "LOCKED (" + (score * 100f).ToString("F0") + "%)";
+                    localStatusText.color = Color.white;
+                }
+                else
+                {
+                    localStatusText.text = "TIMEOUT (" + (score * 100f).ToString("F0") + "%)";
+                    localStatusText.color = Color.red;
+                }
             }
         }
         else if (rivalCar != null && rivalCar.photonView != null && rivalCar.photonView.ViewID == viewId)
         {
             rivalScore = score;
+            rivalPressedSpace = pressedSpace;
             rivalLocked = true;
             if (rivalBarFill != null)
             {
                 rivalBarFill.fillAmount = score;
-                rivalBarFill.color = new Color(0.7f, 0.7f, 0.7f);
+                rivalBarFill.color = pressedSpace ? new Color(0.7f, 0.7f, 0.7f) : Color.gray;
             }
             if (rivalStatusText != null)
             {
-                rivalStatusText.text = "¡LISTO! (" + (score * 100f).ToString("F0") + "%)";
-                rivalStatusText.color = Color.white;
+                if (pressedSpace)
+                {
+                    rivalStatusText.text = "¡LISTO! (" + (score * 100f).ToString("F0") + "%)";
+                    rivalStatusText.color = Color.white;
+                }
+                else
+                {
+                    rivalStatusText.text = "TIMEOUT (" + (score * 100f).ToString("F0") + "%)";
+                    rivalStatusText.color = Color.red;
+                }
             }
         }
     }
@@ -493,6 +521,7 @@ public class ConfrontationManager : MonoBehaviour
             if (!rivalLocked)
             {
                 rivalScore = 0f;
+                rivalPressedSpace = false;
                 rivalLocked = true;
                 if (rivalBarFill != null)
                 {
@@ -502,20 +531,58 @@ public class ConfrontationManager : MonoBehaviour
                 if (rivalStatusText != null)
                 {
                     rivalStatusText.text = "TIMEOUT (0%)";
+                    rivalStatusText.color = Color.red;
                 }
             }
         }
 
         if (localCar != null)
         {
-            if (localScore == rivalScore)
+            bool localWon = false;
+            bool bothLost = false;
+
+            if (!localPressedSpace && !rivalPressedSpace)
             {
-                localScore += 0.001f; // tie breaker
+                bothLost = true;
+            }
+            else if (localPressedSpace && !rivalPressedSpace)
+            {
+                localWon = true;
+            }
+            else if (!localPressedSpace && rivalPressedSpace)
+            {
+                localWon = false;
+            }
+            else
+            {
+                if (localScore == rivalScore)
+                {
+                    localScore += 0.001f; // tie breaker
+                }
+                localWon = localScore > rivalScore;
             }
 
-            bool localWon = localScore > rivalScore;
+            if (bothLost)
+            {
+                if (titleText != null)
+                {
+                    titleText.text = "¡AMBOS PIERDEN!";
+                    titleText.color = Color.red;
+                }
+                if (localStatusText != null)
+                {
+                    localStatusText.text = "TIMEOUT - PERDEDOR";
+                    localStatusText.color = Color.red;
+                }
+                if (rivalStatusText != null)
+                {
+                    rivalStatusText.text = "TIMEOUT - PERDEDOR";
+                    rivalStatusText.color = Color.red;
+                }
 
-            if (localWon)
+                ApplyDoubleLoss(localCar, rivalCar);
+            }
+            else if (localWon)
             {
                 if (titleText != null)
                 {
@@ -529,7 +596,8 @@ public class ConfrontationManager : MonoBehaviour
                 }
                 if (rivalStatusText != null)
                 {
-                    rivalStatusText.text = "PERDEDOR (" + (rivalScore * 100f).ToString("F0") + "%)";
+                    string pct = rivalPressedSpace ? " (" + (rivalScore * 100f).ToString("F0") + "%)" : "";
+                    rivalStatusText.text = "PERDEDOR" + pct;
                     rivalStatusText.color = Color.red;
                 }
 
@@ -544,7 +612,8 @@ public class ConfrontationManager : MonoBehaviour
                 }
                 if (localStatusText != null)
                 {
-                    localStatusText.text = "PERDEDOR (" + (localScore * 100f).ToString("F0") + "%)";
+                    string pct = localPressedSpace ? " (" + (localScore * 100f).ToString("F0") + "%)" : "";
+                    localStatusText.text = "PERDEDOR" + pct;
                     localStatusText.color = Color.red;
                 }
                 if (rivalStatusText != null)
@@ -552,6 +621,8 @@ public class ConfrontationManager : MonoBehaviour
                     rivalStatusText.text = "¡GANADOR! (" + (rivalScore * 100f).ToString("F0") + "%)";
                     rivalStatusText.color = Color.green;
                 }
+
+                ApplyRewardsAndPunishments(rivalCar, localCar);
             }
         }
 
@@ -588,7 +659,27 @@ public class ConfrontationManager : MonoBehaviour
             bool isLoserMine = (loser.photonView == null) || loser.photonView.IsMine;
             if (isLoserMine)
             {
-                loser.TransformToPedestrian(pedestrianPrefabName);
+                loser.TransformToPedestrian(pedestrianPrefab);
+            }
+        }
+    }
+
+    private void ApplyDoubleLoss(CarController carA, CarController carB)
+    {
+        if (carA != null)
+        {
+            bool isCarAMine = (carA.photonView == null) || carA.photonView.IsMine;
+            if (isCarAMine)
+            {
+                carA.TransformToPedestrian(pedestrianPrefab);
+            }
+        }
+        if (carB != null)
+        {
+            bool isCarBMine = (carB.photonView == null) || carB.photonView.IsMine;
+            if (isCarBMine)
+            {
+                carB.TransformToPedestrian(pedestrianPrefab);
             }
         }
     }
@@ -609,7 +700,10 @@ public class ConfrontationManager : MonoBehaviour
         CameraFollow camFollow = FindObjectOfType<CameraFollow>();
         if (camFollow != null)
         {
-            camFollow.SetTarget(null);
+            if (dummyCamTarget != null && camFollow.Target == dummyCamTarget.transform)
+            {
+                camFollow.SetTarget(null);
+            }
         }
 
         if (dummyCamTarget != null)

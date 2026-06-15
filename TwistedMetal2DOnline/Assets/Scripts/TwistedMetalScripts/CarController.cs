@@ -451,32 +451,38 @@ public class CarController : MonoBehaviourPun, IPunObservable
         }
     }
 
-    public void SendConfrontationScore(float score)
+    public void SendConfrontationScore(float score, bool pressedSpace)
     {
         if (photonView != null && PhotonNetwork.InRoom)
         {
-            photonView.RPC("RPC_SubmitConfrontationScore", RpcTarget.All, score);
+            photonView.RPC("RPC_SubmitConfrontationScore", RpcTarget.All, score, pressedSpace);
         }
         else
         {
             if (ConfrontationManager.Instance != null)
             {
-                ConfrontationManager.Instance.OnScoreSubmitted(photonView != null ? photonView.ViewID : 0, score);
+                ConfrontationManager.Instance.OnScoreSubmitted(photonView != null ? photonView.ViewID : 0, score, pressedSpace);
             }
         }
     }
 
     [PunRPC]
-    private void RPC_SubmitConfrontationScore(float score)
+    private void RPC_SubmitConfrontationScore(float score, bool pressedSpace)
     {
         if (ConfrontationManager.Instance != null)
         {
-            ConfrontationManager.Instance.OnScoreSubmitted(photonView.ViewID, score);
+            ConfrontationManager.Instance.OnScoreSubmitted(photonView.ViewID, score, pressedSpace);
         }
     }
 
-    public void TransformToPedestrian(string prefabName)
+    public void TransformToPedestrian(GameObject pedestrianPrefab)
     {
+        if (pedestrianPrefab == null)
+        {
+            Debug.LogError("[CarController] TransformToPedestrian: pedestrianPrefab is null!");
+            return;
+        }
+
         Vector3 spawnPos = transform.position;
 
         if (PhotonNetwork.InRoom)
@@ -484,13 +490,13 @@ public class CarController : MonoBehaviourPun, IPunObservable
             if (photonView != null && photonView.IsMine)
             {
                 PhotonNetwork.Destroy(gameObject);
-                PhotonNetwork.Instantiate(prefabName, spawnPos, Quaternion.identity);
+                PhotonNetwork.Instantiate(pedestrianPrefab.name, spawnPos, Quaternion.identity);
             }
         }
         else
         {
             Destroy(gameObject);
-            GameObject pedestrianGo = Instantiate(Resources.Load<GameObject>(prefabName), spawnPos, Quaternion.identity);
+            GameObject pedestrianGo = Instantiate(pedestrianPrefab, spawnPos, Quaternion.identity);
             
             PedestrianController pc = pedestrianGo.GetComponent<PedestrianController>();
         }
