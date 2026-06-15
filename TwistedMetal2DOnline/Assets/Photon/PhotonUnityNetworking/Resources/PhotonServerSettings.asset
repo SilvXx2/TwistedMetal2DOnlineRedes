@@ -53,6 +53,11 @@ MonoBehaviour:
   - RPC_SetSmokeVisible
   - RPC_StartConfrontation
   - RPC_SubmitConfrontationScore
+  - RPC_GiveMachineGun
+  - RPC_GiveRayGun
+  - RPC_RequestDestroy
+  - RPC_ShowLaser
+  - SetWeapon
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0

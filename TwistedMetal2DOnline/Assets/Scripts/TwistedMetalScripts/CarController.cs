@@ -86,7 +86,18 @@ public class CarController : MonoBehaviourPun, IPunObservable
 
             if (photonView.InstantiationData != null && photonView.InstantiationData.Length > 0)
             {
-                hasWeapon = (bool)photonView.InstantiationData[0];
+                object data = photonView.InstantiationData[0];
+                if (data is bool b)
+                {
+                    hasWeapon = b;
+                    SetInitialWeaponState(b ? WeaponType.MachineGun : WeaponType.None);
+                }
+                else if (data is int i)
+                {
+                    WeaponType wt = (WeaponType)i;
+                    hasWeapon = (wt == WeaponType.MachineGun);
+                    SetInitialWeaponState(wt);
+                }
             }
         }
         else
@@ -362,7 +373,37 @@ public class CarController : MonoBehaviourPun, IPunObservable
             weaponObject.SetActive(true);
         }
 
+        WeaponState weaponState = GetComponent<WeaponState>();
+        if (weaponState != null)
+        {
+            weaponState.SetWeapon(WeaponType.MachineGun);
+        }
+
         Debug.Log("Arma recogida");
+    }
+
+    public void SetInitialWeapon(WeaponType weaponType)
+    {
+        hasWeapon = (weaponType == WeaponType.MachineGun);
+        SetInitialWeaponState(weaponType);
+    }
+
+    private void SetInitialWeaponState(WeaponType weaponType)
+    {
+        WeaponState weaponState = GetComponent<WeaponState>();
+        if (weaponState != null)
+        {
+            weaponState.SetWeapon(weaponType);
+        }
+
+        if (weaponType == WeaponType.RayGun)
+        {
+            RayGunWeapon rayGun = GetComponent<RayGunWeapon>();
+            if (rayGun != null)
+            {
+                rayGun.Activate();
+            }
+        }
     }
 
     public bool HasWeapon()
@@ -492,12 +533,15 @@ public class CarController : MonoBehaviourPun, IPunObservable
         Vector3 spawnPos = transform.position - transform.right * spawnOffset;
         spawnPos.z = -1f; // Force pedestrian Z position to -1
 
+        WeaponState weaponState = GetComponent<WeaponState>();
+        WeaponType activeWeapon = weaponState != null ? weaponState.CurrentWeapon() : (hasWeapon ? WeaponType.MachineGun : WeaponType.None);
+
         if (PhotonNetwork.InRoom)
         {
             if (photonView != null && photonView.IsMine)
             {
                 PhotonNetwork.Destroy(gameObject);
-                PhotonNetwork.Instantiate(pedestrianPrefab.name, spawnPos, Quaternion.identity, 0, new object[] { hasWeapon });
+                PhotonNetwork.Instantiate(pedestrianPrefab.name, spawnPos, Quaternion.identity, 0, new object[] { (int)activeWeapon });
             }
         }
         else
@@ -508,7 +552,7 @@ public class CarController : MonoBehaviourPun, IPunObservable
             PedestrianController pc = pedestrianGo.GetComponent<PedestrianController>();
             if (pc != null)
             {
-                pc.SetHadWeapon(hasWeapon);
+                pc.SetHadWeaponType(activeWeapon);
             }
         }
     }

@@ -14,7 +14,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
     private PlayerHealth health;
     private float timer;
     private bool isLocal;
-    private bool hadWeapon;
+    private WeaponType hadWeaponType = WeaponType.None;
 
     // Sincronización de posición para clientes remotos
     private Vector3 remotePos;
@@ -27,7 +27,12 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
 
     public void SetHadWeapon(bool value)
     {
-        hadWeapon = value;
+        hadWeaponType = value ? WeaponType.MachineGun : WeaponType.None;
+    }
+
+    public void SetHadWeaponType(WeaponType value)
+    {
+        hadWeaponType = value;
     }
 
     private void Start()
@@ -36,7 +41,15 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
 
         if (photonView != null && photonView.InstantiationData != null && photonView.InstantiationData.Length > 0)
         {
-            hadWeapon = (bool)photonView.InstantiationData[0];
+            object data = photonView.InstantiationData[0];
+            if (data is bool b)
+            {
+                hadWeaponType = b ? WeaponType.MachineGun : WeaponType.None;
+            }
+            else if (data is int i)
+            {
+                hadWeaponType = (WeaponType)i;
+            }
         }
 
         if (isLocal)
@@ -130,7 +143,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
             PhotonNetwork.Destroy(gameObject);
 
             // Spawnear el auto
-            PhotonNetwork.Instantiate(carPrefabName, spawnPos, Quaternion.identity, 0, new object[] { hadWeapon });
+            PhotonNetwork.Instantiate(carPrefabName, spawnPos, Quaternion.identity, 0, new object[] { (int)hadWeaponType });
         }
         else
         {
@@ -142,10 +155,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
             if (cc != null)
             {
                 cc.SetLocalPlayer(true);
-                if (hadWeapon)
-                {
-                    cc.PickWeapon();
-                }
+                cc.SetInitialWeapon(hadWeaponType);
             }
         }
     }
