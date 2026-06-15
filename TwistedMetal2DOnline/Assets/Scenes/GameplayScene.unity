@@ -1639,6 +1639,7 @@ MonoBehaviour:
   separationDistance: 1.6
   oscillationSpeed: 5
   confrontationDamage: 40
+  pedestrianPrefabName: Pedestrian
 --- !u!4 &1617474279
 Transform:
   m_ObjectHideFlags: 0
