@@ -44,6 +44,29 @@ public class CarController : MonoBehaviourPun, IPunObservable
     private float moveInput;
     private float turnInput;
 
+    private bool isInConfrontation;
+    public bool IsInConfrontation
+    {
+        get => isInConfrontation;
+        set
+        {
+            isInConfrontation = value;
+            if (rb != null)
+            {
+                if (isInConfrontation)
+                {
+                    rb.velocity = Vector2.zero;
+                    rb.angularVelocity = 0f;
+                    rb.isKinematic = true;
+                }
+                else
+                {
+                    rb.isKinematic = !isLocalPlayer;
+                }
+            }
+        }
+    }
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -107,6 +130,16 @@ public class CarController : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
+        if (isInConfrontation)
+        {
+            if (rb != null)
+            {
+                rb.velocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+            }
+            return;
+        }
+
         if (photonView != null && !photonView.IsMine)
         {
             remoteSynchronizer?.ApplyRemoteStep(Time.deltaTime);
@@ -134,7 +167,7 @@ public class CarController : MonoBehaviourPun, IPunObservable
 
     private void FixedUpdate()
     {
-        if (!isLocalPlayer)
+        if (isInConfrontation || !isLocalPlayer)
             return;
 
         Move();
@@ -358,6 +391,87 @@ public class CarController : MonoBehaviourPun, IPunObservable
                     weaponObject.SetActive(hasWeapon);
                 }
             }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (photonView == null || !photonView.IsMine)
+            return;
+
+        if (isInConfrontation)
+            return;
+
+        CarController otherCar = collision.gameObject.GetComponent<CarController>();
+        if (otherCar == null)
+            return;
+
+        if (otherCar.IsInConfrontation)
+            return;
+
+        if (nitroSystem == null || !nitroSystem.IsNitroActive)
+            return;
+
+        NitroSystem otherNitro = otherCar.GetComponent<NitroSystem>();
+        if (otherNitro == null || !otherNitro.IsNitroActive)
+            return;
+
+        // Must be a head-on collision (facing opposite directions, dot product < -0.6f)
+        float dot = Vector2.Dot(transform.right, otherCar.transform.right);
+        if (dot > -0.6f)
+            return;
+
+        if (PhotonNetwork.InRoom)
+        {
+            photonView.RPC("RPC_StartConfrontation", RpcTarget.All, otherCar.photonView.ViewID);
+        }
+        else
+        {
+            StartConfrontationLocal(otherCar);
+        }
+    }
+
+    [PunRPC]
+    private void RPC_StartConfrontation(int otherViewId)
+    {
+        PhotonView otherView = PhotonView.Find(otherViewId);
+        if (otherView == null) return;
+
+        CarController otherCar = otherView.GetComponent<CarController>();
+        if (otherCar == null) return;
+
+        StartConfrontationLocal(otherCar);
+    }
+
+    private void StartConfrontationLocal(CarController otherCar)
+    {
+        if (ConfrontationManager.Instance != null)
+        {
+            ConfrontationManager.Instance.StartConfrontation(this, otherCar);
+        }
+    }
+
+    public void SendConfrontationScore(float score)
+    {
+        if (photonView != null && PhotonNetwork.InRoom)
+        {
+            photonView.RPC("RPC_SubmitConfrontationScore", RpcTarget.All, score);
+        }
+        else
+        {
+            if (ConfrontationManager.Instance != null)
+            {
+                ConfrontationManager.Instance.OnScoreSubmitted(photonView != null ? photonView.ViewID : 0, score);
+            }
+        }
+    }
+
+    [PunRPC]
+    private void RPC_SubmitConfrontationScore(float score)
+    {
+        if (ConfrontationManager.Instance != null)
+        {
+            ConfrontationManager.Instance.OnScoreSubmitted(photonView.ViewID, score);
         }
     }
 }
