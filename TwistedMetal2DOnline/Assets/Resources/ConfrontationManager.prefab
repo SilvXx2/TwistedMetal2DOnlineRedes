@@ -49,3 +49,4 @@ MonoBehaviour:
   oscillationSpeed: 5
   confrontationDamage: 40
   pedestrianPrefab: {fileID: 398389711173448284, guid: 0e011bc344f074945af7b053bfe84901, type: 3}
+  pedestrianSpawnOffset: 500
