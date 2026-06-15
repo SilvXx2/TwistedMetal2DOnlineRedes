@@ -72,6 +72,16 @@ public class ConfrontationManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        // Fallback if reference was lost or dynamically instantiated
+        if (pedestrianPrefab == null)
+        {
+            pedestrianPrefab = Resources.Load<GameObject>("Pedestrian");
+            if (pedestrianPrefab == null)
+            {
+                Debug.LogWarning("[ConfrontationManager] Pedestrian prefab could not be loaded from Resources!");
+            }
+        }
     }
 
     public void StartConfrontation(CarController carA, CarController carB)
