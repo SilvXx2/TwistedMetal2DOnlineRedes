@@ -122,6 +122,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
         if (photonView != null && !photonView.IsMine) return;
 
         Vector3 spawnPos = transform.position;
+        spawnPos.z = 0f; // Force car Z position to 0
 
         if (PhotonNetwork.InRoom)
         {

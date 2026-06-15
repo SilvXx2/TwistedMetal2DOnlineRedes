@@ -1871,7 +1871,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7988428010738386520, guid: eb3e22cfb157dfd4aae5640012eb6c56, type: 3}
       propertyPath: pedestrianSpawnOffset
-      value: 500
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7988428010738386521, guid: eb3e22cfb157dfd4aae5640012eb6c56, type: 3}
       propertyPath: m_RootOrder

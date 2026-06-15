@@ -490,6 +490,7 @@ public class CarController : MonoBehaviourPun, IPunObservable
 
         // Spawn position shifted backwards relative to orientation
         Vector3 spawnPos = transform.position - transform.right * spawnOffset;
+        spawnPos.z = -1f; // Force pedestrian Z position to -1
 
         if (PhotonNetwork.InRoom)
         {
