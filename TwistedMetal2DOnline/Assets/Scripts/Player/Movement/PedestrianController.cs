@@ -155,7 +155,12 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
             if (cc != null)
             {
                 cc.SetLocalPlayer(true);
-                cc.SetInitialWeapon(hadWeaponType);
+            }
+
+            CarWeaponController weaponCtrl = spawnedCar.GetComponent<CarWeaponController>();
+            if (weaponCtrl != null)
+            {
+                weaponCtrl.SetInitialWeapon(hadWeaponType);
             }
         }
     }

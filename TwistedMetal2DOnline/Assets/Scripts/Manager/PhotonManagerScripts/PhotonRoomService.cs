@@ -27,7 +27,9 @@ internal sealed class PhotonRoomService
 
         RoomOptions roomOptions = new RoomOptions
         {
-            MaxPlayers = 4
+            MaxPlayers = 4,
+            IsVisible = true,
+            IsOpen = true
         };
 
         Debug.Log($"Intentando unirse a la room: {roomName}");

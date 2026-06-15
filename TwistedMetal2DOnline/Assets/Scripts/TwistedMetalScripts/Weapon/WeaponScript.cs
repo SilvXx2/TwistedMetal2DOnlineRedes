@@ -53,7 +53,7 @@ public class WeaponScript : MonoBehaviourPun
         carView.GetComponent<WeaponState>()
             ?.SetWeapon(WeaponType.MachineGun);
 
-        carView.GetComponent<CarController>()
+        carView.GetComponent<CarWeaponController>()
             ?.PickWeapon();
     }
 
