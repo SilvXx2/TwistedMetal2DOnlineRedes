@@ -67,6 +67,8 @@ public class ConfrontationManager : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
+            // Copy inspector settings from the scene-loaded instance to the persistent instance
+            Instance.CopySettingsFrom(this);
             Destroy(gameObject);
             return;
         }
@@ -83,6 +85,19 @@ public class ConfrontationManager : MonoBehaviour
                 Debug.LogWarning("[ConfrontationManager] Pedestrian prefab could not be loaded from Resources!");
             }
         }
+    }
+
+    private void CopySettingsFrom(ConfrontationManager source)
+    {
+        this.maxDuration = source.maxDuration;
+        this.separationDistance = source.separationDistance;
+        this.oscillationSpeed = source.oscillationSpeed;
+        this.confrontationDamage = source.confrontationDamage;
+        if (source.pedestrianPrefab != null)
+        {
+            this.pedestrianPrefab = source.pedestrianPrefab;
+        }
+        this.pedestrianSpawnOffset = source.pedestrianSpawnOffset;
     }
 
     public void StartConfrontation(CarController carA, CarController carB)
