@@ -10,7 +10,7 @@ public class RayGunWeapon : MonoBehaviourPun
     [SerializeField] private Vector3 localScale = Vector3.one;
     [SerializeField] private int sortingOrder = 10;
 
-    [Header("Shot")]
+    [Header("Shoot")]
     [SerializeField] private float fireRate = 0.2f;
     [SerializeField] private float maxDistance = 50f;
     [SerializeField] private int damage = 10;
@@ -59,16 +59,10 @@ public class RayGunWeapon : MonoBehaviourPun
         Vector2 origin = weaponPivot.position;
         Vector2 direction = weaponPivot.right;
 
-        RaycastHit2D[] hits =
-            Physics2D.RaycastAll(
-                origin,
-                direction,
-                maxDistance
-            );
+        RaycastHit2D[] hits = Physics2D.RaycastAll(origin, direction, maxDistance);
 
         Collider2D target = null;
-        Vector3 hitPoint =
-            origin + direction * maxDistance;
+        Vector3 hitPoint = origin + direction * maxDistance;
 
         foreach (RaycastHit2D hit in hits)
         {
@@ -87,8 +81,7 @@ public class RayGunWeapon : MonoBehaviourPun
                 && targetView.ViewID == photonView.ViewID)
                 continue;
 
-            PlayerHealth health =
-                hit.collider.GetComponent<PlayerHealth>()
+            PlayerHealth health = hit.collider.GetComponent<PlayerHealth>()
                 ?? hit.collider.GetComponentInParent<PlayerHealth>();
 
             if (health == null)
@@ -97,22 +90,11 @@ public class RayGunWeapon : MonoBehaviourPun
             target = hit.collider;
             hitPoint = hit.point;
 
-            health.photonView.RPC(
-                "TakeDamage",
-                RpcTarget.All,
-                damage,
-                photonView.OwnerActorNr
-            );
-
+            health.photonView.RPC("TakeDamage", RpcTarget.All, damage, photonView.OwnerActorNr);
             break;
         }
 
-        photonView.RPC(
-            nameof(RPC_ShowLaser),
-            RpcTarget.All,
-            origin,
-            hitPoint
-        );
+        photonView.RPC(nameof(RPC_ShowLaser), RpcTarget.All, (Vector3)origin, hitPoint);
     }
 
     [PunRPC]
