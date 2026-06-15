@@ -21,12 +21,11 @@ public class CarWeaponController : MonoBehaviourPun
     private GameObject weaponObject;
     private SpriteRenderer weaponSpriteRenderer;
     private float weaponAngle;
-    private float nextFireTime = 0f;
-    private bool hasWeapon = false;
+    private float nextFireTime;
+    private bool hasWeapon;
     private static Sprite defaultBulletSprite;
 
     public float WeaponAngle => weaponAngle;
-    public bool HasWeaponEquipped => hasWeapon;
 
     public void Initialize(bool startWithWeapon)
     {
@@ -36,8 +35,7 @@ public class CarWeaponController : MonoBehaviourPun
 
     public void Tick(bool isLocalPlayer)
     {
-        if (!isLocalPlayer)
-            return;
+        if (!isLocalPlayer) return;
 
         if (hasWeapon && weaponObject != null)
         {
@@ -50,9 +48,7 @@ public class CarWeaponController : MonoBehaviourPun
     {
         weaponAngle = angle;
         if (weaponObject != null && weaponObject.activeSelf)
-        {
             weaponObject.transform.rotation = Quaternion.Euler(0f, 0f, weaponAngle);
-        }
     }
 
     public void SerializeWeaponData(PhotonStream stream)
@@ -64,17 +60,14 @@ public class CarWeaponController : MonoBehaviourPun
         }
         else
         {
-            bool previousHasWeapon = hasWeapon;
-            if (stream.Count >= 4)
-            {
-                hasWeapon = (bool)stream.ReceiveNext();
-                weaponAngle = (float)stream.ReceiveNext();
+            if (stream.Count < 4) return;
 
-                if (hasWeapon != previousHasWeapon && weaponObject != null)
-                {
-                    weaponObject.SetActive(hasWeapon);
-                }
-            }
+            bool previousHasWeapon = hasWeapon;
+            hasWeapon = (bool)stream.ReceiveNext();
+            weaponAngle = (float)stream.ReceiveNext();
+
+            if (hasWeapon != previousHasWeapon)
+                weaponObject?.SetActive(hasWeapon);
         }
     }
 
@@ -82,53 +75,30 @@ public class CarWeaponController : MonoBehaviourPun
     public void PickWeapon()
     {
         hasWeapon = true;
-        if (weaponObject != null)
-        {
-            weaponObject.SetActive(true);
-        }
-
-        WeaponState weaponState = GetComponent<WeaponState>();
-        if (weaponState != null)
-        {
-            weaponState.SetWeapon(WeaponType.MachineGun);
-        }
-
+        weaponObject?.SetActive(true);
+        GetComponent<WeaponState>()?.SetWeapon(WeaponType.MachineGun);
         Debug.Log("Arma recogida");
     }
 
     public void SetInitialWeapon(WeaponType weaponType)
     {
-        hasWeapon = (weaponType == WeaponType.MachineGun);
+        hasWeapon = weaponType == WeaponType.MachineGun;
         SetInitialWeaponState(weaponType);
     }
 
-    public bool HasWeapon()
-    {
-        return hasWeapon;
-    }
+    public bool HasWeapon() => hasWeapon;
 
     private void SetInitialWeaponState(WeaponType weaponType)
     {
-        WeaponState weaponState = GetComponent<WeaponState>();
-        if (weaponState != null)
-        {
-            weaponState.SetWeapon(weaponType);
-        }
+        GetComponent<WeaponState>()?.SetWeapon(weaponType);
 
         if (weaponType == WeaponType.RayGun)
-        {
-            RayGunWeapon rayGun = GetComponent<RayGunWeapon>();
-            if (rayGun != null)
-            {
-                rayGun.Activate();
-            }
-        }
+            GetComponent<RayGunWeapon>()?.Activate();
     }
 
     private void InitializeWeaponObject()
     {
-        if (weaponObject != null)
-            return;
+        if (weaponObject != null) return;
 
         weaponObject = new GameObject("CarWeapon");
         weaponObject.transform.SetParent(transform, false);
@@ -145,15 +115,13 @@ public class CarWeaponController : MonoBehaviourPun
     private void RotateWeaponToMouse()
     {
         Camera mainCam = Camera.main;
-        if (mainCam == null)
-            return;
+        if (mainCam == null) return;
 
         Vector3 mouseWorldPosition = mainCam.ScreenToWorldPoint(Input.mousePosition);
         mouseWorldPosition.z = 0f;
 
         Vector3 direction = mouseWorldPosition - weaponObject.transform.position;
         weaponAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + weaponAngleOffset;
-
         weaponObject.transform.rotation = Quaternion.Euler(0f, 0f, weaponAngle);
     }
 
@@ -171,14 +139,10 @@ public class CarWeaponController : MonoBehaviourPun
         Vector3 dir = Quaternion.Euler(0, 0, weaponAngle) * Vector3.right;
         Vector3 spawnPos = weaponObject.transform.position + dir * bulletSpawnOffset;
 
-        if (photonView != null && PhotonNetwork.InRoom)
-        {
-            photonView.RPC("RPC_Shoot", RpcTarget.All, spawnPos, weaponAngle);
-        }
+        if (PhotonNetwork.InRoom)
+            photonView.RPC(nameof(RPC_Shoot), RpcTarget.All, spawnPos, weaponAngle);
         else
-        {
             RPC_Shoot(spawnPos, weaponAngle);
-        }
     }
 
     [PunRPC]
@@ -209,18 +173,14 @@ public class CarWeaponController : MonoBehaviourPun
 
     private static Sprite GetDefaultBulletSprite()
     {
-        if (defaultBulletSprite == null)
-        {
-            Texture2D texture = new Texture2D(8, 4);
-            Color[] colors = new Color[32];
-            for (int i = 0; i < colors.Length; i++)
-            {
-                colors[i] = Color.yellow;
-            }
-            texture.SetPixels(colors);
-            texture.Apply();
-            defaultBulletSprite = Sprite.Create(texture, new Rect(0, 0, 8, 4), new Vector2(0.5f, 0.5f));
-        }
+        if (defaultBulletSprite != null) return defaultBulletSprite;
+
+        Texture2D texture = new Texture2D(8, 4);
+        Color[] colors = new Color[32];
+        System.Array.Fill(colors, Color.yellow);
+        texture.SetPixels(colors);
+        texture.Apply();
+        defaultBulletSprite = Sprite.Create(texture, new Rect(0, 0, 8, 4), new Vector2(0.5f, 0.5f));
         return defaultBulletSprite;
     }
 }

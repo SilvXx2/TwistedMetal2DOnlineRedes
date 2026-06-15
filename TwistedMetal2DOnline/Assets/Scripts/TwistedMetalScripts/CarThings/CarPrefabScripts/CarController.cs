@@ -36,42 +36,28 @@ public class CarController : MonoBehaviourPun
 
     private void Awake()
     {
-        movement = GetComponent<CarMovement>();
+        movement        = GetComponent<CarMovement>();
         weaponController = GetComponent<CarWeaponController>();
-        confrontation = GetComponent<CarConfrontation>();
-        networkSync = GetComponent<CarNetworkSync>();
-        liveOpsConfig = GetComponent<CarLiveOpsConfig>();
+        confrontation   = GetComponent<CarConfrontation>();
+        networkSync     = GetComponent<CarNetworkSync>();
+        liveOpsConfig   = GetComponent<CarLiveOpsConfig>();
     }
 
     private void Start()
     {
-        if (photonView != null)
-        {
-            Debug.Log($"[CarController] Start en GameObject '{gameObject.name}' — photonView.IsMine: {photonView.IsMine}");
-            SetLocalPlayer(photonView.IsMine);
+        Debug.Log($"[CarController] Start en GameObject '{gameObject.name}' — photonView.IsMine: {photonView.IsMine}");
+        SetLocalPlayer(photonView.IsMine);
 
-            if (photonView.InstantiationData != null && photonView.InstantiationData.Length > 0)
-            {
-                object data = photonView.InstantiationData[0];
-                if (data is bool b)
-                {
-                    weaponController?.SetInitialWeapon(b ? WeaponType.MachineGun : WeaponType.None);
-                }
-                else if (data is int i)
-                {
-                    WeaponType wt = (WeaponType)i;
-                    weaponController?.SetInitialWeapon(wt);
-                }
-            }
-        }
-        else
+        if (photonView.InstantiationData != null && photonView.InstantiationData.Length > 0)
         {
-            Debug.LogWarning($"[CarController] Start en GameObject '{gameObject.name}' — photonView es null!");
+            object data = photonView.InstantiationData[0];
+            if (data is bool b)
+                weaponController?.SetInitialWeapon(b ? WeaponType.MachineGun : WeaponType.None);
+            else if (data is int i)
+                weaponController?.SetInitialWeapon((WeaponType)i);
         }
 
-        bool startWithWeapon = weaponController != null && weaponController.HasWeapon();
-        weaponController?.Initialize(startWithWeapon);
-
+        weaponController?.Initialize(weaponController.HasWeapon());
         liveOpsConfig?.Initialize();
     }
 
@@ -83,18 +69,14 @@ public class CarController : MonoBehaviourPun
             return;
         }
 
-        if (photonView != null && !photonView.IsMine)
+        if (!photonView.IsMine)
         {
             networkSync?.TickRemote(Time.deltaTime);
-            if (weaponController != null)
-            {
-                weaponController.ApplyRemoteWeaponAngle(weaponController.WeaponAngle);
-            }
+            weaponController?.ApplyRemoteWeaponAngle(weaponController.WeaponAngle);
             return;
         }
 
-        if (!isLocalPlayer)
-            return;
+        if (!isLocalPlayer) return;
 
         movement?.Tick(isLocalPlayer, isInConfrontation);
         weaponController?.Tick(isLocalPlayer);
@@ -112,34 +94,19 @@ public class CarController : MonoBehaviourPun
         movement?.ConfigureRigidbody(isLocalPlayer);
     }
 
-    public bool IsLocalPlayer()
-    {
-        return isLocalPlayer;
-    }
+    public bool IsLocalPlayer() => isLocalPlayer;
 
-    public void SendConfrontationScore(float score, bool pressedSpace)
-    {
+    public void SendConfrontationScore(float score, bool pressedSpace) =>
         confrontation?.SendConfrontationScore(score, pressedSpace);
-    }
 
-    public void TransformToPedestrian(GameObject pedestrianPrefab, float spawnOffset)
-    {
+    public void TransformToPedestrian(GameObject pedestrianPrefab, float spawnOffset) =>
         confrontation?.TransformToPedestrian(pedestrianPrefab, spawnOffset);
-    }
 
-    public void SetInitialWeapon(WeaponType weaponType)
-    {
+    public void SetInitialWeapon(WeaponType weaponType) =>
         weaponController?.SetInitialWeapon(weaponType);
-    }
 
     [PunRPC]
-    public void PickWeapon()
-    {
-        weaponController?.PickWeapon();
-    }
+    public void PickWeapon() => weaponController?.PickWeapon();
 
-    public bool HasWeapon()
-    {
-        return weaponController != null && weaponController.HasWeapon();
-    }
+    public bool HasWeapon() => weaponController != null && weaponController.HasWeapon();
 }
