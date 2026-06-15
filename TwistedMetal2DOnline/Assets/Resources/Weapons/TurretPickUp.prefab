@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2794974881140644235}
   - component: {fileID: 2794974881140644238}
   - component: {fileID: 6127524843130499017}
+  - component: {fileID: 4056335013178099717}
   m_Layer: 0
   m_Name: TurretPickUp
   m_TagString: Untagged
@@ -76,7 +77,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 1
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -101,9 +102,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.43155822, y: 0.040711977}
+  m_Offset: {x: 0.5339447, y: 0.040711977}
   serializedVersion: 2
-  m_Radius: 3.9999664
+  m_Radius: 3.7951934
 --- !u!114 &2794974881140644238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,6 +139,20 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &4056335013178099717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2794974881140644234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a63c145341589545ae5a6ae6e46e02d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveDistance: 0.8
+  moveSpeed: 2
 --- !u!1 &2794974881846826289
 GameObject:
   m_ObjectHideFlags: 0

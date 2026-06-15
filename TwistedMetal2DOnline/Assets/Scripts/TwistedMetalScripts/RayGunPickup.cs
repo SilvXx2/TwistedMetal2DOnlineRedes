@@ -1,7 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
 
-public class WeaponScript : MonoBehaviourPun
+public class RayGunPickup : MonoBehaviourPun
 {
     private bool picked;
 
@@ -10,8 +10,7 @@ public class WeaponScript : MonoBehaviourPun
         if (picked)
             return;
 
-        PhotonView carView =
-            other.GetComponent<PhotonView>();
+        PhotonView carView = other.GetComponent<PhotonView>();
 
         if (carView == null || !carView.IsMine)
             return;
@@ -25,7 +24,7 @@ public class WeaponScript : MonoBehaviourPun
         picked = true;
 
         photonView.RPC(
-            nameof(RPC_GiveMachineGun),
+            nameof(RPC_GiveRayGun),
             RpcTarget.AllBuffered,
             carView.ViewID
         );
@@ -42,19 +41,21 @@ public class WeaponScript : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void RPC_GiveMachineGun(int carViewId)
+    private void RPC_GiveRayGun(int carViewId)
     {
-        PhotonView carView =
-            PhotonView.Find(carViewId);
+        PhotonView carView = PhotonView.Find(carViewId);
 
         if (carView == null)
             return;
 
-        carView.GetComponent<WeaponState>()
-            ?.SetWeapon(WeaponType.MachineGun);
+        WeaponState weaponState =
+            carView.GetComponent<WeaponState>();
 
-        carView.GetComponent<CarController>()
-            ?.PickWeapon();
+        RayGunWeapon rayGun =
+            carView.GetComponent<RayGunWeapon>();
+
+        weaponState?.SetWeapon(WeaponType.RayGun);
+        rayGun?.Activate();
     }
 
     [PunRPC]
