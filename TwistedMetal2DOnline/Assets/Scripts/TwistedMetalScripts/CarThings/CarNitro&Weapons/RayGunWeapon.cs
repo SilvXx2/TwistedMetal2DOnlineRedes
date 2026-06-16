@@ -27,6 +27,16 @@ public class RayGunWeapon : MonoBehaviourPun
     private bool activeWeapon;
     private float nextFire;
 
+    public bool ActiveWeapon => activeWeapon;
+
+    public void SetRotation(float angle)
+    {
+        if (weaponPivot != null)
+        {
+            weaponPivot.rotation = Quaternion.Euler(0f, 0f, angle);
+        }
+    }
+
     private void Awake()
     {
         CreateWeaponVisual();
@@ -148,6 +158,12 @@ public class RayGunWeapon : MonoBehaviourPun
                 0,
                 angle
             );
+
+        CarWeaponController weaponController = GetComponent<CarWeaponController>();
+        if (weaponController != null)
+        {
+            weaponController.SetWeaponAngle(angle);
+        }
     }
 
     private void CreateWeaponVisual()

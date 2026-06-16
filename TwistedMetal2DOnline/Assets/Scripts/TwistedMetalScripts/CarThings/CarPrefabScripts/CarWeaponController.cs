@@ -44,11 +44,22 @@ public class CarWeaponController : MonoBehaviourPun
         }
     }
 
+    public void SetWeaponAngle(float angle)
+    {
+        weaponAngle = angle;
+    }
+
     public void ApplyRemoteWeaponAngle(float angle)
     {
         weaponAngle = angle;
         if (weaponObject != null && weaponObject.activeSelf)
             weaponObject.transform.rotation = Quaternion.Euler(0f, 0f, weaponAngle);
+
+        RayGunWeapon rayGun = GetComponent<RayGunWeapon>();
+        if (rayGun != null && rayGun.ActiveWeapon)
+        {
+            rayGun.SetRotation(weaponAngle);
+        }
     }
 
     public void SerializeWeaponData(PhotonStream stream)
