@@ -1,133 +1,0 @@
-
-
-Juegos en Red
-Live-OPs
-Unity Remote
-Contenido:
-Live-Ops
-Qué es
-Usos
-Unity Remote Config
-
-
-
-
-
-Live-Ops:
-Live Operations. Es uno de los principios que rige la industria en este último tiempo. Sobre todo si hablamos de juegos Free-to-play o Juegos como Servicio.
-Ya no se trata de publicar el juego y olvidarse, sino que se intenta de que este juego evolucione o cambie contantemente.
-Live-Ops:
-Live Ops son todas las técnicas o el enfoque, que nos permite tratar un juego ya publicado como un servicio continuo y no como un producto estático.
-Realizamos cambios, actualizaciones, features, eventos, etc. Para mejorar la experiencia del jugador o mantener su interés y monetización o interacción.
-Todo esto sin necesidad de lanzar una nueva versión de nuestro juego o aplicación.
-Live-Ops:
-En el pasado, una vez que el equipo de desarrollo terminaba el juego, se grababa, se copiaba y se vendía en un formato físico. El equipo pasaba a un nuevo juego.
-
-Pero ahora con este nuevo paradigma, el trabajo no se termina en el lanzamiento. El juego evoluciona, idealmente, basado en el comportamiento de los jugadores.
-Live-Ops:
-Algunos de los usos más comunes son:
-Gestión de eventos de juego y/o contenido temporal
-Seasons, eventos por días especiales
-Calendario de eventos
-Pruebas, análisis y optimización
-A/B Test
-Funnel Analysis o análisis de deserción 
-Mejorar la retención y Engagement
-Sistemas de progresión dinámicos
-Ofertas personalizadas
-Economía del juego
-Balances o Hotfixes
-¿Preguntas? ¿Consultas? ¿Inquietudes?
-
-
-Live-Ops:
-Para lograr aplicar esos cambios se necesita cierto nivel de infraestructura que deberá ir escalando con el juego mismo. Sin embargo, no suele ser un impedimento. Ya existen varias herramientas especializadas en Backend as a Service.
-Unity Gaming Services
-Azure PlayFab (Microsoft)
-Firebase (Google)
-Epic Online Services
-Live-Ops:
-A la hora de aplicar estos cambios existen dos conceptos claves de infraestructura.
-Remote Config. Lo que nos permite cambiar variables de nuestro juego, SIN QUE EL JUGADOR DEBA DESCARGAR UNA NUEVA VERSIÓN DE NUESTRO JUEGO
-Cloud Code: Ejecutar lógica crucial de nuestro juego en el servidor, para evitar modificaciones indeseadas.
-¿Preguntas? ¿Consultas? ¿Inquietudes?
-
-
-Unity RemoteConfig:
-Es una herramienta dentro del paquete de Unity Gaming Services que nos permite hacer modificaciones en vivo a nuestro juego.
-Curva de aprendizaje baja, integracipon nativa
-Gratis para empezar, pago luego de cierto volumen de usuarios
-Fácil segmentación de usuarios
-Soporte para A/B Tests, conexión directa con la herramienta de A/B test de Unity.
-Unity RemoteConfig:
-Por otro lado, también tiene algunas desventajas...
-Estamos a atados a Unity y sus servicios. Si bien tiene una opción para acceder y usarla por medio de una API, está diseñada por y para Unity.
-Trabaja con información. Podemos usarla con variables simples o jsons. Pero no podemos enviar lógica ni paquetes de Assets.
-¿Preguntas? ¿Consultas? ¿Inquietudes?
-
-
-Unity RemoteConfig:
-Utilizar esta herramienta necesitamos ingresar a nuestro perfil de Unity y crear un nuevo proyecto si no lo tenemos aún.
-Cuando estemos dentro de nuestro proyecto, en la pestaña de servicios veremos todo lo que nos ofrece Unity
-Manual
-Unity RemoteConfig:
-Por ahora nos importa el servicio de Remote Config.
-Así que presionamos en el botón de Launch
-Manual
-Unity RemoteConfig:
-Una vez adentro del servicio podemos configurar nuestro espacio de trabajo.
-Lo primero es definir nuestros Enviroments. Podemos tener, por ejemplo:
-Production
-Staging
-QA
-Dev
-
-
-Unity RemoteConfig:
-Los Enviroments o ambientes son formas de separar el trabajo o modificaciones. Así, por ejemplo, podemos probar cosas en el ambiente DEV y que esas pruebas nunca impacten en el ambiente de producción, donde está el juego publicado.
-
-
-Unity RemoteConfig:
-El segundo paso es instalar el paquete en nuestro proyecto.
-Para eso, en el apartado de Poject Settings debemos "registrarnos", indicar nuestra organización y nuestro proyecto. Y linkearlo.
-
-
-Unity RemoteConfig:
-Una vez hecho eso, podemos buscar el paquete en el package manager como "Remote Config"
-
-Unity RemoteConfig:
-Ahora podemos empezar a crear nuestras Keys.
-Estás key-value pair serán lo que mandemos a nuestro proyecto.
-La key será el identificador, y tendrá asociado un valor.
-
-Unity RemoteConfig:
-Primero definimos el Nombre y el tipo de dato; 
-
-Unity RemoteConfig:
-Y luego le ponemos su valor inicial.
-
-Unity RemoteConfig:
-Unity nos ofrece un script sencillo para poder escuchar los cambios de esa config.
-
-Unity RemoteConfig:
-Volviendo al Dashboard. Ahora podemos ir al apartado de Config y ahí vamos a poder ver toda nuestra configuración, todos los datos que se transmitirán a nuestros jugadores.
-
-¿Preguntas? ¿Consultas? ¿Inquietudes?
-
-
-Unity RemoteConfig:
-También podemos visualizar nuestra config desde el Editor de Unity.
-
-Unity RemoteConfig:
-Eso nos mostrará una ventana donde podemos elegir el Enviroment, ver y editar la config que esté registrada y Pushear o Pullear los cambios
-
-Unity RemoteConfig:
-Para poder leer el valor de nuestra config podemos usar los Get que nos ofrece.
-
-
-
-
-Pero por supuesto, luego tenemos que propagar ese cambio al resto del juego.
-
-¿Preguntas? ¿Consultas? ¿Inquietudes?
-

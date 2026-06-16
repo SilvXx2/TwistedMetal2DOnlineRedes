@@ -6,12 +6,12 @@ public class CarNetworkSync : MonoBehaviourPun, IPunObservable
     [Header("Network Sync")]
     [SerializeField] private float remoteLerpSpeed = 12f;
 
-    private RemoteTransformSynchronizer remoteSynchronizer;
+    private NetworkInterpolator remoteSynchronizer;
     private CarWeaponController weaponController;
 
     private void Awake()
     {
-        remoteSynchronizer = new RemoteTransformSynchronizer(transform, remoteLerpSpeed);
+        remoteSynchronizer = new NetworkInterpolator(transform);
         weaponController = GetComponent<CarWeaponController>();
     }
 

@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
     private Rigidbody rb;
     private PhotonView photonView;
     private PlayerInputMovement localMovement;
-    private RemoteTransformSynchronizer remoteSynchronizer;
+    private NetworkInterpolator remoteSynchronizer;
 
     private void Awake()
     {
@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
         PhotonViewMovementConfigurator.Configure(photonView, this);
         PlayerOwnerColorAssigner.ApplyOwnerColor(playerRenderer, photonView);
         localMovement = new PlayerInputMovement(transform, rb, movSpeed, rotSpeed, nitroMultiplier, nitroKey); // agregar rb y nitro
-        remoteSynchronizer = new RemoteTransformSynchronizer(transform, remoteLerpSpeed);
+        remoteSynchronizer = new NetworkInterpolator(transform);
     }
 
     private void Update()
