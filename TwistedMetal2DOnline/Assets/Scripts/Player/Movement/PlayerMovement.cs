@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
     private void Awake()
     {
         photonView = GetComponent<PhotonView>();
-        rb = GetComponent<Rigidbody>(); // agregar esto
+        rb = GetComponent<Rigidbody>();
 
         if (playerRenderer == null)
             playerRenderer = GetComponent<Renderer>();
@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
 
         PhotonViewMovementConfigurator.Configure(photonView, this);
         PlayerOwnerColorAssigner.ApplyOwnerColor(playerRenderer, photonView);
-        localMovement = new PlayerInputMovement(transform, rb, movSpeed, rotSpeed, nitroMultiplier, nitroKey); // agregar rb y nitro
+        localMovement = new PlayerInputMovement(transform, rb, movSpeed, rotSpeed, nitroMultiplier, nitroKey);
         remoteSynchronizer = new NetworkInterpolator(transform);
     }
 
