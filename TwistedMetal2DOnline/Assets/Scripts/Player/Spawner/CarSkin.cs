@@ -1,12 +1,12 @@
-using UnityEngine;
 using Photon.Pun;
+using UnityEngine;
 
-public class CarSkin : MonoBehaviourPun, IPunObservable
+public class CarSkin : MonoBehaviourPun
 {
+    private const string CarSkinKey = "CarSkin";
+
     [SerializeField] private SpriteRenderer carSpriteRenderer;
     [SerializeField] private Sprite[] carSprites;
-
-    private int skinIndex;
 
     private void Awake()
     {
@@ -16,42 +16,23 @@ public class CarSkin : MonoBehaviourPun, IPunObservable
 
     private void Start()
     {
-        if (photonView != null && photonView.IsMine)
-        {
-            int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
-            SetSkin(actorNumber - 1);
+        int skinIndex = 0;
 
-            photonView.RPC(nameof(RPC_SetSkin), RpcTarget.AllBuffered, skinIndex);
+        if (photonView.Owner != null &&
+            photonView.Owner.CustomProperties.TryGetValue(CarSkinKey, out object value))
+        {
+            skinIndex = (int)value;
         }
+
+        SetSkin(skinIndex);
     }
 
-    public void SetSkin(int index)
+    private void SetSkin(int index)
     {
         if (carSprites == null || carSprites.Length == 0)
             return;
 
-        skinIndex = index % carSprites.Length;
-
-        if (carSpriteRenderer != null)
-            carSpriteRenderer.sprite = carSprites[skinIndex];
-    }
-
-    [PunRPC]
-    private void RPC_SetSkin(int index)
-    {
-        SetSkin(index);
-    }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(skinIndex);
-        }
-        else
-        {
-            skinIndex = (int)stream.ReceiveNext();
-            SetSkin(skinIndex);
-        }
+        index = Mathf.Clamp(index, 0, carSprites.Length - 1);
+        carSpriteRenderer.sprite = carSprites[index];
     }
 }

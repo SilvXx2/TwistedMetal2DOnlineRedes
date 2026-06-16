@@ -9,6 +9,7 @@ public class MenuUIManager : MonoBehaviour
     [Header("Panels")]
     [SerializeField] private GameObject panelMainMenu;
     [SerializeField] private GameObject panelNickname;
+    [SerializeField] private GameObject panelColorSelect;
     [SerializeField] private GameObject panelRoomSelect;
     [SerializeField] private GameObject panelCreateRoom;
     [SerializeField] private GameObject panelJoinRoom;
@@ -49,6 +50,7 @@ public class MenuUIManager : MonoBehaviour
         panelNavigator = new MenuPanelNavigator(
             panelMainMenu,
             panelNickname,
+            panelColorSelect,
             panelRoomSelect,
             panelCreateRoom,
             panelJoinRoom,
@@ -118,6 +120,7 @@ public class MenuUIManager : MonoBehaviour
 
     public void ShowMainMenu()  => panelNavigator.Show(MenuPanel.MainMenu);
     public void ShowNickname()  => panelNavigator.Show(MenuPanel.Nickname);
+    public void ShowColorSelect() => panelNavigator.Show(MenuPanel.ColorSelect);
     public void ShowRoomSelect() => panelNavigator.Show(MenuPanel.RoomSelect);
     public void ShowCreateRoom() => panelNavigator.Show(MenuPanel.CreateRoom);
     public void ShowJoinRoom()   => panelNavigator.Show(MenuPanel.JoinRoom);
@@ -149,7 +152,7 @@ public class MenuUIManager : MonoBehaviour
     {
         if (nicknameInput == null)
         {
-            ShowRoomSelect();
+            ShowColorSelect();
             return;
         }
 
@@ -167,8 +170,25 @@ public class MenuUIManager : MonoBehaviour
         PlayerPrefs.SetString("PlayerNickname", nickname);
         PlayerPrefs.Save();
 
+        ShowColorSelect();
+    }
+
+    public void OnClickSelectCarColor(int colorIndex)
+    {
+        PlayerPrefs.SetInt("SelectedCarSkin", colorIndex);
+        PlayerPrefs.Save();
+
+        ExitGames.Client.Photon.Hashtable props =
+            new ExitGames.Client.Photon.Hashtable();
+
+        props["CarSkin"] = colorIndex;
+
+        Photon.Pun.PhotonNetwork.LocalPlayer
+            .SetCustomProperties(props);
+
         ShowRoomSelect();
     }
+
 
     public void OnClickOpenCreateRoom()   => ShowCreateRoom();
     public void OnClickOpenJoinRoom()     => ShowJoinRoom();

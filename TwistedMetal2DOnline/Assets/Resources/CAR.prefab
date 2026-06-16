@@ -19,7 +19,6 @@ GameObject:
   - component: {fileID: -6366716036144992972}
   - component: {fileID: 9111207047709230937}
   - component: {fileID: 648031224935911833}
-  - component: {fileID: 2148524861854565514}
   - component: {fileID: 4724630049302104319}
   - component: {fileID: 5767731704423278076}
   - component: {fileID: 1907591409373016273}
@@ -31,6 +30,7 @@ GameObject:
   - component: {fileID: 5768455096086591124}
   - component: {fileID: 8112251270135953854}
   - component: {fileID: 1893023657701695803}
+  - component: {fileID: 5134463658424330353}
   m_Layer: 0
   m_Name: CAR
   m_TagString: Untagged
@@ -199,7 +199,6 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 2148524861854565514}
   - {fileID: 5767731704423278076}
   - {fileID: 8112251270135953854}
   sceneViewId: 0
@@ -260,24 +259,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   fallbackBlinkDuration: 0.15
---- !u!114 &2148524861854565514
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1622535798551406416}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e394dffdb670bc4cbe26655cf2e6509, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  carSpriteRenderer: {fileID: 1622535798551406421}
-  carSprites:
-  - {fileID: 21300000, guid: 270e21e1d146e74429f0c9918d2b0275, type: 3}
-  - {fileID: 21300000, guid: aaad0ca0deeea904fbd991778bd162b0, type: 3}
-  - {fileID: 21300000, guid: 3ab18fafc809a8e48baeb92bbe7eef45, type: 3}
-  - {fileID: 21300000, guid: 6bfa9dd8d606dda47b0e9ef39b311b39, type: 3}
 --- !u!114 &4724630049302104319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,13 +346,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equippedSprite: {fileID: 21300000, guid: 082ef13a6e3c55343be293c06da64ad7, type: 3}
   localPosition: {x: 0, y: 0, z: 0}
-  localScale: {x: 0.6, y: 0.6, z: 1}
+  localScale: {x: 0.7, y: 0.7, z: 1}
   sortingOrder: 10
   fireRate: 2
-  maxDistance: 160
-  damage: 20
-  lineDuration: 0.07
-  lineWidth: 12
+  maxDistance: 180
+  damage: 30
+  lineDuration: 0.09
+  lineWidth: 10
   lineColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!114 &7387018474567117797
 MonoBehaviour:
@@ -401,7 +382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponSprite: {fileID: 21300000, guid: 6b1b37cacc428bf46bf7e6be97bdf7f1, type: 3}
   weaponLocalPosition: {x: 0, y: 0, z: 0}
-  weaponLocalScale: {x: 1, y: 1, z: 1}
+  weaponLocalScale: {x: 0.8, y: 0.8, z: 1}
   weaponAngleOffset: 0
   bulletCustomSprite: {fileID: 21300000, guid: 9ae76870037069745a08ad28c967e0aa, type: 3}
   bulletSpeed: 500
@@ -409,7 +390,7 @@ MonoBehaviour:
   bulletLifetime: 2
   fireRate: 0.15
   bulletSpawnOffset: 8
-  bulletScale: {x: 10, y: 10, z: 1}
+  bulletScale: {x: 2, y: 2, z: 1}
 --- !u!114 &5768455096086591124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -447,6 +428,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06c62039852a7a44eb5093ff9f6120a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5134463658424330353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622535798551406416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e394dffdb670bc4cbe26655cf2e6509, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carSpriteRenderer: {fileID: 1622535798551406421}
+  carSprites:
+  - {fileID: 21300000, guid: 270e21e1d146e74429f0c9918d2b0275, type: 3}
+  - {fileID: 21300000, guid: 6bfa9dd8d606dda47b0e9ef39b311b39, type: 3}
+  - {fileID: 21300000, guid: aaad0ca0deeea904fbd991778bd162b0, type: 3}
+  - {fileID: 21300000, guid: 3ab18fafc809a8e48baeb92bbe7eef45, type: 3}
 --- !u!1 &2407121194439546569
 GameObject:
   m_ObjectHideFlags: 0
