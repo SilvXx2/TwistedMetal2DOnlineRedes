@@ -46,9 +46,30 @@ public class ObstacleSpawner : MonoBehaviourPunCallbacks
         }
     }
 
+    private void Awake()
+    {
+        RegisterPrefabWithPhoton();
+    }
+
     private void Start()
     {
+        RegisterPrefabWithPhoton();
         TryStartSpawnRoutine();
+    }
+
+    private void RegisterPrefabWithPhoton()
+    {
+        if (obstaclePrefab != null)
+        {
+            if (PhotonNetwork.PrefabPool is DefaultPool defaultPool)
+            {
+                if (!defaultPool.ResourceCache.ContainsKey(obstaclePrefab.name))
+                {
+                    defaultPool.ResourceCache.Add(obstaclePrefab.name, obstaclePrefab);
+                    Debug.Log($"[ObstacleSpawner] Prefab '{obstaclePrefab.name}' registrado exitosamente en el ResourceCache de Photon.");
+                }
+            }
+        }
     }
 
     public override void OnJoinedRoom()
@@ -123,6 +144,7 @@ public class ObstacleSpawner : MonoBehaviourPunCallbacks
 
     private void SpawnObstacles()
     {
+        RegisterPrefabWithPhoton();
         for (int i = 0; i < obstacleCount; i++)
         {
             Vector3 spawnPosition = GetRandomSpawnPosition();
