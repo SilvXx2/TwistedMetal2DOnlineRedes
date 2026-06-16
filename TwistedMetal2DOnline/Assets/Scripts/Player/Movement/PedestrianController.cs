@@ -16,13 +16,13 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
     private bool isLocal;
     private WeaponType hadWeaponType = WeaponType.None;
 
-    // Sincronización de posición para clientes remotos
-    private Vector3 remotePos;
+    private NetworkInterpolator remoteInterpolator;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         health = GetComponent<PlayerHealth>();
+        remoteInterpolator = new NetworkInterpolator(transform);
     }
 
     public void SetHadWeapon(bool value)
@@ -77,8 +77,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
     {
         if (!isLocal)
         {
-            // Interpolación de posición para peatones remotos
-            transform.position = Vector3.Lerp(transform.position, remotePos, Time.deltaTime * 12f);
+            remoteInterpolator.ApplyRemoteStep(Time.deltaTime);
             return;
         }
 
@@ -167,13 +166,6 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(transform.position);
-        }
-        else
-        {
-            remotePos = (Vector3)stream.ReceiveNext();
-        }
+        remoteInterpolator.Serialize(stream);
     }
 }

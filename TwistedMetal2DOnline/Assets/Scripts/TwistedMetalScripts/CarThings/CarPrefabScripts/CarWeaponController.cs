@@ -157,10 +157,32 @@ public class CarWeaponController : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void RPC_Shoot(Vector3 position, float angle)
+    private void RPC_Shoot(Vector3 position, float angle, PhotonMessageInfo info = default)
     {
+        Vector3 direction = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0f);
+        float lag = 0f;
+
+        if (PhotonNetwork.InRoom && info.Sender != null && !info.Sender.IsLocal)
+        {
+            lag = (float)(PhotonNetwork.Time - info.SentServerTime);
+            if (lag < 0f) lag = 0f;
+        }
+
+        BulletExtrapolator.ExtrapolationResult extrap = BulletExtrapolator.Calculate(
+            position,
+            direction,
+            bulletSpeed,
+            bulletLifetime,
+            lag
+        );
+
+        if (!extrap.ShouldSpawn)
+        {
+            return;
+        }
+
         GameObject bulletGo = new GameObject("Bullet");
-        bulletGo.transform.position = position;
+        bulletGo.transform.position = extrap.Position;
         bulletGo.transform.rotation = Quaternion.Euler(0f, 0f, angle);
         bulletGo.transform.localScale = bulletScale;
 
@@ -176,10 +198,9 @@ public class CarWeaponController : MonoBehaviourPun
         col.isTrigger = true;
 
         Bullet bulletComponent = bulletGo.AddComponent<Bullet>();
-        bulletComponent.Initialize(gameObject, bulletDamage, bulletLifetime);
+        bulletComponent.Initialize(gameObject, bulletDamage, extrap.RemainingLifetime);
 
-        Vector2 direction = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
-        bulletRb.velocity = direction * bulletSpeed;
+        bulletRb.velocity = (Vector2)direction * bulletSpeed;
     }
 
     private static Sprite GetDefaultBulletSprite()
