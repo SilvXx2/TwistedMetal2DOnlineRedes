@@ -56,6 +56,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         PhotonPlayerSlotRegistry.EnsureLocalStableIdentity();
         InitializeServices();
 
+        // Precargar la lista de taunts desde la API al arrancar
+        var _ = TauntList.Instance;
+
         if (!PhotonNetwork.IsConnected)
         {
             Debug.Log("Conectando a Photon...");

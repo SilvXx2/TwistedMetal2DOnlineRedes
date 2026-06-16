@@ -27,6 +27,7 @@ public class TauntList : MonoBehaviour
     private string url = "https://script.google.com/macros/s/AKfycbzl1AJHTjE26XYuL7OaHuYQfIMccTHYXNJvnDEt2TCprjBBEvi4tLz7ZHUAI949PyZO/exec";
 
     public Taunt[] taunts;
+    private bool isLoaded = false;
 
     private readonly string[] fallbackTaunts = new string[]
     {
@@ -50,6 +51,60 @@ public class TauntList : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        StartCoroutine(FetchAllTaunts());
+    }
+
+    private IEnumerator FetchAllTaunts()
+    {
+        Debug.Log("[TauntList] Iniciando la precarga de todos los taunts desde la API...");
+        using (UnityWebRequest www = UnityWebRequest.Get(url))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogWarning("[TauntList] Error al precargar taunts, se usarán fallbacks. Error: " + www.error);
+            }
+            else
+            {
+                string jsonResponse = www.downloadHandler.text;
+                Debug.Log("[TauntList] Respuesta JSON recibida: " + jsonResponse);
+
+                try
+                {
+                    string trimmed = jsonResponse != null ? jsonResponse.Trim() : "";
+                    if (trimmed.StartsWith("["))
+                    {
+                        string wrappedJson = "{\"taunts\":" + trimmed + "}";
+                        TauntListWrapper wrapper = JsonUtility.FromJson<TauntListWrapper>(wrappedJson);
+                        if (wrapper != null && wrapper.taunts != null)
+                        {
+                            taunts = wrapper.taunts.ToArray();
+                            isLoaded = true;
+                            Debug.Log($"[TauntList] Precargados con éxito {taunts.Length} taunts desde la API.");
+                        }
+                    }
+                    else if (trimmed.StartsWith("{"))
+                    {
+                        Taunt parsed = JsonUtility.FromJson<Taunt>(trimmed);
+                        if (parsed != null)
+                        {
+                            taunts = new Taunt[] { parsed };
+                            isLoaded = true;
+                            Debug.Log("[TauntList] Precargado 1 taunt desde la API.");
+                        }
+                    }
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning("[TauntList] Error al parsear JSON precargado: " + e.Message);
+                }
+            }
+        }
+    }
+
     public Taunt GetRandomTaunt()
     {
         if (taunts == null || taunts.Length == 0)
@@ -61,75 +116,17 @@ public class TauntList : MonoBehaviour
 
     public void ObtenerTauntPorId(int id, System.Action<string> callback)
     {
-        StartCoroutine(FetchTaunt(id, callback));
-    }
-
-    private IEnumerator FetchTaunt(int id, System.Action<string> callback)
-    {
-        string requestUrl = url + "?id=" + id;
-        using (UnityWebRequest www = UnityWebRequest.Get(requestUrl))
+        if (isLoaded && taunts != null && taunts.Length > 0)
         {
-            yield return www.SendWebRequest();
-
-            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+            Taunt found = System.Array.Find(taunts, t => t.id == id);
+            if (found != null && !string.IsNullOrEmpty(found.GetMessage()))
             {
-                Debug.LogWarning("Error al obtener taunt de API, usando fallback. Error: " + www.error);
-                callback?.Invoke(GetFallbackTaunt(id));
-            }
-            else
-            {
-                string jsonResponse = www.downloadHandler.text;
-                Debug.Log("Taunt obtenido: " + jsonResponse);
-
-                try
-                {
-                    string trimmed = jsonResponse != null ? jsonResponse.Trim() : "";
-                    if (trimmed.StartsWith("["))
-                    {
-                        string wrappedJson = "{\"taunts\":" + trimmed + "}";
-                        TauntListWrapper wrapper = JsonUtility.FromJson<TauntListWrapper>(wrappedJson);
-                        if (wrapper != null && wrapper.taunts != null && wrapper.taunts.Count > 0)
-                        {
-                            Taunt found = wrapper.taunts.Find(t => t.id == id);
-                            if (found != null && !string.IsNullOrEmpty(found.GetMessage()))
-                            {
-                                callback?.Invoke(found.GetMessage());
-                            }
-                            else
-                            {
-                                callback?.Invoke(GetFallbackTaunt(id));
-                            }
-                        }
-                        else
-                        {
-                            callback?.Invoke(GetFallbackTaunt(id));
-                        }
-                    }
-                    else if (trimmed.StartsWith("{"))
-                    {
-                        Taunt parsed = JsonUtility.FromJson<Taunt>(trimmed);
-                        if (parsed != null && !string.IsNullOrEmpty(parsed.GetMessage()))
-                        {
-                            callback?.Invoke(parsed.GetMessage());
-                        }
-                        else
-                        {
-                            callback?.Invoke(GetFallbackTaunt(id));
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogWarning("La respuesta de la API no es un JSON válido. Usando fallback. Detalle del error: " + (trimmed.Length > 200 ? trimmed.Substring(0, 200) + "..." : trimmed));
-                        callback?.Invoke(GetFallbackTaunt(id));
-                    }
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogWarning("Error al parsear JSON del taunt, usando fallback. Error: " + e.Message);
-                    callback?.Invoke(GetFallbackTaunt(id));
-                }
+                callback?.Invoke(found.GetMessage());
+                return;
             }
         }
+
+        callback?.Invoke(GetFallbackTaunt(id));
     }
 
     private string GetFallbackTaunt(int id)
