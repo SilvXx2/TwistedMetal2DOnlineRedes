@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     public static GameManager Instance { get; private set; }
 
     private const byte MatchResultEventCode = 20;
+    private const byte ForceRestartEventCode = 21;
+    private const byte TauntEventCode = 22;
     private const string RoomRoundIdPropertyKey = "tgRoundId";
     private const string RoomMatchEndedPropertyKey = "tgMatchEnded";
 
@@ -25,12 +27,12 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     private MatchRoundState matchState = new MatchRoundState();
     private PhotonMatchResultEventBridge matchResultEventBridge;
+    private PhotonTauntEventBridge tauntEventBridge;
     private Coroutine pendingResultRoutine;
     private bool isLeavingToLobby = false;
 
     public event Action<bool> LocalMatchResultResolved;
     public event Action MatchStateReset;
-    private const byte ForceRestartEventCode = 21;
 
     public bool IsMatchEnded => matchState.GameEnded;
 
@@ -57,6 +59,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Instance = this;
         DontDestroyOnLoad(gameObject);
         matchResultEventBridge = new PhotonMatchResultEventBridge(MatchResultEventCode);
+        tauntEventBridge = new PhotonTauntEventBridge(TauntEventCode);
 
         
         if (LiveOpsManager.Instance != null && LiveOpsManager.Instance.IsReady)
@@ -155,7 +158,36 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                     UnitySceneManager.LoadScene(sceneName);
                 }
                 break;
+
+            case TauntEventCode:
+                if (PhotonTauntEventBridge.TryUnpack(photonEvent.CustomData, out int attackerActor, out int victimActor, out int tauntId))
+                {
+                    string attackerName = GetPlayerName(attackerActor);
+                    string victimName = GetPlayerName(victimActor);
+
+                    TauntList.Instance.ObtenerTauntPorId(tauntId, (tauntText) =>
+                    {
+                        if (TauntNotifier.Instance != null)
+                        {
+                            TauntNotifier.Instance.ShowTaunt(attackerName, victimName, tauntText);
+                        }
+                    });
+                }
+                break;
         }
+    }
+
+    private string GetPlayerName(int actorNumber)
+    {
+        if (PhotonNetwork.InRoom && PhotonNetwork.CurrentRoom != null)
+        {
+            Player player = PhotonNetwork.CurrentRoom.GetPlayer(actorNumber);
+            if (player != null && !string.IsNullOrEmpty(player.NickName))
+            {
+                return player.NickName;
+            }
+        }
+        return $"Jugador {actorNumber}";
     }
 
     public override void OnJoinedRoom()
