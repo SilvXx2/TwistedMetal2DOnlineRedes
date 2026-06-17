@@ -1,0 +1,128 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 469c24fdb3bd6431b92cc1465bd9166b, type: 3}
+  m_Name: RemoteConfigDataStoreAsset
+  m_EditorClassIdentifier: 
+  _rsKeyList: "[\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"7123a434-c5a6-4855-aa69-eeaab5b5e2ff\"\r\n   
+    },\r\n    \"rs\": {\r\n      \"key\": \"player_max_health\",\r\n      \"type\":
+    \"int\",\r\n      \"value\": 100\r\n    }\r\n  },\r\n  {\r\n    \"metadata\":
+    {\r\n      \"entityId\": \"97bd82a8-db4e-4ac8-b5e5-90b285fb4aca\"\r\n    },\r\n   
+    \"rs\": {\r\n      \"key\": \"car_move_speed\",\r\n      \"type\": \"float\",\r\n     
+    \"value\": 100.0\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"4d325f75-d302-4996-bab3-6c6d43cbe82d\"\r\n    },\r\n    \"rs\": {\r\n     
+    \"key\": \"car_turn_speed\",\r\n      \"type\": \"float\",\r\n      \"value\":
+    240.0\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"9562e971-8ee0-4e29-aa16-e0542816414a\"\r\n   
+    },\r\n    \"rs\": {\r\n      \"key\": \"pickup_spawn_interval\",\r\n      \"type\":
+    \"float\",\r\n      \"value\": 5.0\r\n    }\r\n  },\r\n  {\r\n    \"metadata\":
+    {\r\n      \"entityId\": \"684c29d8-43d6-41ee-9e63-f66cccb34d34\"\r\n    },\r\n   
+    \"rs\": {\r\n      \"key\": \"match_grace_period\",\r\n      \"type\": \"float\",\r\n     
+    \"value\": 2.5\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"45a0a0d6-74f7-438f-908c-6c0ab1e81345\"\r\n    },\r\n    \"rs\": {\r\n     
+    \"key\": \"event_mode_active\",\r\n      \"type\": \"bool\",\r\n      \"value\":
+    false\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"80d4b0f4-b9ae-40d6-a9ad-c3b9fef818b8\"\r\n   
+    },\r\n    \"rs\": {\r\n      \"key\": \"event_mode_name\",\r\n      \"type\":
+    \"string\",\r\n      \"value\": \"\"\r\n    }\r\n  },\r\n  {\r\n    \"metadata\":
+    {\r\n      \"entityId\": \"1b9a7aad-6e35-4383-8763-ff979f1c5aed\"\r\n    },\r\n   
+    \"rs\": {\r\n      \"key\": \"active_map_partition\",\r\n      \"type\": \"json\",\r\n     
+    \"schemaId\": null,\r\n      \"value\": {\r\n        \"partitionId\": \"map_standard\",\r\n       
+    \"randomSeed\": -1,\r\n        \"activeRatio\": 0.5,\r\n        \"displayName\":
+    \"Arena Est\xE1ndar\",\r\n        \"spawnPoints\": [\r\n          {\r\n           
+    \"x\": -5,\r\n            \"y\": 3,\r\n            \"rotation\": 0\r\n         
+    },\r\n          {\r\n            \"x\": 5,\r\n            \"y\": -3,\r\n           
+    \"rotation\": 180\r\n          }\r\n        ],\r\n        \"obstacleZones\":
+    [\r\n          {\r\n            \"zoneId\": \"Building1\",\r\n            \"active\":
+    true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building2\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building3\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building4\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building5\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building6\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building7\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building8\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building9\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building10\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building11\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building12\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building13\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building14\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building15\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building16\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building17\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building18\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building19\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building20\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building21\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building22\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building23\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building24\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building25\",\r\n           
+    \"active\": true\r\n          }\r\n        ],\r\n        \"pickupZones\": [\r\n         
+    {\r\n            \"zoneId\": \"pickup_center\",\r\n            \"active\": true,\r\n           
+    \"spawnRate\": 5\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  }\r\n]"
+  _rsLastCachedKeyList: "[\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"7123a434-c5a6-4855-aa69-eeaab5b5e2ff\"\r\n   
+    },\r\n    \"rs\": {\r\n      \"key\": \"player_max_health\",\r\n      \"type\":
+    \"int\",\r\n      \"value\": 100\r\n    }\r\n  },\r\n  {\r\n    \"metadata\":
+    {\r\n      \"entityId\": \"97bd82a8-db4e-4ac8-b5e5-90b285fb4aca\"\r\n    },\r\n   
+    \"rs\": {\r\n      \"key\": \"car_move_speed\",\r\n      \"type\": \"float\",\r\n     
+    \"value\": 100.0\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"4d325f75-d302-4996-bab3-6c6d43cbe82d\"\r\n    },\r\n    \"rs\": {\r\n     
+    \"key\": \"car_turn_speed\",\r\n      \"type\": \"float\",\r\n      \"value\":
+    240.0\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"9562e971-8ee0-4e29-aa16-e0542816414a\"\r\n   
+    },\r\n    \"rs\": {\r\n      \"key\": \"pickup_spawn_interval\",\r\n      \"type\":
+    \"float\",\r\n      \"value\": 5.0\r\n    }\r\n  },\r\n  {\r\n    \"metadata\":
+    {\r\n      \"entityId\": \"684c29d8-43d6-41ee-9e63-f66cccb34d34\"\r\n    },\r\n   
+    \"rs\": {\r\n      \"key\": \"match_grace_period\",\r\n      \"type\": \"float\",\r\n     
+    \"value\": 2.5\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\":
+    \"45a0a0d6-74f7-438f-908c-6c0ab1e81345\"\r\n    },\r\n    \"rs\": {\r\n     
+    \"key\": \"event_mode_active\",\r\n      \"type\": \"bool\",\r\n      \"value\":
+    false\r\n    }\r\n  },\r\n  {\r\n    \"metadata\": {\r\n      \"entityId\": \"80d4b0f4-b9ae-40d6-a9ad-c3b9fef818b8\"\r\n   
+    },\r\n    \"rs\": {\r\n      \"key\": \"event_mode_name\",\r\n      \"type\":
+    \"string\",\r\n      \"value\": \"\"\r\n    }\r\n  },\r\n  {\r\n    \"metadata\":
+    {\r\n      \"entityId\": \"1b9a7aad-6e35-4383-8763-ff979f1c5aed\"\r\n    },\r\n   
+    \"rs\": {\r\n      \"key\": \"active_map_partition\",\r\n      \"type\": \"json\",\r\n     
+    \"schemaId\": null,\r\n      \"value\": {\r\n        \"partitionId\": \"map_standard\",\r\n       
+    \"randomSeed\": -1,\r\n        \"activeRatio\": 0.5,\r\n        \"displayName\":
+    \"Arena Est\xE1ndar\",\r\n        \"spawnPoints\": [\r\n          {\r\n           
+    \"x\": -5,\r\n            \"y\": 3,\r\n            \"rotation\": 0\r\n         
+    },\r\n          {\r\n            \"x\": 5,\r\n            \"y\": -3,\r\n           
+    \"rotation\": 180\r\n          }\r\n        ],\r\n        \"obstacleZones\":
+    [\r\n          {\r\n            \"zoneId\": \"Building1\",\r\n            \"active\":
+    true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building2\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building3\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building4\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building5\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building6\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building7\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building8\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building9\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building10\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building11\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building12\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building13\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building14\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building15\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building16\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building17\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building18\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building19\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building20\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building21\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building22\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building23\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building24\",\r\n           
+    \"active\": true\r\n          },\r\n          {\r\n            \"zoneId\": \"Building25\",\r\n           
+    \"active\": true\r\n          }\r\n        ],\r\n        \"pickupZones\": [\r\n         
+    {\r\n            \"zoneId\": \"pickup_center\",\r\n            \"active\": true,\r\n           
+    \"spawnRate\": 5\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  }\r\n]"
+  _environments: "[\r\n  {\r\n    \"projectId\": \"cc22364a-dfc1-43fd-ae8e-2383a2c8798a\",\r\n   
+    \"name\": \"production\",\r\n    \"id\": \"ac2228eb-c204-4e18-ba25-68e60b2b98e8\",\r\n   
+    \"isDefault\": true,\r\n    \"createdAt\": \"2026-06-04T21:40:44Z\",\r\n    \"updatedAt\":
+    \"2026-06-04T21:40:44Z\"\r\n  }\r\n]"
