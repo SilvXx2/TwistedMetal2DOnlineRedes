@@ -151,28 +151,11 @@ public class PlayerHealth : MonoBehaviourPun
                     PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 
                     int tauntId = UnityEngine.Random.Range(1, 6);
-                    string victimName = (photonView != null && photonView.Owner != null) ? photonView.Owner.NickName : "El rival";
-                    string attackerName = PhotonNetwork.LocalPlayer.NickName;
+                    int victimActorNumber = (photonView != null && photonView.Owner != null) ? photonView.Owner.ActorNumber : -1;
+                    int attackerActorNumberVal = PhotonNetwork.LocalPlayer.ActorNumber;
 
-                    if (photonView != null && photonView.Owner != null && string.IsNullOrEmpty(victimName))
-                        victimName = $"Jugador {photonView.Owner.ActorNumber}";
-                    if (string.IsNullOrEmpty(attackerName))
-                        attackerName = $"Jugador {PhotonNetwork.LocalPlayer.ActorNumber}";
-
-                    TauntList.Instance.ObtenerTauntPorId(tauntId, (tauntText) =>
-                    {
-                        if (LocalPlayerInstance != null && LocalPlayerInstance.photonView != null)
-                        {
-                            LocalPlayerInstance.photonView.RPC("RPC_ShowTaunt", RpcTarget.All, attackerName, victimName, tauntText);
-                        }
-                        else
-                        {
-                            if (TauntNotifier.Instance != null)
-                            {
-                                TauntNotifier.Instance.ShowTaunt(attackerName, victimName, tauntText);
-                            }
-                        }
-                    });
+                    PhotonTauntEventBridge tauntBridge = new PhotonTauntEventBridge(22);
+                    tauntBridge.BroadcastTaunt(attackerActorNumberVal, victimActorNumber, tauntId);
                 }
             }
             else
@@ -203,16 +186,6 @@ public class PlayerHealth : MonoBehaviourPun
             }
 
             Die();
-        }
-    }
-
-    [PunRPC]
-    public void RPC_ShowTaunt(string attackerName, string victimName, string tauntText)
-    {
-        Debug.Log($"[Taunt RPC] {attackerName} -> {victimName}: {tauntText}");
-        if (TauntNotifier.Instance != null)
-        {
-            TauntNotifier.Instance.ShowTaunt(attackerName, victimName, tauntText);
         }
     }
 
