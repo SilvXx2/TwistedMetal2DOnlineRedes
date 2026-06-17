@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class LeaderBoardAPI : MonoBehaviour
 {
@@ -55,14 +56,17 @@ public class LeaderBoardAPI : MonoBehaviour
 
     private IEnumerator PostScore(string nombre, int score, string macId, System.Action<bool> callback)
     {
-        string json = JsonUtility.ToJson(new ScoreData(nombre, score, macId));
+        ScoreNetworkPackage package = new ScoreNetworkPackage(nombre, score, macId);
+        byte[] serializedData = package.Serialize();
+        byte[] encryptedData = ScoreNetworkPackage.EncryptDecrypt(serializedData);
+        string base64Payload = System.Convert.ToBase64String(encryptedData);
 
         using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
         {
-            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(base64Payload);
             www.uploadHandler = new UploadHandlerRaw(bodyRaw);
             www.downloadHandler = new DownloadHandlerBuffer();
-            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("Content-Type", "text/plain");
 
             yield return www.SendWebRequest();
 
@@ -168,4 +172,58 @@ public class ScoreData
 public class ScoreListWrapper
 {
     public List<ScoreData> scores;
+}
+
+[System.Serializable]
+public struct ScoreNetworkPackage
+{
+    public string nombre;
+    public int score;
+    public string macId;
+
+    public ScoreNetworkPackage(string nombre, int score, string macId)
+    {
+        this.nombre = nombre;
+        this.score = score;
+        this.macId = macId;
+    }
+
+    public byte[] Serialize()
+    {
+        using (MemoryStream ms = new MemoryStream())
+        {
+            using (BinaryWriter writer = new BinaryWriter(ms))
+            {
+                writer.Write(nombre);
+                writer.Write(score);
+                writer.Write(macId);
+            }
+            return ms.ToArray();
+        }
+    }
+
+    public static ScoreNetworkPackage Deserialize(byte[] data)
+    {
+        using (MemoryStream ms = new MemoryStream(data))
+        {
+            using (BinaryReader reader = new BinaryReader(ms))
+            {
+                string nombre = reader.ReadString();
+                int score = reader.ReadInt32();
+                string macId = reader.ReadString();
+                return new ScoreNetworkPackage(nombre, score, macId);
+            }
+        }
+    }
+
+    public static byte[] EncryptDecrypt(byte[] data)
+    {
+        byte key = 60;
+        byte[] result = new byte[data.Length];
+        for (int i = 0; i < data.Length; i++)
+        {
+            result[i] = (byte)(data[i] ^ key);
+        }
+        return result;
+    }
 }
