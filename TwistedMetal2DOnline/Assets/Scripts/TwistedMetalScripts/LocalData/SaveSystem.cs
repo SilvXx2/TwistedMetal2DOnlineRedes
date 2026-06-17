@@ -17,7 +17,7 @@ public static class SaveSystem
 
         File.WriteAllText(SavePath, encryptedJson);
 
-        System.Diagnostics.Process.Start(Application.persistentDataPath);
+        //System.Diagnostics.Process.Start(Application.persistentDataPath);
 
         Debug.Log("JSON original: " + json);
         Debug.Log("JSON encriptado: " + encryptedJson);
