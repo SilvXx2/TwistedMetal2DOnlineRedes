@@ -26,7 +26,7 @@ public class TauntNotifier : MonoBehaviour
 
     public void ShowTaunt(string attackerName, string victimName, string tauntText)
     {
-        if (notificationPanel == null || notificationText == null)
+        if (notificationText == null)
         {
             Debug.LogWarning($"[TauntNotifier] UI References missing. Msg: {attackerName} -> {victimName}: {tauntText}");
             return;
@@ -39,14 +39,14 @@ public class TauntNotifier : MonoBehaviour
             StopCoroutine(hideRoutine);
         }
 
-        notificationPanel.SetActive(true);
+        notificationText.gameObject.SetActive(true);
         hideRoutine = StartCoroutine(HideAfterDelay());
     }
 
     private IEnumerator HideAfterDelay()
     {
         yield return new WaitForSeconds(displayDuration);
-        notificationPanel.SetActive(false);
+        notificationText.gameObject.SetActive(false);
         hideRoutine = null;
     }
 

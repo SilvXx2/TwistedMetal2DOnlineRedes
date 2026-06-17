@@ -106,8 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9f1d10bbd4d2b64cb0df4d8e7160bcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
-  returnToCarDelay: 30
+  moveSpeed: 50
+  returnToCarDelay: 20
   carPrefabName: CAR
 --- !u!114 &8989421442069294960
 MonoBehaviour:

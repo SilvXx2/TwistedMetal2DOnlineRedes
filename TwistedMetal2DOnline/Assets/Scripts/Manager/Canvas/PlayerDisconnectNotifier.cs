@@ -21,7 +21,7 @@ public class PlayerDisconnectNotifier : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        if (notificationPanel == null || notificationText == null)
+        if (notificationText == null)
         {
             return;
         }
@@ -42,14 +42,14 @@ public class PlayerDisconnectNotifier : MonoBehaviourPunCallbacks
             StopCoroutine(hideRoutine);
         }
 
-        notificationPanel.SetActive(true);
+        notificationText.gameObject.SetActive(true);
         hideRoutine = StartCoroutine(HideAfterDelay());
     }
 
     private IEnumerator HideAfterDelay()
     {
         yield return new WaitForSeconds(displayDuration);
-        notificationPanel.SetActive(false);
+        notificationText.gameObject.SetActive(false);
         hideRoutine = null;
     }
 
