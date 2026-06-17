@@ -155,7 +155,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 if (!string.IsNullOrEmpty(sceneName))
                 {
                     PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.LocalPlayer);
-                    UnitySceneManager.LoadScene(sceneName);
+                    PhotonNetwork.LoadLevel(sceneName);
                 }
                 break;
 
@@ -212,6 +212,17 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
         if (TryReadRoundId(propertiesThatChanged, out int roomRoundId))
         {
+            if (!PhotonNetwork.IsMasterClient && roomRoundId > matchState.RoundId)
+            {
+                if (IsGameplayScene(UnitySceneManager.GetActiveScene()))
+                {
+                    Debug.Log($"[GameManager] RoundId incrementado de {matchState.RoundId} a {roomRoundId} mientras estábamos en gameplay. Forzando reinicio de escena.");
+                    PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.LocalPlayer);
+                    PhotonNetwork.LoadLevel(ResolveGameplaySceneName());
+                    return;
+                }
+            }
+
             ApplyRoomRoundId(roomRoundId);
         }
     }

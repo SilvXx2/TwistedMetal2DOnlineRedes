@@ -102,6 +102,18 @@ internal sealed class PhotonMatchService
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.DestroyAll();
+            if (!shouldReturnToLobby)
+            {
+                Hashtable properties = new Hashtable
+                {
+                    { "tgMatchEnded", false }
+                };
+                PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+
+                PhotonNetwork.AutomaticallySyncScene = true;
+                PhotonNetwork.LoadLevel(targetSceneName);
+                return true;
+            }
         }
 
         RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
