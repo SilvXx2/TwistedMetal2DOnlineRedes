@@ -5,10 +5,10 @@ public class PickUpFloat : MonoBehaviour
     [SerializeField] private float moveDistance = 0.8f;
     [SerializeField] private float moveSpeed = 2f;
 
-    /// <summary>
-    /// Intervalo de reaparición en segundos. LiveOps puede modificar este valor
-    /// mediante MapPartitionLoader. El sistema de spawning externo debe leer esta propiedad.
-    /// </summary>
+    
+    
+    
+    
     public float SpawnInterval { get; private set; } = 5f;
 
     private Vector3 startPosition;
@@ -36,9 +36,9 @@ public class PickUpFloat : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Permite que el sistema LiveOps sobreescriba el intervalo de spawn de este pickup.
-    /// </summary>
+    
+    
+    
     public void SetSpawnInterval(float interval)
     {
         SpawnInterval = Mathf.Max(0.1f, interval);

@@ -39,7 +39,7 @@ public class ConfrontationManager : MonoBehaviour
     private float localPhaseOffset;
     private float rivalPhaseOffset;
 
-    // UI elements
+    
     private GameObject uiCanvasGo;
     private Image localBarFill;
     private Image rivalBarFill;
@@ -67,7 +67,7 @@ public class ConfrontationManager : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            // Copy inspector settings from the scene-loaded instance to the persistent instance
+            
             Instance.CopySettingsFrom(this);
             Destroy(gameObject);
             return;
@@ -76,7 +76,7 @@ public class ConfrontationManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // Fallback if reference was lost or dynamically instantiated
+        
         if (pedestrianPrefab == null)
         {
             pedestrianPrefab = Resources.Load<GameObject>("Pedestrian");
@@ -116,11 +116,11 @@ public class ConfrontationManager : MonoBehaviour
         participantA = carA;
         participantB = carB;
 
-        // Generate random phase offsets for bar oscillation
+        
         localPhaseOffset = Random.Range(0f, 2f * Mathf.PI);
         rivalPhaseOffset = Random.Range(0f, 2f * Mathf.PI);
 
-        // Determine local vs rival
+        
         if (carA.photonView != null && carA.photonView.IsMine)
         {
             localCar = carA;
@@ -137,11 +137,11 @@ public class ConfrontationManager : MonoBehaviour
             rivalCar = null;
         }
 
-        // Set state on both cars to disable standard movement/rotation
+        
         carA.IsInConfrontation = true;
         carB.IsInConfrontation = true;
 
-        // Calculate positions
+        
         Vector3 posA = carA.transform.position;
         Vector3 posB = carB.transform.position;
         Vector3 midpoint = (posA + posB) / 2f;
@@ -152,13 +152,13 @@ public class ConfrontationManager : MonoBehaviour
             dir = carA.transform.right;
         }
 
-        // Reposition and orient face-to-face
+        
         carA.transform.position = midpoint - dir * separationDistance;
         carB.transform.position = midpoint + dir * separationDistance;
         carA.transform.right = dir;
         carB.transform.right = -dir;
 
-        // Camera follow target
+        
         dummyCamTarget = new GameObject("ConfrontationCamTarget");
         dummyCamTarget.transform.position = midpoint;
         CameraFollow camFollow = FindObjectOfType<CameraFollow>();
@@ -167,7 +167,7 @@ public class ConfrontationManager : MonoBehaviour
             camFollow.SetTarget(dummyCamTarget.transform);
         }
 
-        // Create UI if participant
+        
         if (localCar != null)
         {
             string localName = localCar.photonView != null && localCar.photonView.Owner != null
@@ -199,7 +199,7 @@ public class ConfrontationManager : MonoBehaviour
         
         uiCanvasGo.AddComponent<GraphicRaycaster>();
 
-        // Dark Overlay
+        
         GameObject overlayGo = new GameObject("DarkOverlay");
         overlayGo.transform.SetParent(uiCanvasGo.transform, false);
         Image overlayImg = overlayGo.AddComponent<Image>();
@@ -209,7 +209,7 @@ public class ConfrontationManager : MonoBehaviour
         overlayRt.anchorMax = Vector2.one;
         overlayRt.sizeDelta = Vector2.zero;
 
-        // Central Panel
+        
         GameObject panelGo = new GameObject("CenterPanel");
         panelGo.transform.SetParent(uiCanvasGo.transform, false);
         Image panelImg = panelGo.AddComponent<Image>();
@@ -218,7 +218,7 @@ public class ConfrontationManager : MonoBehaviour
         panelRt.sizeDelta = new Vector2(800, 360);
         panelRt.anchoredPosition = Vector2.zero;
 
-        // Top Border Highlight
+        
         GameObject topBar = new GameObject("TopBorder");
         topBar.transform.SetParent(panelGo.transform, false);
         Image topBarImg = topBar.AddComponent<Image>();
@@ -230,7 +230,7 @@ public class ConfrontationManager : MonoBehaviour
         topBarRt.anchoredPosition = Vector2.zero;
         topBarRt.sizeDelta = new Vector2(0, 6);
 
-        // Title Text
+        
         GameObject titleGo = new GameObject("TitleText");
         titleGo.transform.SetParent(panelGo.transform, false);
         titleText = titleGo.AddComponent<TMPro.TextMeshProUGUI>();
@@ -243,7 +243,7 @@ public class ConfrontationManager : MonoBehaviour
         titleRt.anchoredPosition = new Vector2(0, 110);
         titleRt.sizeDelta = new Vector2(700, 60);
 
-        // Subtitle Hint
+        
         GameObject hintGo = new GameObject("HintText");
         hintGo.transform.SetParent(panelGo.transform, false);
         TMPro.TextMeshProUGUI hintText = hintGo.AddComponent<TMPro.TextMeshProUGUI>();
@@ -255,7 +255,7 @@ public class ConfrontationManager : MonoBehaviour
         hintRt.anchoredPosition = new Vector2(0, 65);
         hintRt.sizeDelta = new Vector2(700, 30);
 
-        // Local Player UI
+        
         GameObject localNameGo = new GameObject("LocalNameText");
         localNameGo.transform.SetParent(panelGo.transform, false);
         TMPro.TextMeshProUGUI localNameTxt = localNameGo.AddComponent<TMPro.TextMeshProUGUI>();
@@ -298,7 +298,7 @@ public class ConfrontationManager : MonoBehaviour
         localStatusRt.anchoredPosition = new Vector2(-220, -70);
         localStatusRt.sizeDelta = new Vector2(250, 25);
 
-        // Rival Player UI
+        
         GameObject rivalNameGo = new GameObject("RivalNameText");
         rivalNameGo.transform.SetParent(panelGo.transform, false);
         TMPro.TextMeshProUGUI rivalNameTxt = rivalNameGo.AddComponent<TMPro.TextMeshProUGUI>();
@@ -341,7 +341,7 @@ public class ConfrontationManager : MonoBehaviour
         rivalStatusRt.anchoredPosition = new Vector2(220, -70);
         rivalStatusRt.sizeDelta = new Vector2(250, 25);
 
-        // VS Badge
+        
         GameObject vsGo = new GameObject("VSBadge");
         vsGo.transform.SetParent(panelGo.transform, false);
         TMPro.TextMeshProUGUI vsText = vsGo.AddComponent<TMPro.TextMeshProUGUI>();
@@ -354,7 +354,7 @@ public class ConfrontationManager : MonoBehaviour
         vsRt.anchoredPosition = new Vector2(0, -35);
         vsRt.sizeDelta = new Vector2(80, 50);
 
-        // Timer
+        
         GameObject timerGo = new GameObject("TimerText");
         timerGo.transform.SetParent(panelGo.transform, false);
         timerText = timerGo.AddComponent<TMPro.TextMeshProUGUI>();
@@ -371,7 +371,7 @@ public class ConfrontationManager : MonoBehaviour
     {
         if (state == ConfrontationState.Idle) return;
 
-        // Auto abort if participant cars are destroyed
+        
         if (participantA == null || participantB == null)
         {
             AbortConfrontation();
@@ -392,17 +392,17 @@ public class ConfrontationManager : MonoBehaviour
                 }
             }
 
-            // Animate title pulse
+            
             if (titleText != null)
             {
                 float pulse = 1f + Mathf.PingPong(Time.time * 2f, 0.08f);
                 titleText.transform.localScale = new Vector3(pulse, pulse, 1f);
             }
 
-            // If we are participant
+            
             if (localCar != null)
             {
-                // Local Bar Oscillation
+                
                 if (!localLocked)
                 {
                     float localFill = Mathf.PingPong(Time.time * oscillationSpeed + localPhaseOffset, 1.0f);
@@ -435,7 +435,7 @@ public class ConfrontationManager : MonoBehaviour
                     }
                 }
 
-                // Rival Bar Oscillation (simulated locally until actual score received)
+                
                 if (!rivalLocked)
                 {
                     float rivalFill = Mathf.PingPong(Time.time * (oscillationSpeed * 0.95f) + rivalPhaseOffset, 1.0f);
@@ -445,7 +445,7 @@ public class ConfrontationManager : MonoBehaviour
                     }
                 }
 
-                // Check transition to resolution
+                
                 if ((localLocked && rivalLocked) || timer <= 0f)
                 {
                     if (!localLocked)
@@ -467,7 +467,7 @@ public class ConfrontationManager : MonoBehaviour
             }
             else
             {
-                // Spectator
+                
                 if (timer <= 0f)
                 {
                     StartCoroutine(ResolveConfrontationRoutine());
@@ -534,7 +534,7 @@ public class ConfrontationManager : MonoBehaviour
     {
         state = ConfrontationState.Resolving;
 
-        // Grace period for network delay
+        
         if (localCar != null && !rivalLocked)
         {
             float waitTimer = 0.5f;
@@ -583,7 +583,7 @@ public class ConfrontationManager : MonoBehaviour
             {
                 if (localScore == rivalScore)
                 {
-                    localScore += 0.001f; // tie breaker
+                    localScore += 0.001f; 
                 }
                 localWon = localScore > rivalScore;
             }

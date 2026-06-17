@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         DontDestroyOnLoad(gameObject);
         matchResultEventBridge = new PhotonMatchResultEventBridge(MatchResultEventCode);
 
-        // LiveOps: sobreescribir el período de gracia con el valor remoto si está disponible.
+        
         if (LiveOpsManager.Instance != null && LiveOpsManager.Instance.IsReady)
         {
             ApplyLiveOpsConfig();
@@ -245,7 +245,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         Debug.Log($"[GameManager] ResolveResultAfterDelay — won:{localPlayerWon}");
         Debug.Log(localPlayerWon ? "Ganaste." : "Perdiste.");
 
-        // If the local player won, they get a Victory bonus of +500 points!
+        
         if (localPlayerWon && PhotonNetwork.InRoom)
         {
             int score = PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Score") ? (int)PhotonNetwork.LocalPlayer.CustomProperties["Score"] : 0;
@@ -259,7 +259,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             yield return new WaitForSeconds(endGameDelay);
         }
 
-        // Send local player's score to LeaderBoardAPI
+        
         if (PhotonNetwork.InRoom && PhotonNetwork.LocalPlayer != null)
         {
             Player p = PhotonNetwork.LocalPlayer;
@@ -277,7 +277,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         yield return null;
 
-        // Reset player custom properties for the new round
+        
         if (PhotonNetwork.InRoom)
         {
             PhotonHashtable hash = new PhotonHashtable();

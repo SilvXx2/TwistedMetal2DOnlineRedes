@@ -116,7 +116,7 @@ public class GameConditionManager : MonoBehaviourPunCallbacks
         Debug.Log($"[GameConditionManager] OnLocalMatchResultResolved - won:{localPlayerWon}");
         canvasView.ShowResult(localPlayerWon);
 
-        // Update and show the scoreboard
+        
         string scoreBoardText = GetScoreBoardText();
         if (victoryScoreText != null) victoryScoreText.text = scoreBoardText;
         if (defeatScoreText != null) defeatScoreText.text = scoreBoardText;

@@ -71,7 +71,7 @@ public class PlayerNicknameDisplay : MonoBehaviour
         }
         else
         {
-            // Fallback for single-player/offline or before network is ready
+            
             string name = PhotonNetwork.NickName;
             if (string.IsNullOrEmpty(name))
             {
@@ -85,10 +85,10 @@ public class PlayerNicknameDisplay : MonoBehaviour
     {
         if (rotationLockedTransform != null)
         {
-            // Force world position to follow the parent root position with a constant world offset
+            
             rotationLockedTransform.position = transform.position + worldOffset;
             
-            // Force world rotation to be identity so the text remains horizontal and upright
+            
             rotationLockedTransform.rotation = Quaternion.identity;
         }
     }

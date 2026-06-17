@@ -26,7 +26,7 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        // Limpiar coches estáticos que hayan quedado colocados en la escena por error
+        
         if (playerPrefab != null)
         {
             PhotonView[] allViews = FindObjectsOfType<PhotonView>(true);
@@ -100,10 +100,10 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
         TrySpawnPlayer();
     }
 
-    /// <summary>
-    /// Permite que el sistema LiveOps (MapPartitionLoader) sobreescriba las posiciones
-    /// de spawn definidas en el inspector con valores recibidos desde Remote Config.
-    /// </summary>
+    
+    
+    
+    
     public void SetSpawnPositionsFromLiveOps(Vector3[] positions)
     {
         if (positions == null || positions.Length == 0)
@@ -207,7 +207,7 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
                 continue;
             }
 
-            // Ignorar objetos colocados estáticamente en la escena (no instanciados en tiempo de ejecución)
+            
             if (!view.isRuntimeInstantiated || view.InstantiationId == 0)
             {
                 continue;

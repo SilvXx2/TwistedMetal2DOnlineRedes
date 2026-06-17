@@ -51,7 +51,7 @@ public class LiveOpsManager : MonoBehaviour
         {
             Debug.Log("[LiveOpsManager] Inicializando Unity Gaming Services...");
             
-            // Timeout de 4 segundos para todo el proceso de inicialización de LiveOps
+            
             Task initTask = DoInitializeLiveOpsAsync();
             Task delayTask = Task.Delay(4000);
             
@@ -61,7 +61,7 @@ public class LiveOpsManager : MonoBehaviour
                 throw new TimeoutException("La inicialización de LiveOps superó el límite de tiempo.");
             }
 
-            // Await the task to propagate any exceptions (e.g. initialization or connection failure)
+            
             await initTask;
         }
         catch (Exception e)

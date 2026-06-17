@@ -56,7 +56,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
         {
             timer = returnToCarDelay;
 
-            // Bloquear la cámara en este peatón
+            
             CameraFollow camFollow = FindObjectOfType<CameraFollow>();
             if (camFollow != null)
             {
@@ -65,7 +65,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
         }
         else
         {
-            // Peatón remoto es kinematic
+            
             if (rb != null)
             {
                 rb.isKinematic = true;
@@ -81,7 +81,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
             return;
         }
 
-        // Si el peatón está muerto, no hacer nada (dejar que PlayerHealth maneje la muerte)
+        
         if (health != null && health.IsDead)
         {
             if (rb != null)
@@ -91,7 +91,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
             return;
         }
 
-        // Movimiento simple 2D con WASD / Flechas
+        
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
         Vector2 movement = new Vector2(moveX, moveY).normalized * moveSpeed;
@@ -101,7 +101,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
             rb.velocity = movement;
         }
 
-        // Temporizador para volver al auto
+        
         timer -= Time.deltaTime;
         if (timer <= 0f)
         {
@@ -113,13 +113,13 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
     {
         if (!isLocal) return;
 
-        // Si choca contra un coche, muere de inmediato
+        
         CarController car = collision.gameObject.GetComponent<CarController>();
         if (car != null && health != null && !health.IsDead)
         {
             if (photonView != null)
             {
-                // Enviar daño masivo por RPC
+                
                 health.photonView.RPC("TakeDamage", RpcTarget.All, 999, car.photonView.OwnerActorNr);
             }
             else
@@ -134,19 +134,19 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
         if (photonView != null && !photonView.IsMine) return;
 
         Vector3 spawnPos = transform.position;
-        spawnPos.z = 0f; // Force car Z position to 0
+        spawnPos.z = 0f; 
 
         if (PhotonNetwork.InRoom)
         {
-            // Destruir peatón
+            
             PhotonNetwork.Destroy(gameObject);
 
-            // Spawnear el auto
+            
             PhotonNetwork.Instantiate(carPrefabName, spawnPos, Quaternion.identity, 0, new object[] { (int)hadWeaponType });
         }
         else
         {
-            // Fallback offline
+            
             Destroy(gameObject);
             GameObject spawnedCar = Instantiate(Resources.Load<GameObject>(carPrefabName), spawnPos, Quaternion.identity);
             

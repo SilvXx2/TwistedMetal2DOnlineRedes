@@ -56,7 +56,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         PhotonPlayerSlotRegistry.EnsureLocalStableIdentity();
         InitializeServices();
 
-        // Precargar la lista de taunts desde la API al arrancar
+        
         var _ = TauntList.Instance;
 
         if (!PhotonNetwork.IsConnected)
@@ -224,7 +224,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         RoomLeft?.Invoke();
         EmitStatus("Saliste de la room.");
 
-        // Volver a la pantalla del menú/lobby si salimos de la room durante el gameplay
+        
         string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         if (currentScene != lobbySceneName)
         {
@@ -255,7 +255,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         EmitStatus(statusMsg);
         ConnectionFailed?.Invoke(cause);
 
-        // Volver a la pantalla del menú/lobby si nos desconectamos durante el gameplay
+        
         string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         if (currentScene != lobbySceneName)
         {
@@ -278,7 +278,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            // Esperar 2 segundos antes de limpiar la bandera por si se produce desconexión diferida
+            
             if (gameObject.activeInHierarchy)
             {
                 if (resetFocusFlagsCoroutine != null)

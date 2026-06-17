@@ -32,8 +32,8 @@ public class PlayerHealth : MonoBehaviourPun
             LocalPlayerInstance = this;
         }
 
-        // LiveOps: sobreescribir maxHealth con el valor remoto si está disponible.
-        // Si LiveOpsManager no cargó todavía, se usa el valor del inspector como fallback y se subscribe.
+        
+        
         if (LiveOpsManager.Instance != null && LiveOpsManager.Instance.IsReady)
         {
             ApplyLiveOpsConfig();
@@ -177,7 +177,7 @@ public class PlayerHealth : MonoBehaviourPun
             }
             else
             {
-                // Single-player / Offline fallback
+                
                 if (photonView == null || photonView.IsMine)
                 {
                     int tauntId = UnityEngine.Random.Range(1, 6);
