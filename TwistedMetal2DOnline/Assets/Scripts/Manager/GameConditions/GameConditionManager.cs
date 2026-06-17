@@ -175,11 +175,27 @@ public class GameConditionManager : MonoBehaviourPunCallbacks
             && photonManager.IsMasterClient;
     }
 
+    private void ShowMatchEndedState()
+    {
+        canvasView.ShowResult(false);
+        string scoreBoardText = GetScoreBoardText();
+        if (victoryScoreText != null) victoryScoreText.text = scoreBoardText;
+        if (defeatScoreText != null) defeatScoreText.text = scoreBoardText;
+        RefreshRestartButtonInteractivity();
+    }
+
     private IEnumerator ResetCanvasAfterLoad()
     {
         yield return null;
         TryBindManagers();
-        canvasView.ShowGameplayOnly();
+        if (gameManager != null && gameManager.IsMatchEnded)
+        {
+            ShowMatchEndedState();
+        }
+        else
+        {
+            canvasView.ShowGameplayOnly();
+        }
         RefreshRestartButtonInteractivity();
     }
 }

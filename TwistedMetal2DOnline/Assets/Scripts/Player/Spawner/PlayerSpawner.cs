@@ -121,6 +121,12 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
     {
         Debug.Log($"[PlayerSpawner] TrySpawnPlayer entered. hasSpawned={hasSpawned}, InRoom={PhotonNetwork.InRoom}, localPlayer.ActorNumber={PhotonNetwork.LocalPlayer?.ActorNumber}");
 
+        if (GameManager.Instance != null && GameManager.Instance.IsMatchEnded)
+        {
+            Debug.Log("[PlayerSpawner] TrySpawnPlayer omitido: la partida ya ha terminado.");
+            return;
+        }
+
         if (LiveOpsManager.Instance != null && !LiveOpsManager.Instance.IsReady)
         {
             Debug.Log("[PlayerSpawner] TrySpawnPlayer omitido: LiveOpsManager está inicializándose.");

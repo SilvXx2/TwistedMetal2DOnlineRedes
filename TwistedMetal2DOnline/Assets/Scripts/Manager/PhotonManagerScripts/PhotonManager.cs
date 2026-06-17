@@ -224,6 +224,14 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         RoomLeft?.Invoke();
         EmitStatus("Saliste de la room.");
 
+        // Volver a la pantalla del menú/lobby si salimos de la room durante el gameplay
+        string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        if (currentScene != lobbySceneName)
+        {
+            Debug.Log($"[PhotonManager] Cargando escena de lobby/menu '{lobbySceneName}' debido a que salimos de la room.");
+            UnityEngine.SceneManagement.SceneManager.LoadScene(lobbySceneName);
+        }
+
         if (PhotonNetwork.IsConnected && !PhotonNetwork.InLobby)
         {
             PhotonNetwork.JoinLobby();

@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     private const byte MatchResultEventCode = 20;
     private const string RoomRoundIdPropertyKey = "tgRoundId";
+    private const string RoomMatchEndedPropertyKey = "tgMatchEnded";
 
     [Header("Configuracion de resultado")]
     [SerializeField] private float endGameDelay = 2f;
@@ -25,10 +26,13 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
     private MatchRoundState matchState = new MatchRoundState();
     private PhotonMatchResultEventBridge matchResultEventBridge;
     private Coroutine pendingResultRoutine;
+    private bool isLeavingToLobby = false;
 
     public event Action<bool> LocalMatchResultResolved;
     public event Action MatchStateReset;
     private const byte ForceRestartEventCode = 21;
+
+    public bool IsMatchEnded => matchState.GameEnded;
 
     public override void OnEnable()
     {
@@ -88,22 +92,30 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     private void OnSceneLoaded(UnityScene scene, UnityLoadSceneMode mode)
     {
+        isLeavingToLobby = false;
         Debug.Log($"[GameManager] OnSceneLoaded — scene:{scene.name} roundId antes:{matchState.RoundId}");
         StopPendingResultRoutine();
         matchState.OnSceneLoaded(Time.time);
+        bool isEnded = false;
         if (PhotonNetwork.InRoom && IsGameplayScene(scene))
         {
             if (PhotonNetwork.IsMasterClient)
             {
                 SetRoomRoundId(matchState.RoundId);
+                SetRoomMatchEnded(false);
             }
             else
             {
                 TrySyncRoundIdFromRoom();
+                TrySyncMatchEndedFromRoom();
+                isEnded = IsMatchEnded;
             }
         }
         PhotonNetwork.AutomaticallySyncScene = true;
-        StartCoroutine(InvokeMatchStateResetNextFrame());
+        if (!isEnded)
+        {
+            StartCoroutine(InvokeMatchStateResetNextFrame());
+        }
     }
 
     public void OnEvent(EventData photonEvent)
@@ -148,10 +160,15 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public override void OnJoinedRoom()
     {
+        isLeavingToLobby = false;
         StopPendingResultRoutine();
         matchState.ResetForRoomJoin(Time.time);
         TrySyncRoundIdFromRoom();
-        StartCoroutine(InvokeMatchStateResetNextFrame());
+        TrySyncMatchEndedFromRoom();
+        if (!IsMatchEnded)
+        {
+            StartCoroutine(InvokeMatchStateResetNextFrame());
+        }
     }
 
     public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
@@ -169,6 +186,21 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
 
     private void Update()
     {
+        if (PhotonNetwork.InRoom && matchState.GameEnded && pendingResultRoutine == null && !isLeavingToLobby)
+        {
+            int playerCount = PhotonNetwork.CurrentRoom != null ? PhotonNetwork.CurrentRoom.PlayerCount : 0;
+            if (playerCount < 2)
+            {
+                Debug.Log($"[GameManager] Solo queda {playerCount} jugador en la sala durante la pantalla de resultados. Volviendo al lobby.");
+                isLeavingToLobby = true;
+                if (PhotonManager.Instance != null)
+                {
+                    PhotonManager.Instance.LeaveCurrentRoom();
+                }
+                return;
+            }
+        }
+
         if (!matchState.CanCheckMatch(Time.time, matchCheckGracePeriod))
         {
             return;
@@ -185,6 +217,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
             if (PhotonNetwork.IsMasterClient)
             {
                 matchResultEventBridge.BroadcastMatchResult(snapshot.LastAlive.photonView.OwnerActorNr, matchState.RoundId);
+                SetRoomMatchEnded(true);
             }
 
             return;
@@ -307,6 +340,50 @@ public class GameManager : MonoBehaviourPunCallbacks, IOnEventCallback
         };
 
         PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+    }
+
+    private void SetRoomMatchEnded(bool ended)
+    {
+        if (!PhotonNetwork.InRoom || PhotonNetwork.CurrentRoom == null)
+        {
+            return;
+        }
+
+        PhotonHashtable properties = new PhotonHashtable
+        {
+            { RoomMatchEndedPropertyKey, ended }
+        };
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+    }
+
+    private void TrySyncMatchEndedFromRoom()
+    {
+        if (!PhotonNetwork.InRoom || PhotonNetwork.CurrentRoom == null)
+        {
+            return;
+        }
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+
+        if (matchState.GameEnded)
+        {
+            return;
+        }
+
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomMatchEndedPropertyKey, out object val))
+        {
+            if (val is bool isEnded && isEnded)
+            {
+                Debug.Log($"[GameManager] Sincronizando MatchEnded como TRUE desde room.");
+                matchState.MarkGameEnded();
+                matchState.MarkResultProcessed();
+                LocalMatchResultResolved?.Invoke(false);
+            }
+        }
     }
 
     private bool IsGameplayScene(UnityScene scene)
