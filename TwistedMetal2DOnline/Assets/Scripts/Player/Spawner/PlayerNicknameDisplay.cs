@@ -75,7 +75,11 @@ public class PlayerNicknameDisplay : MonoBehaviour
             string name = PhotonNetwork.NickName;
             if (string.IsNullOrEmpty(name))
             {
-                name = PlayerPrefs.GetString("PlayerName", "Player");
+                name = SaveManager.Instance.CurrentSave.PlayerNickname;
+                if (string.IsNullOrEmpty(name))
+                {
+                    name = "Player";
+                }
             }
             nicknameText.text = name;
         }

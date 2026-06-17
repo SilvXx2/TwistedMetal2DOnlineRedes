@@ -91,7 +91,7 @@ public class MenuUIManager : MonoBehaviour
 
         if (nicknameInput != null)
         {
-            nicknameInput.text = PlayerPrefs.GetString("PlayerNickname", "");
+            nicknameInput.text = SaveManager.Instance.CurrentSave.PlayerNickname;
         }
     }
 
@@ -167,8 +167,8 @@ public class MenuUIManager : MonoBehaviour
         }
 
         PhotonNetwork.NickName = nickname;
-        PlayerPrefs.SetString("PlayerNickname", nickname);
-        PlayerPrefs.Save();
+        SaveManager.Instance.CurrentSave.PlayerNickname = nickname;
+        SaveManager.Instance.Save();
 
         ShowColorSelect();
     }
