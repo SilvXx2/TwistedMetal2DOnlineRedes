@@ -89,9 +89,11 @@ public class MenuUIManager : MonoBehaviour
 
         SyncLobbyFromPhotonState();
 
+        LocalSaveData data = SaveSystem.Load();
+
         if (nicknameInput != null)
         {
-            nicknameInput.text = PlayerPrefs.GetString("PlayerNickname", "");
+            nicknameInput.text = data.nickname;
         }
     }
 
@@ -167,8 +169,10 @@ public class MenuUIManager : MonoBehaviour
         }
 
         PhotonNetwork.NickName = nickname;
-        PlayerPrefs.SetString("PlayerNickname", nickname);
-        PlayerPrefs.Save();
+
+        LocalSaveData data = SaveSystem.Load();
+        data.nickname = nickname;
+        SaveSystem.Save(data);
 
         ShowColorSelect();
     }
@@ -184,7 +188,11 @@ public class MenuUIManager : MonoBehaviour
         props["CarSkin"] = colorIndex;
 
         Photon.Pun.PhotonNetwork.LocalPlayer
-            .SetCustomProperties(props);
+        .SetCustomProperties(props);
+
+        LocalSaveData data = SaveSystem.Load();
+        data.selectedCarSkin = colorIndex;
+        SaveSystem.Save(data);
 
         ShowRoomSelect();
     }
