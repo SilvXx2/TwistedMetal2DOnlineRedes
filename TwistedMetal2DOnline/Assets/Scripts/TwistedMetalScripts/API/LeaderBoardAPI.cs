@@ -25,7 +25,7 @@ public class LeaderBoardAPI : MonoBehaviour
     }
 
     [SerializeField]
-    private string url = "https://script.google.com/macros/s/AKfycbx66j_Fz7Iaqk5lYAwEqP3NthXOsheGQU7Z98NlYzbt2mzWIpaeCRL-OYrl9kLq0Fmc/exec";
+    private string url = "https://script.google.com/macros/s/AKfycbxf5bOge105NlRxjB7y6Tw6W-h-gVYs6t6aS7cWNZfA_12xoz-cm5MO66yjfrhmtgDy/exec";
 
     private void Awake()
     {
