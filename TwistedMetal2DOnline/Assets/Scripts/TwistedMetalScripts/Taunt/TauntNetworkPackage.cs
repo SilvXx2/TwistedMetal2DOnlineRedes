@@ -13,9 +13,6 @@ public struct TauntNetworkPackage
         TauntId = tauntId;
     }
 
-    /// <summary>
-    /// Serializa los datos del paquete en una secuencia binaria de bytes (Diapositiva 15).
-    /// </summary>
     public byte[] Serialize()
     {
         using (MemoryStream ms = new MemoryStream())
@@ -30,10 +27,6 @@ public struct TauntNetworkPackage
         }
     }
 
-    /// <summary>
-    /// Deserializa la secuencia binaria en un objeto TauntNetworkPackage (Diapositiva 15).
-    /// Es fundamental leer en el mismo orden que se escribió.
-    /// </summary>
     public static TauntNetworkPackage Deserialize(byte[] data)
     {
         using (MemoryStream ms = new MemoryStream(data))
@@ -48,11 +41,6 @@ public struct TauntNetworkPackage
         }
     }
 
-    /// <summary>
-    /// Aplica encriptación binaria XOR sobre la secuencia de bytes usando la reflexividad (Diapositiva 31-40).
-    /// La clave utilizada es 60 (Diapositiva 33).
-    /// Al ser reflexivo, el mismo método cifra y descifra.
-    /// </summary>
     public static byte[] EncryptDecrypt(byte[] data)
     {
         byte key = 60;
