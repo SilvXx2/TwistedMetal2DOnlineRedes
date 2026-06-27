@@ -4,6 +4,7 @@ using UnityEngine;
 public class ObstacleHealth : MonoBehaviourPun
 {
     [SerializeField] private int maxHealth = 100;
+    [SerializeField] private string destructionEffectPath = "Effects/Demolition";
 
     private int currentHealth;
     private bool isDestroyed = false;
@@ -24,10 +25,23 @@ public class ObstacleHealth : MonoBehaviourPun
         {
             isDestroyed = true;
 
+            PlayDestructionEffect();
+
             if (PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.Destroy(gameObject);
             }
+        }
+    }
+
+    private void PlayDestructionEffect()
+    {
+        if (string.IsNullOrEmpty(destructionEffectPath)) return;
+
+        GameObject effectPrefab = Resources.Load<GameObject>(destructionEffectPath);
+        if (effectPrefab != null)
+        {
+            Instantiate(effectPrefab, transform.position, Quaternion.identity);
         }
     }
 }

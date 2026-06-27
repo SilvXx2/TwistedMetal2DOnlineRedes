@@ -201,6 +201,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 5767731704423278076}
   - {fileID: 8112251270135953854}
+  - {fileID: 987654321098765432}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -457,13 +458,14 @@ GameObject:
   - component: {fileID: 5541918115279668237}
   - component: {fileID: 4903013179166163604}
   - component: {fileID: 6010538608434246408}
+  - component: {fileID: 987654321098765432}
   m_Layer: 0
   m_Name: SmokeCar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5541918115279668237
 Transform:
   m_ObjectHideFlags: 0
@@ -787,3 +789,25 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &987654321098765432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2407121194439546569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: IsSmoking
+  m_SynchronizeLayers:
+  - SynchronizeType: 2
+    LayerIndex: 0
+
