@@ -16,6 +16,7 @@ internal sealed class MenuBackNavigationPolicy
                 return MenuBackNavigationDecision.ShowNickname;
             case MenuPanel.CreateRoom:
             case MenuPanel.JoinRoom:
+            case MenuPanel.PasswordPrompt:
                 return MenuBackNavigationDecision.ShowRoomSelect;
             case MenuPanel.Lobby:
                 return MenuBackNavigationDecision.LeaveLobby;

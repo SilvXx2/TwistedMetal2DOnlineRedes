@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
@@ -11,6 +12,8 @@ public class RoomList : MonoBehaviourPunCallbacks
 
     private readonly Dictionary<string, Room> roomButtons = new Dictionary<string, Room>();
     private PhotonManager photonManager;
+
+    public event Action<string> PasswordRequired;
 
     private void Awake()
     {
@@ -55,11 +58,28 @@ public class RoomList : MonoBehaviourPunCallbacks
                 roomButtons[roomInfo.Name] = roomButton;
             }
 
-            roomButton.Setup(roomInfo.Name, this);
+            bool hasPassword = ReadHasPassword(roomInfo);
+            roomButton.Setup(roomInfo.Name, hasPassword, this);
         }
     }
 
-    public void JoinRoomByName(string roomName)
+    public void JoinRoomByName(string roomName, bool hasPassword)
+    {
+        if (string.IsNullOrWhiteSpace(roomName))
+        {
+            return;
+        }
+
+        if (hasPassword)
+        {
+            PasswordRequired?.Invoke(roomName);
+            return;
+        }
+
+        JoinRoomDirectly(roomName);
+    }
+
+    public void JoinRoomDirectly(string roomName)
     {
         if (string.IsNullOrWhiteSpace(roomName))
         {
@@ -78,6 +98,21 @@ public class RoomList : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.JoinRoom(roomName);
+    }
+
+    private static bool ReadHasPassword(RoomInfo roomInfo)
+    {
+        if (roomInfo.CustomProperties == null)
+        {
+            return false;
+        }
+
+        if (roomInfo.CustomProperties.TryGetValue("hasPassword", out object value))
+        {
+            return value is bool boolValue && boolValue;
+        }
+
+        return false;
     }
 
     private void RemoveRoomButton(string roomName)

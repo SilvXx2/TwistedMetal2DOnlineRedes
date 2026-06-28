@@ -40,6 +40,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     private string currentStatusMessage = string.Empty;
     private bool wasOutOfFocus = false;
     private Coroutine resetFocusFlagsCoroutine;
+    private bool currentRoomHasPassword = false;
+    private string currentRoomName = string.Empty;
+    private bool wasMasterClientBeforeLeave = false;
 
     private void Awake()
     {
@@ -101,6 +104,12 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         return roomService.JoinSelectedRoom(roomName);
     }
 
+
+    public bool JoinSelectedRoom(string roomName, string password)
+    {
+        return roomService.JoinSelectedRoom(roomName, password);
+    }
+
     public bool JoinExistingRoom(string roomName)
     {
         return roomService.JoinExistingRoom(roomName);
@@ -119,6 +128,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
         matchService.ResetMatchState();
         roomState.ResetRoomFlags();
+
+        currentRoomName = PhotonNetwork.CurrentRoom != null ? PhotonNetwork.CurrentRoom.Name : string.Empty;
+        currentRoomHasPassword = ReadCurrentRoomHasPassword();
 
         StartCoroutine(CleanUpOrphanedPhotonViewsDelayed());
 
@@ -213,6 +225,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public void LeaveCurrentRoom()
     {
+        wasMasterClientBeforeLeave = PhotonNetwork.IsMasterClient;
         roomService.LeaveCurrentRoom();
     }
 
@@ -221,6 +234,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log("[PhotonManager] OnLeftRoom");
         matchService.ResetMatchState();
         roomState.ResetRoomFlags();
+
+        CleanUpRoomPasswordIfNeeded();
+
         RoomLeft?.Invoke();
         EmitStatus("Saliste de la room.");
 
@@ -244,6 +260,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         connectionState.MarkDisconnected();
         matchService.ResetMatchState();
         roomState.ResetRoomFlags();
+
+        CleanUpRoomPasswordIfNeeded();
 
         string statusMsg = $"Desconectado: {cause}";
         if (wasOutOfFocus)
@@ -330,6 +348,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         Debug.LogWarning($"No se pudo entrar a la room. Code: {returnCode} - {message}");
         EmitStatus($"No se pudo entrar a la room: {message}");
+
+        CleanUpRoomPasswordIfNeeded();
     }
 
     public void Disconnect()
@@ -348,6 +368,55 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         currentStatusMessage = message;
         StatusChanged?.Invoke(message);
+    }
+
+
+    private static bool ReadCurrentRoomHasPassword()
+    {
+        if (PhotonNetwork.CurrentRoom == null || PhotonNetwork.CurrentRoom.CustomProperties == null)
+        {
+            return false;
+        }
+
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("hasPassword", out object value))
+        {
+            return value is bool boolValue && boolValue;
+        }
+
+        return false;
+    }
+
+    private void CleanUpRoomPasswordIfNeeded()
+    {
+        if (!wasMasterClientBeforeLeave || !currentRoomHasPassword || string.IsNullOrEmpty(currentRoomName))
+        {
+            ResetPasswordState();
+            return;
+        }
+
+        string roomToClean = currentRoomName;
+        Debug.Log($"[PhotonManager] Limpiando password del Google Sheet para room: {roomToClean}");
+
+        RoomPasswordAPI.Instance.ClearRoomPassword(roomToClean, (success) =>
+        {
+            if (success)
+            {
+                Debug.Log($"[PhotonManager] Password limpiada del sheet para room: {roomToClean}");
+            }
+            else
+            {
+                Debug.LogWarning($"[PhotonManager] No se pudo limpiar la password del sheet para room: {roomToClean}");
+            }
+        });
+
+        ResetPasswordState();
+    }
+
+    private void ResetPasswordState()
+    {
+        currentRoomHasPassword = false;
+        currentRoomName = string.Empty;
+        wasMasterClientBeforeLeave = false;
     }
 
     private void InitializeServices()

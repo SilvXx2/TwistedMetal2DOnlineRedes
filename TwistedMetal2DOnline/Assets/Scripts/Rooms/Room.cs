@@ -10,23 +10,28 @@ public class Room : MonoBehaviour
     [SerializeField] private TMP_Text roomNameTMPText;
 
     private string roomName;
+    private bool hasPassword;
     private RoomList roomList;
 
     public string RoomName => roomName;
+    public bool HasPassword => hasPassword;
 
-    public void Setup(string newRoomName, RoomList owner)
+    public void Setup(string newRoomName, bool roomHasPassword, RoomList owner)
     {
         roomName = newRoomName;
+        hasPassword = roomHasPassword;
         roomList = owner;
+
+        string displayName = roomHasPassword ? $"🔒 {newRoomName}" : newRoomName;
 
         if (roomNameText != null)
         {
-            roomNameText.text = newRoomName;
+            roomNameText.text = displayName;
         }
 
         if (roomNameTMPText != null)
         {
-            roomNameTMPText.text = newRoomName;
+            roomNameTMPText.text = displayName;
         }
     }
 
@@ -38,6 +43,6 @@ public class Room : MonoBehaviour
             return;
         }
 
-        roomList.JoinRoomByName(roomName);
+        roomList.JoinRoomByName(roomName, hasPassword);
     }
 }

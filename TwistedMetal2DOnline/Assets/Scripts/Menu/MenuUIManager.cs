@@ -15,6 +15,7 @@ public class MenuUIManager : MonoBehaviour
     [SerializeField] private GameObject panelJoinRoom;
     [SerializeField] private GameObject panelLobby;
     [SerializeField] private GameObject panelLoading;
+    [SerializeField] private GameObject panelPasswordPrompt;
 
     [Header("Nickname Inputs")]
     [SerializeField] private TMP_InputField nicknameInput;
@@ -25,13 +26,21 @@ public class MenuUIManager : MonoBehaviour
 
     [Header("Room Inputs")]
     [SerializeField] private TMP_InputField createRoomInput;
+    [SerializeField] private TMP_InputField createRoomPasswordInput;
     [SerializeField] private TMP_InputField joinRoomInput;
     [SerializeField] private string defaultCreateRoomName = "Room1";
     [SerializeField] private string defaultJoinRoomName   = "Room1";
 
+    [Header("Password Prompt")]
+    [SerializeField] private TMP_InputField passwordPromptInput;
+    [SerializeField] private TMP_Text passwordPromptStatusText;
+
     [Header("Lobby Buttons (Opcional)")]
     [SerializeField] private Button lobbyStartGameButton;
     [SerializeField] private Button lobbyRestartGameButton;
+
+    [Header("Room List")]
+    [SerializeField] private RoomList roomListComponent;
 
     private IPhotonMenuService photonService;
     private MenuPanelNavigator panelNavigator;
@@ -41,6 +50,8 @@ public class MenuUIManager : MonoBehaviour
     private string currentRoomName = string.Empty;
     private bool leavingRoom = false;
     private bool waitingForMatchSceneLoad = false;
+
+    private string pendingPasswordRoomName = string.Empty;
 
     private const float ConnectionTimeoutSeconds = 15f;
     private const string ConnectionTimeoutMessage = "No tiene conexión a internet o Server time out";
@@ -55,7 +66,8 @@ public class MenuUIManager : MonoBehaviour
             panelCreateRoom,
             panelJoinRoom,
             panelLobby,
-            panelLoading);
+            panelLoading,
+            panelPasswordPrompt);
 
         lobbyView = new LobbyMenuView(
             statusText,
@@ -70,11 +82,13 @@ public class MenuUIManager : MonoBehaviour
     private void OnEnable()
     {
         TryBindPhotonService();
+        SubscribeToRoomList();
     }
 
     private void OnDisable()
     {
         UnbindPhotonService();
+        UnsubscribeFromRoomList();
     }
 
     private void Start()
@@ -95,6 +109,41 @@ public class MenuUIManager : MonoBehaviour
         {
             nicknameInput.text = data.nickname;
         }
+
+
+        if (createRoomInput != null)
+        {
+            createRoomInput.onValueChanged.AddListener(OnCreateRoomInputChanged);
+        }
+        if (joinRoomInput != null)
+        {
+            joinRoomInput.onValueChanged.AddListener(OnJoinRoomInputChanged);
+        }
+    }
+
+    private void OnCreateRoomInputChanged(string value)
+    {
+        string filtered = RemoveNumbers(value);
+        if (filtered != value)
+        {
+            createRoomInput.text = filtered;
+        }
+    }
+
+    private void OnJoinRoomInputChanged(string value)
+    {
+        string filtered = RemoveNumbers(value);
+        if (filtered != value)
+        {
+            joinRoomInput.text = filtered;
+        }
+    }
+
+    private string RemoveNumbers(string input)
+    {
+        if (string.IsNullOrEmpty(input)) return string.Empty;
+        // Remueve cualquier dígito del 0 al 9
+        return System.Text.RegularExpressions.Regex.Replace(input, @"[0-9]", "");
     }
 
     private void Update()
@@ -127,6 +176,7 @@ public class MenuUIManager : MonoBehaviour
     public void ShowCreateRoom() => panelNavigator.Show(MenuPanel.CreateRoom);
     public void ShowJoinRoom()   => panelNavigator.Show(MenuPanel.JoinRoom);
     public void ShowLobby()      => panelNavigator.Show(MenuPanel.Lobby);
+    public void ShowPasswordPrompt() => panelNavigator.Show(MenuPanel.PasswordPrompt);
 
     public void ShowLoading(string message)
     {
@@ -229,13 +279,67 @@ public class MenuUIManager : MonoBehaviour
     public void OnClickCreateRoomConfirm()
     {
         string roomName = GetRoomName(createRoomInput, defaultCreateRoomName);
-        TryJoinRoom(roomName, $"Creando room {roomName}...");
+        string password = GetInputText(createRoomPasswordInput);
+
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            TryJoinRoom(roomName, $"Creando room {roomName}...");
+        }
+        else
+        {
+            TryCreateRoomWithPassword(roomName, password);
+        }
     }
 
     public void OnClickJoinRoomConfirm()
     {
         string roomName = GetRoomName(joinRoomInput, defaultJoinRoomName);
         TryJoinRoom(roomName, $"Uniéndose a {roomName}...");
+    }
+
+
+    public void OnClickPasswordConfirm()
+    {
+        if (string.IsNullOrWhiteSpace(pendingPasswordRoomName))
+        {
+            SetPasswordPromptStatus("Error: no hay room pendiente.");
+            return;
+        }
+
+        string password = GetInputText(passwordPromptInput);
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            SetPasswordPromptStatus("Ingresá una contraseña.");
+            return;
+        }
+
+        SetPasswordPromptStatus("Validando contraseña...");
+
+        string roomName = pendingPasswordRoomName;
+
+        RoomPasswordAPI.Instance.ValidateRoomPassword(roomName, password, (isValid) =>
+        {
+            if (isValid)
+            {
+                Debug.Log($"[MenuUIManager] Contraseña válida para room: {roomName}");
+                pendingPasswordRoomName = string.Empty;
+                ClearPasswordPromptInput();
+                TryJoinExistingRoom(roomName, $"Uniéndose a {roomName}...");
+            }
+            else
+            {
+                Debug.Log($"[MenuUIManager] Contraseña inválida para room: {roomName}");
+                SetPasswordPromptStatus("Contraseña incorrecta. Intentá de nuevo.");
+            }
+        });
+    }
+
+
+    public void OnClickPasswordCancel()
+    {
+        pendingPasswordRoomName = string.Empty;
+        ClearPasswordPromptInput();
+        ShowRoomSelect();
     }
 
     public void OnClickLobbyStartGame()
@@ -274,12 +378,30 @@ public class MenuUIManager : MonoBehaviour
         photonService.LeaveCurrentRoom();
     }
 
+
+    private void TryCreateRoomWithPassword(string roomName, string password)
+    {
+        if (!EnsurePhotonService("PhotonManager no encontrado.")) return;
+
+        ShowLoading($"Creando room {roomName} con contraseña...");
+        photonService.JoinSelectedRoom(roomName, password);
+    }
+
     private void TryJoinRoom(string roomName, string loadingMessage)
     {
         if (!EnsurePhotonService("PhotonManager no encontrado.")) return;
 
         ShowLoading(loadingMessage);
         photonService.JoinSelectedRoom(roomName);
+    }
+
+
+    private void TryJoinExistingRoom(string roomName, string loadingMessage)
+    {
+        if (!EnsurePhotonService("PhotonManager no encontrado.")) return;
+
+        ShowLoading(loadingMessage);
+        photonService.JoinExistingRoom(roomName);
     }
 
     private bool EnsurePhotonService(string failureMessage, bool showRoomSelectOnFail = false)
@@ -331,6 +453,30 @@ public class MenuUIManager : MonoBehaviour
         photonService.RoomLeft               -= OnRoomLeft;
         photonService.ConnectionFailed       -= OnConnectionFailed;
         photonService = null;
+    }
+
+    private void SubscribeToRoomList()
+    {
+        if (roomListComponent != null)
+        {
+            roomListComponent.PasswordRequired += OnPasswordRequired;
+        }
+    }
+
+    private void UnsubscribeFromRoomList()
+    {
+        if (roomListComponent != null)
+        {
+            roomListComponent.PasswordRequired -= OnPasswordRequired;
+        }
+    }
+
+    private void OnPasswordRequired(string roomName)
+    {
+        pendingPasswordRoomName = roomName;
+        ClearPasswordPromptInput();
+        SetPasswordPromptStatus($"Room \"{roomName}\" requiere contraseña.");
+        ShowPasswordPrompt();
     }
 
     private void OnPhotonStatusChanged(string message)
@@ -399,6 +545,12 @@ public class MenuUIManager : MonoBehaviour
         return string.IsNullOrWhiteSpace(value) ? fallback : value.Trim();
     }
 
+    private static string GetInputText(TMP_InputField inputField)
+    {
+        if (inputField == null) return string.Empty;
+        return inputField.text?.Trim() ?? string.Empty;
+    }
+
     private void RefreshLobbyButtonsInteractivity()
     {
         bool canControlMatch = photonService != null && photonService.IsInRoom && photonService.IsMasterClient;
@@ -443,5 +595,23 @@ public class MenuUIManager : MonoBehaviour
         Debug.Log("[MenuUIManager] Connection timeout alcanzado.");
         ShowMainMenu();
         SetStatus(ConnectionTimeoutMessage);
+    }
+
+    private void SetPasswordPromptStatus(string message)
+    {
+        if (passwordPromptStatusText != null)
+        {
+            passwordPromptStatusText.text = message;
+        }
+    }
+
+    private void ClearPasswordPromptInput()
+    {
+        if (passwordPromptInput != null)
+        {
+            passwordPromptInput.text = string.Empty;
+        }
+
+        SetPasswordPromptStatus(string.Empty);
     }
 }

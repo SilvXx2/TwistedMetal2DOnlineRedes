@@ -9,7 +9,8 @@ internal enum MenuPanel
     CreateRoom,
     JoinRoom,
     Lobby,
-    Loading
+    Loading,
+    PasswordPrompt
 }
 
 internal sealed class MenuPanelNavigator
@@ -22,6 +23,7 @@ internal sealed class MenuPanelNavigator
     private readonly GameObject panelJoinRoom;
     private readonly GameObject panelLobby;
     private readonly GameObject panelLoading;
+    private readonly GameObject panelPasswordPrompt;
 
     public MenuPanel CurrentPanel { get; private set; } = MenuPanel.MainMenu;
 
@@ -33,7 +35,8 @@ internal sealed class MenuPanelNavigator
         GameObject panelCreateRoom,
         GameObject panelJoinRoom,
         GameObject panelLobby,
-        GameObject panelLoading)
+        GameObject panelLoading,
+        GameObject panelPasswordPrompt)
     {
         this.panelMainMenu = panelMainMenu;
         this.panelNickname = panelNickname;
@@ -43,6 +46,7 @@ internal sealed class MenuPanelNavigator
         this.panelJoinRoom = panelJoinRoom;
         this.panelLobby = panelLobby;
         this.panelLoading = panelLoading;
+        this.panelPasswordPrompt = panelPasswordPrompt;
     }
 
     public void Show(MenuPanel panel)
@@ -57,6 +61,7 @@ internal sealed class MenuPanelNavigator
         SetPanelActive(panelJoinRoom, panel == MenuPanel.JoinRoom);
         SetPanelActive(panelLobby, panel == MenuPanel.Lobby);
         SetPanelActive(panelLoading, panel == MenuPanel.Loading);
+        SetPanelActive(panelPasswordPrompt, panel == MenuPanel.PasswordPrompt);
     }
 
     public bool HideLoading()

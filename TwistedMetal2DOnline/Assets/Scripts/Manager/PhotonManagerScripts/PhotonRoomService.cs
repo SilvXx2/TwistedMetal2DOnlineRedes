@@ -9,6 +9,9 @@ internal sealed class PhotonRoomService
     private readonly PhotonRoomState roomState;
     private readonly Action<string> emitStatus;
 
+
+    private static readonly string[] LobbyVisibleProperties = { "hasPassword" };
+
     public PhotonRoomService(PhotonConnectionState connectionState, PhotonRoomState roomState, Action<string> emitStatus)
     {
         this.connectionState = connectionState ?? throw new ArgumentNullException(nameof(connectionState));
@@ -16,7 +19,14 @@ internal sealed class PhotonRoomService
         this.emitStatus = emitStatus ?? throw new ArgumentNullException(nameof(emitStatus));
     }
 
+
     public bool JoinSelectedRoom(string roomName)
+    {
+        return JoinSelectedRoom(roomName, null);
+    }
+
+
+    public bool JoinSelectedRoom(string roomName, string password)
     {
         if (!connectionState.CanUseLobbyOperations)
         {
@@ -25,15 +35,37 @@ internal sealed class PhotonRoomService
             return false;
         }
 
+        bool hasPassword = !string.IsNullOrWhiteSpace(password);
+
         RoomOptions roomOptions = new RoomOptions
         {
             MaxPlayers = 4,
             IsVisible = true,
-            IsOpen = true
+            IsOpen = true,
+            CustomRoomProperties = new ExitGames.Client.Photon.Hashtable
+            {
+                { "hasPassword", hasPassword }
+            },
+            CustomRoomPropertiesForLobby = LobbyVisibleProperties
         };
 
-        Debug.Log($"Intentando unirse a la room: {roomName}");
+        Debug.Log($"Intentando unirse a la room: {roomName} (hasPassword: {hasPassword})");
         emitStatus($"Uniéndose a {roomName}...");
+
+        if (hasPassword)
+        {
+            RoomPasswordAPI.Instance.SetRoomPassword(roomName, password, (success) =>
+            {
+                if (success)
+                {
+                    Debug.Log($"[PhotonRoomService] Contraseña persistida en Google Sheet para room: {roomName}");
+                }
+                else
+                {
+                    Debug.LogWarning($"[PhotonRoomService] No se pudo persistir la contraseña para room: {roomName}");
+                }
+            });
+        }
 
         PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
         return true;
