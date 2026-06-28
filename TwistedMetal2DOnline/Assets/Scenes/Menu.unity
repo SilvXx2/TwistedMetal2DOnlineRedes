@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657886, g: 0.4964128, b: 0.57481724, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -471,6 +471,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 111797817}
   m_CullTransparentMesh: 1
+--- !u!114 &121495081 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2903589402137686337, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+  m_PrefabInstance: {fileID: 2655422682051137635}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &130148048
 GameObject:
   m_ObjectHideFlags: 0
@@ -1322,6 +1333,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 959935478}
   m_CullTransparentMesh: 1
+--- !u!1 &970413626
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 970413628}
+  - component: {fileID: 970413627}
+  m_Layer: 0
+  m_Name: RoomPasswordAPI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &970413627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 970413626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84183ee52ac98c7499ec8a70d78e48c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  url: https://script.google.com/macros/s/AKfycbyzgm3Wbw-gfro5NbFxs1URY8o2wux86NqtDczEzmFfDUsugVmP8U3tNxHBr-iByKTlxg/exec
+--- !u!4 &970413628
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 970413626}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 662.67645, y: 397.00494, z: -1.5400984}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1022839521
 GameObject:
   m_ObjectHideFlags: 0
@@ -1725,6 +1781,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1064095546}
   m_CullTransparentMesh: 1
+--- !u!1 &1090082077 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5566523966494242122, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+  m_PrefabInstance: {fileID: 2655422682051137635}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1230237560
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2518,6 +2579,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1548880134}
   m_CullTransparentMesh: 1
+--- !u!114 &1751384750 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8764432865059616108, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+  m_PrefabInstance: {fileID: 2655422682051137635}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65f706a9fa34d804db7e696a4f56d676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1820459247
 GameObject:
   m_ObjectHideFlags: 0
@@ -3384,6 +3456,30 @@ PrefabInstance:
       propertyPath: panelColorSelect
       value: 
       objectReference: {fileID: 708737113}
+    - target: {fileID: 1981224296640058187, guid: 5778b8a4799cab64a8d922eabb95e66c, type: 3}
+      propertyPath: roomListComponent
+      value: 
+      objectReference: {fileID: 1751384750}
+    - target: {fileID: 1981224296640058187, guid: 5778b8a4799cab64a8d922eabb95e66c, type: 3}
+      propertyPath: panelPasswordPrompt
+      value: 
+      objectReference: {fileID: 1090082077}
+    - target: {fileID: 1981224296640058187, guid: 5778b8a4799cab64a8d922eabb95e66c, type: 3}
+      propertyPath: passwordPromptInput
+      value: 
+      objectReference: {fileID: 121495081}
+    - target: {fileID: 1981224296640058187, guid: 5778b8a4799cab64a8d922eabb95e66c, type: 3}
+      propertyPath: lobbyStartGameButton
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1981224296640058187, guid: 5778b8a4799cab64a8d922eabb95e66c, type: 3}
+      propertyPath: lobbyRestartGameButton
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1981224296640058187, guid: 5778b8a4799cab64a8d922eabb95e66c, type: 3}
+      propertyPath: createRoomPasswordInput
+      value: 
+      objectReference: {fileID: 2655422682051137636}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5778b8a4799cab64a8d922eabb95e66c, type: 3}
 --- !u!114 &2092080874 stripped
@@ -3425,11 +3521,19 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 447236962820715186, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1217636521097078553, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_Text
       value: '
 
 '
+      objectReference: {fileID: 0}
+    - target: {fileID: 1502113470154500297, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1686582821865520454, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_Sprite
@@ -3458,6 +3562,10 @@ PrefabInstance:
     - target: {fileID: 2655422682931588823, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2881195330072658569, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3025002846786965705, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_SizeDelta.x
@@ -3593,6 +3701,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4557099695596456557, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4557099695982346812, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -3613,7 +3725,7 @@ PrefabInstance:
       objectReference: {fileID: 2092080874}
     - target: {fileID: 4557099696319837369, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4854204862438300801, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_Sprite
@@ -3638,6 +3750,18 @@ PrefabInstance:
     - target: {fileID: 5548163294472070802, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5566523966494242122, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5975508323700676302, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2092080874}
+    - target: {fileID: 5975508323700676302, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickPasswordConfirm
       objectReference: {fileID: 0}
     - target: {fileID: 6250220161822105454, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -3670,6 +3794,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8049956043007730557, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8463195358339985193, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2092080874}
+    - target: {fileID: 8463195358339985193, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickPasswordCancel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8572819549660560804, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+      propertyPath: m_text
+      value: "\n\u200B"
+      objectReference: {fileID: 0}
     - target: {fileID: 8572819549660560804, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
       propertyPath: m_isRightToLeft
       value: 0
@@ -3688,6 +3828,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+--- !u!114 &2655422682051137636 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7828351552861099267, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}
+  m_PrefabInstance: {fileID: 2655422682051137635}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4446474525382241223 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4905695722505767780, guid: 66bb85e9d67b9d54484d85e729757b24, type: 3}

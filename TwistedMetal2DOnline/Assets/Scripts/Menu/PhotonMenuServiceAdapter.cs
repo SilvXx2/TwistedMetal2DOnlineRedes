@@ -15,6 +15,8 @@ internal interface IPhotonMenuService
     event Action<DisconnectCause> ConnectionFailed;
 
     bool JoinSelectedRoom(string roomName);
+    bool JoinSelectedRoom(string roomName, string password);
+    bool JoinExistingRoom(string roomName);
     bool RequestStartGame();
     bool RequestRestartGame();
     void LeaveCurrentRoom();
@@ -77,6 +79,16 @@ internal sealed class PhotonMenuServiceAdapter : IPhotonMenuService
     public bool JoinSelectedRoom(string roomName)
     {
         return Source.JoinSelectedRoom(roomName);
+    }
+
+    public bool JoinSelectedRoom(string roomName, string password)
+    {
+        return Source.JoinSelectedRoom(roomName, password);
+    }
+
+    public bool JoinExistingRoom(string roomName)
+    {
+        return Source.JoinExistingRoom(roomName);
     }
 
     public bool RequestStartGame()
