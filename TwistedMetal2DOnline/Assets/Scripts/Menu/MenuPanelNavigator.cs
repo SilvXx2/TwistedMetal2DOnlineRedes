@@ -3,6 +3,7 @@ using UnityEngine;
 internal enum MenuPanel
 {
     MainMenu,
+    Language,
     Nickname,
     ColorSelect,
     RoomSelect,
@@ -16,6 +17,7 @@ internal enum MenuPanel
 internal sealed class MenuPanelNavigator
 {
     private readonly GameObject panelMainMenu;
+    private readonly GameObject panelLanguage;
     private readonly GameObject panelNickname;
     private readonly GameObject panelColorSelect;
     private readonly GameObject panelRoomSelect;
@@ -29,6 +31,7 @@ internal sealed class MenuPanelNavigator
 
     public MenuPanelNavigator(
         GameObject panelMainMenu,
+        GameObject panelLanguage,
         GameObject panelNickname,
         GameObject panelColorSelect,
         GameObject panelRoomSelect,
@@ -39,6 +42,7 @@ internal sealed class MenuPanelNavigator
         GameObject panelPasswordPrompt)
     {
         this.panelMainMenu = panelMainMenu;
+        this.panelLanguage = panelLanguage;
         this.panelNickname = panelNickname;
         this.panelColorSelect = panelColorSelect;
         this.panelRoomSelect = panelRoomSelect;
@@ -54,6 +58,7 @@ internal sealed class MenuPanelNavigator
         CurrentPanel = panel;
 
         SetPanelActive(panelMainMenu, panel == MenuPanel.MainMenu);
+        SetPanelActive(panelLanguage, panel == MenuPanel.Language);
         SetPanelActive(panelNickname, panel == MenuPanel.Nickname);
         SetPanelActive(panelColorSelect, panel == MenuPanel.ColorSelect);
         SetPanelActive(panelRoomSelect, panel == MenuPanel.RoomSelect);

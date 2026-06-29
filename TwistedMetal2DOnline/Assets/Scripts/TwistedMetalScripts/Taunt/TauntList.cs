@@ -24,7 +24,7 @@ public class TauntList : MonoBehaviour
     }
 
     [SerializeField]
-    private string url = "https://script.google.com/macros/s/AKfycbzl1AJHTjE26XYuL7OaHuYQfIMccTHYXNJvnDEt2TCprjBBEvi4tLz7ZHUAI949PyZO/exec";
+    private string url = "https://script.google.com/macros/s/AKfycbxcA2SSr-14Xlnwl62JCeqb4u0b1NZTBd9q8fXh_ikyMk1DNsXE_jebbR0QgoYEbgsF/exec";
 
     public Taunt[] taunts;
     private bool isLoaded = false;
@@ -53,13 +53,26 @@ public class TauntList : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(FetchAllTaunts());
+        // No auto-fetching here anymore. Loaded via the Language Panel in the Main Menu.
     }
 
-    private IEnumerator FetchAllTaunts()
+    public void LoadTaunts(string language, System.Action onComplete = null)
     {
-        Debug.Log("[TauntList] Iniciando la precarga de todos los taunts desde la API...");
-        using (UnityWebRequest www = UnityWebRequest.Get(url))
+        StartCoroutine(FetchAllTaunts(language, onComplete));
+    }
+
+    private IEnumerator FetchAllTaunts(string language, System.Action onComplete)
+    {
+        isLoaded = false;
+        Debug.Log($"[TauntList] Iniciando la precarga de todos los taunts ({language}) desde la API...");
+        
+        string requestUrl = url;
+        if (!string.IsNullOrEmpty(language))
+        {
+            requestUrl += "?lang=" + UnityWebRequest.EscapeURL(language);
+        }
+
+        using (UnityWebRequest www = UnityWebRequest.Get(requestUrl))
         {
             yield return www.SendWebRequest();
 
@@ -83,7 +96,7 @@ public class TauntList : MonoBehaviour
                         {
                             taunts = wrapper.taunts.ToArray();
                             isLoaded = true;
-                            Debug.Log($"[TauntList] Precargados con éxito {taunts.Length} taunts desde la API.");
+                            Debug.Log($"[TauntList] Precargados con éxito {taunts.Length} taunts ({language}) desde la API.");
                         }
                     }
                     else if (trimmed.StartsWith("{"))
@@ -93,7 +106,7 @@ public class TauntList : MonoBehaviour
                         {
                             taunts = new Taunt[] { parsed };
                             isLoaded = true;
-                            Debug.Log("[TauntList] Precargado 1 taunt desde la API.");
+                            Debug.Log($"[TauntList] Precargado 1 taunt ({language}) desde la API.");
                         }
                     }
                 }
@@ -103,6 +116,7 @@ public class TauntList : MonoBehaviour
                 }
             }
         }
+        onComplete?.Invoke();
     }
 
     public Taunt GetRandomTaunt()

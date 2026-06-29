@@ -8,6 +8,7 @@ public class MenuUIManager : MonoBehaviour
 {
     [Header("Panels")]
     [SerializeField] private GameObject panelMainMenu;
+    [SerializeField] private GameObject panelLanguage;
     [SerializeField] private GameObject panelNickname;
     [SerializeField] private GameObject panelColorSelect;
     [SerializeField] private GameObject panelRoomSelect;
@@ -60,6 +61,7 @@ public class MenuUIManager : MonoBehaviour
     {
         panelNavigator = new MenuPanelNavigator(
             panelMainMenu,
+            panelLanguage,
             panelNickname,
             panelColorSelect,
             panelRoomSelect,
@@ -170,6 +172,7 @@ public class MenuUIManager : MonoBehaviour
     }
 
     public void ShowMainMenu()  => panelNavigator.Show(MenuPanel.MainMenu);
+    public void ShowLanguage()  => panelNavigator.Show(MenuPanel.Language);
     public void ShowNickname()  => panelNavigator.Show(MenuPanel.Nickname);
     public void ShowColorSelect() => panelNavigator.Show(MenuPanel.ColorSelect);
     public void ShowRoomSelect() => panelNavigator.Show(MenuPanel.RoomSelect);
@@ -197,7 +200,17 @@ public class MenuUIManager : MonoBehaviour
             connectionTimeout.Start(Time.unscaledTime);
         }
 
-        ShowNickname();
+        ShowLanguage();
+    }
+
+    public void OnClickSelectLanguage(string lang)
+    {
+        string loadingMsg = lang.ToUpper() == "ESP" ? "Cargando taunts..." : "Loading taunts...";
+        ShowLoading(loadingMsg);
+        TauntList.Instance.LoadTaunts(lang, () =>
+        {
+            ShowNickname();
+        });
     }
 
     public void OnClickNicknameConfirm()
@@ -261,6 +274,9 @@ public class MenuUIManager : MonoBehaviour
     {
         switch (backNavigationPolicy.Resolve(panelNavigator.CurrentPanel))
         {
+            case MenuBackNavigationDecision.ShowLanguage:
+                ShowLanguage();
+                break;
             case MenuBackNavigationDecision.ShowNickname:
                 ShowNickname();
                 break;

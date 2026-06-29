@@ -1,0 +1,76 @@
+function doGet(e)
+{
+  let sheetName = "ENG"; // Default fallback sheet
+  if (e && e.parameter)
+  {
+    if (e.parameter.sheet)
+    {
+      sheetName = e.parameter.sheet;
+    }
+    else if (e.parameter.lang)
+    {
+      const langUpper = e.parameter.lang.toUpperCase();
+      if (langUpper === "ESP" || langUpper === "ES")
+      {
+        sheetName = "ESP";
+      }
+      else
+      {
+        sheetName = "ENG";
+      }
+    }
+  }
+
+  const sheet = SpreadsheetApp
+    .getActiveSpreadsheet()
+    .getSheetByName(sheetName);
+
+  if (!sheet)
+  {
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        error: "Sheet not found: " + sheetName
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  const values = sheet.getDataRange().getValues();
+
+  const id = parseInt(e.parameter.id);
+
+  if (!isNaN(id))
+  {
+    for (let i = 1; i < values.length; i++)
+    {
+      if (Number(values[i][0]) === id)
+      {
+        return ContentService
+          .createTextOutput(JSON.stringify({
+            id: values[i][0],
+            text: values[i][1]
+          }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        error: "Taunt not found"
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  let taunts = [];
+
+  for (let i = 1; i < values.length; i++)
+  {
+    taunts.push({
+      id: values[i][0],
+      text: values[i][1]
+    });
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify(taunts))
+    .setMimeType(ContentService.MimeType.JSON);
+}

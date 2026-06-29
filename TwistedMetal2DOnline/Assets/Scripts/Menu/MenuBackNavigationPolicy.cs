@@ -1,6 +1,7 @@
 internal enum MenuBackNavigationDecision
 {
     ShowMainMenu,
+    ShowLanguage,
     ShowNickname,
     ShowRoomSelect,
     LeaveLobby
@@ -21,6 +22,8 @@ internal sealed class MenuBackNavigationPolicy
             case MenuPanel.Lobby:
                 return MenuBackNavigationDecision.LeaveLobby;
             case MenuPanel.Nickname:
+                return MenuBackNavigationDecision.ShowLanguage;
+            case MenuPanel.Language:
             case MenuPanel.Loading:
             case MenuPanel.MainMenu:
             default:
