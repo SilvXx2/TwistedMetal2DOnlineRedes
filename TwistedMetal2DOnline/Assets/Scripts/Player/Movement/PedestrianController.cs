@@ -15,6 +15,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
     private float timer;
     private bool isLocal;
     private WeaponType hadWeaponType = WeaponType.None;
+    private Animator animator;
 
     private NetworkInterpolator remoteInterpolator;
 
@@ -23,6 +24,7 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
         rb = GetComponent<Rigidbody2D>();
         health = GetComponent<PlayerHealth>();
         remoteInterpolator = new NetworkInterpolator(transform);
+        animator = GetComponent<Animator>();
     }
 
     public void SetHadWeapon(bool value)
@@ -101,7 +103,11 @@ public class PedestrianController : MonoBehaviourPun, IPunObservable
             rb.velocity = movement;
         }
 
-        
+        if (animator != null)
+        {
+            animator.SetBool("IsWalking", movement != Vector2.zero);
+        }
+
         timer -= Time.deltaTime;
         if (timer <= 0f)
         {

@@ -10,7 +10,6 @@ public class Explosion : MonoBehaviourPun
     {
         animator = GetComponent<Animator>();
 
-        // Si fue instanciado a través de la red (PhotonNetwork.Instantiate)
         if (PhotonNetwork.InRoom && photonView != null && photonView.InstantiationId > 0)
         {
             if (photonView.IsMine)
@@ -24,7 +23,6 @@ public class Explosion : MonoBehaviourPun
         }
         else
         {
-            // Si fue instanciado localmente (mediante Instantiate común de Unity)
             if (animator != null)
             {
                 animator.SetBool("Play", true);
